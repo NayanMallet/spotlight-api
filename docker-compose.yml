@@ -38,4 +38,4 @@ services:
       DB_USER: "root"
       DB_PASSWORD: "root"
       DB_DATABASE: "spotlight"
-    command: ["dumb-init", "node", "build/server.js"]
+    command: ["dumb-init", "node", "bin/server.js"]

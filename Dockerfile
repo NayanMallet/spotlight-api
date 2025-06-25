@@ -28,6 +28,7 @@ ENV NODE_ENV=production \
 
 # Copier uniquement build et fichiers pour prod
 COPY --from=build /app/build ./build
+COPY --from=build /app/bin ./bin
 COPY pnpm-lock.yaml package*.json ./
 RUN pnpm install --prod --frozen-lockfile && pnpm store prune
 
@@ -39,4 +40,4 @@ USER adonisjs
 
 EXPOSE 3333
 ENTRYPOINT ["dumb-init", "--"]
-CMD ["node", "build/server.js"]
+CMD ["node", "bin/server.js"]
