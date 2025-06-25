@@ -10,7 +10,6 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: app
-      MYSQL_USER: root
       MYSQL_PASSWORD: root
     volumes:
       - mysql_data:/var/lib/mysql
