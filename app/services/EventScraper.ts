@@ -5,10 +5,10 @@ interface Event {
   date: string
   location: string
   url: string
+  image: string
   description: string
   lineup: string
 }
-
 
 export default class EventScraper {
   static async fetchShotgunEvents(): Promise<Event[]> {
@@ -23,10 +23,8 @@ export default class EventScraper {
       timeout: 60000,
     })
 
-    // Fonction utilitaire pour attendre un délai
     const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
-    // Scroll et clique sur "Voir plus" tant que le bouton est visible
     while (true) {
       const loadMoreVisible = await page.evaluate(() => {
         const btn = Array.from(document.querySelectorAll('button'))
@@ -43,7 +41,6 @@ export default class EventScraper {
 
     await wait(2000)
 
-    // Récupération des événements avec la vraie date depuis datetime
     const rawEvents = await page.evaluate(() => {
       const anchors = Array.from(document.querySelectorAll('a[data-slot="tracked-link"]'))
       return anchors.map(a => {
@@ -53,11 +50,12 @@ export default class EventScraper {
         const dateIso = dateTag?.getAttribute('datetime') || ''
         const href = a.getAttribute('href') || ''
         const url = 'https://shotgun.live' + href
-        return { title, date: dateIso, location, url }
+        const img = a.querySelector('img')?.getAttribute('src') || ''
+
+        return { title, date: dateIso, location, url, image: img }
       }).filter(e => e.title && e.date)
     })
 
-    // Filtrage des événements dans les 4 prochaines semaines
     const now = new Date()
     const nowUtc = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate())
 
@@ -90,14 +88,12 @@ export default class EventScraper {
           const descDiv = parent.querySelector('div.whitespace-pre-wrap')
           if (descDiv) result.description = descDiv.textContent?.trim() || ''
 
-          // Line-up : on regarde les divs suivantes dans le même parent
           const nextDivs = Array.from(parent.querySelectorAll('div'))
           const descIndex = nextDivs.indexOf(descDiv as HTMLDivElement)
 
-          // Heuristique : la line-up est souvent dans la div suivante
           for (let i = descIndex + 1; i < nextDivs.length; i++) {
             const text = nextDivs[i].textContent?.trim()
-            if (text && text.toLowerCase().includes('line up') || text.match(/🎧|🔊|dj/i)) {
+            if (text && (text.toLowerCase().includes('line up') || text.match(/🎧|🔊|dj/i))) {
               result.lineup = text
               break
             }
@@ -112,7 +108,6 @@ export default class EventScraper {
         detailedEvents.push({ ...event, description: '', lineup: '' })
       }
     }
-
 
     await browser.close()
     return detailedEvents
