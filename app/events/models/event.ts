@@ -16,6 +16,9 @@ export default class Event extends BaseModel {
   @column()
   declare description: string | null
 
+  @column({ columnName: 'banner_url' })
+  declare bannerUrl: string | null
+
   @column.date()
   declare startDate: DateTime
 

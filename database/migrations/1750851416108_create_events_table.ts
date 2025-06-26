@@ -8,6 +8,7 @@ export default class extends BaseSchema {
       table.increments('id').notNullable()
       table.string('title').notNullable()
       table.text('description').nullable()
+      table.string('banner_url').nullable()
       table.date('start_date').notNullable()
       table.date('end_date').notNullable()
       table.dateTime('start_hour').notNullable()
