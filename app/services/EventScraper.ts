@@ -1,0 +1,120 @@
+import puppeteer from 'puppeteer'
+
+interface Event {
+  title: string
+  date: string
+  location: string
+  url: string
+  description: string
+  lineup: string
+}
+
+
+export default class EventScraper {
+  static async fetchShotgunEvents(): Promise<Event[]> {
+    const browser = await puppeteer.launch({
+      headless: 'new',
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    })
+
+    const page = await browser.newPage()
+    await page.goto('https://shotgun.live/fr/cities/toulouse', {
+      waitUntil: 'domcontentloaded',
+      timeout: 60000,
+    })
+
+    // Fonction utilitaire pour attendre un délai
+    const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
+
+    // Scroll et clique sur "Voir plus" tant que le bouton est visible
+    while (true) {
+      const loadMoreVisible = await page.evaluate(() => {
+        const btn = Array.from(document.querySelectorAll('button'))
+          .find(b => b.textContent?.toLowerCase().includes('voir plus'))
+        if (btn) {
+          (btn as HTMLElement).click()
+          return true
+        }
+        return false
+      })
+      if (!loadMoreVisible) break
+      await wait(2500)
+    }
+
+    await wait(2000)
+
+    // Récupération des événements avec la vraie date depuis datetime
+    const rawEvents = await page.evaluate(() => {
+      const anchors = Array.from(document.querySelectorAll('a[data-slot="tracked-link"]'))
+      return anchors.map(a => {
+        const title = a.querySelector('p.line-clamp-2')?.textContent?.trim() || ''
+        const location = a.querySelector('.text-muted-foreground')?.textContent?.trim() || ''
+        const dateTag = a.querySelector('time')
+        const dateIso = dateTag?.getAttribute('datetime') || ''
+        const href = a.getAttribute('href') || ''
+        const url = 'https://shotgun.live' + href
+        return { title, date: dateIso, location, url }
+      }).filter(e => e.title && e.date)
+    })
+
+    // Filtrage des événements dans les 4 prochaines semaines
+    const now = new Date()
+    const nowUtc = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate())
+
+    const inFourWeeks = new Date()
+    inFourWeeks.setDate(inFourWeeks.getDate() + 28)
+    const inFourWeeksUtc = Date.UTC(inFourWeeks.getUTCFullYear(), inFourWeeks.getUTCMonth(), inFourWeeks.getUTCDate())
+
+    const events = rawEvents.filter(event => {
+      const eventDate = new Date(event.date)
+      const eventUtc = Date.UTC(eventDate.getUTCFullYear(), eventDate.getUTCMonth(), eventDate.getUTCDate())
+      return eventUtc >= nowUtc && eventUtc <= inFourWeeksUtc
+    })
+
+    const detailedEvents: Event[] = []
+
+    for (const event of events) {
+      try {
+        await page.goto(event.url, { waitUntil: 'domcontentloaded', timeout: 30000 })
+
+        const { description, lineup } = await page.evaluate(() => {
+          const result = { description: '', lineup: '' }
+
+          const aboutHeader = Array.from(document.querySelectorAll('.text-2xl'))
+            .find(h => h.textContent?.trim() === 'À propos')
+          if (!aboutHeader) return result
+
+          const parent = aboutHeader.closest('section') || aboutHeader.parentElement
+          if (!parent) return result
+
+          const descDiv = parent.querySelector('div.whitespace-pre-wrap')
+          if (descDiv) result.description = descDiv.textContent?.trim() || ''
+
+          // Line-up : on regarde les divs suivantes dans le même parent
+          const nextDivs = Array.from(parent.querySelectorAll('div'))
+          const descIndex = nextDivs.indexOf(descDiv as HTMLDivElement)
+
+          // Heuristique : la line-up est souvent dans la div suivante
+          for (let i = descIndex + 1; i < nextDivs.length; i++) {
+            const text = nextDivs[i].textContent?.trim()
+            if (text && text.toLowerCase().includes('line up') || text.match(/🎧|🔊|dj/i)) {
+              result.lineup = text
+              break
+            }
+          }
+
+          return result
+        })
+
+        detailedEvents.push({ ...event, description, lineup })
+      } catch (err) {
+        console.warn(`Erreur lors du chargement de ${event.url}:`, err)
+        detailedEvents.push({ ...event, description: '', lineup: '' })
+      }
+    }
+
+
+    await browser.close()
+    return detailedEvents
+  }
+}
