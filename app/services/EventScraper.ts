@@ -1,5 +1,8 @@
 import puppeteer from 'puppeteer'
 
+import EventModel from '#models/event'
+import { DateTime } from 'luxon'
+
 interface Event {
   title: string
   date: string
@@ -110,6 +113,21 @@ export default class EventScraper {
     }
 
     await browser.close()
+
+    for (const event of detailedEvents) {
+      try {
+        await EventModel.create({
+          name: event.title,
+          startDate: DateTime.fromISO(event.date),
+          address: event.location,
+          description: event.description,
+          lineup: event.lineup,
+          img: event.image ?? null,
+        })
+      } catch (err) {
+        console.error(`Erreur en insérant ${event.title} :`, err)
+      }
+    }
     return detailedEvents
   }
 }
