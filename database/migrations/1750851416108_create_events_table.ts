@@ -1,4 +1,5 @@
 import { BaseSchema } from '@adonisjs/lucid/schema'
+import { EventType, EventSubtype } from '#events/enums/events'
 
 export default class extends BaseSchema {
   protected tableName = 'events'
@@ -19,21 +20,9 @@ export default class extends BaseSchema {
       table.string('address').notNullable()
       table.string('city').notNullable()
 
-      table
-        .integer('type_id')
-        .unsigned()
-        .notNullable()
-        .references('id')
-        .inTable('event_types')
-        .onDelete('CASCADE')
-
-      table
-        .integer('subtype_id')
-        .unsigned()
-        .notNullable()
-        .references('id')
-        .inTable('event_subtypes')
-        .onDelete('CASCADE')
+      // Remplacement des relations par des enums
+      table.enu('type', Object.values(EventType)).notNullable()
+      table.enu('subtype', Object.values(EventSubtype)).notNullable()
 
       table.timestamp('created_at').notNullable()
       table.timestamp('updated_at').nullable()

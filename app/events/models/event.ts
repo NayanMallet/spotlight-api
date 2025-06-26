@@ -1,10 +1,9 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, belongsTo, hasMany } from '@adonisjs/lucid/orm'
-import { type BelongsTo, type HasMany } from '@adonisjs/lucid/types/relations'
-import EventType from '#events/models/event_type'
-import EventSubtype from '#events/models/event_subtype'
+import { BaseModel, column, hasMany } from '@adonisjs/lucid/orm'
+import { type HasMany } from '@adonisjs/lucid/types/relations'
 import EventUser from '#events/models/event_user'
 import EventArtist from '#events/models/event_artist'
+import { EventType, EventSubtype } from '#events/enums/events'
 
 export default class Event extends BaseModel {
   @column({ isPrimary: true })
@@ -47,22 +46,16 @@ export default class Event extends BaseModel {
   declare city: string
 
   @column()
-  declare typeId: number
+  declare type: EventType
 
   @column()
-  declare subtypeId: number
+  declare subtype: EventSubtype
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
-
-  @belongsTo(() => EventType)
-  declare type: BelongsTo<typeof EventType>
-
-  @belongsTo(() => EventSubtype)
-  declare subtype: BelongsTo<typeof EventSubtype>
 
   @hasMany(() => EventUser)
   declare participants: HasMany<typeof EventUser>
