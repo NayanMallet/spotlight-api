@@ -5,7 +5,7 @@ services:
   # 1) Service MySQL #
   ########################
   mysql_db:
-    container_name: mysql_db
+    container_name: db_spotlight
     image: mysql:8.0
     restart: unless-stopped
     expose:
