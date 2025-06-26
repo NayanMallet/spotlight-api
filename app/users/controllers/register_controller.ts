@@ -2,7 +2,9 @@ import type { HttpContext } from '@adonisjs/core/http'
 import { registerValidator } from '#users/validators/users'
 import { UsersService } from '#users/services/users_service'
 import User from '#users/models/user'
+import { inject } from '@adonisjs/core'
 
+@inject()
 export default class RegisterController {
   constructor(protected usersService: UsersService) {}
 
@@ -21,7 +23,7 @@ export default class RegisterController {
     return response.created({
       user: {
         id: user.id,
-        name: user.name,
+        full_name: user.full_name,
         email: user.email,
       },
       token,
