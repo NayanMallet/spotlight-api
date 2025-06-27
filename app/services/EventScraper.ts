@@ -10,8 +10,9 @@ interface Event {
   url: string
   image: string
   description: string
-  lineup: string
+  lineup: { name: string, image: string }[]
 }
+
 
 export default class EventScraper {
   static async fetchShotgunEvents(): Promise<Event[]> {
@@ -79,31 +80,36 @@ export default class EventScraper {
         await page.goto(event.url, { waitUntil: 'domcontentloaded', timeout: 30000 })
 
         const { description, lineup } = await page.evaluate(() => {
-          const result = { description: '', lineup: '' }
+          const result = { description: '', lineup: [] as { name: string, image: string }[] }
 
           const aboutHeader = Array.from(document.querySelectorAll('.text-2xl'))
             .find(h => h.textContent?.trim() === 'À propos')
-          if (!aboutHeader) return result
+          if (aboutHeader) {
+            const parent = aboutHeader.closest('section') || aboutHeader.parentElement
+            const descDiv = parent?.querySelector('div.whitespace-pre-wrap')
+            if (descDiv) {
+              result.description = descDiv.textContent?.trim() || ''
+            }
+          }
 
-          const parent = aboutHeader.closest('section') || aboutHeader.parentElement
-          if (!parent) return result
-
-          const descDiv = parent.querySelector('div.whitespace-pre-wrap')
-          if (descDiv) result.description = descDiv.textContent?.trim() || ''
-
-          const nextDivs = Array.from(parent.querySelectorAll('div'))
-          const descIndex = nextDivs.indexOf(descDiv as HTMLDivElement)
-
-          for (let i = descIndex + 1; i < nextDivs.length; i++) {
-            const text = nextDivs[i].textContent?.trim()
-            if (text && (text.toLowerCase().includes('line up') || text.match(/🎧|🔊|dj/i))) {
-              result.lineup = text
-              break
+          const lineupContainer = document.querySelector('div.grid.grid-cols-3')
+          if (lineupContainer) {
+            const artistLinks = Array.from(lineupContainer.querySelectorAll('a[data-slot="tracked-link"]'))
+            for (const a of artistLinks) {
+              const nameDiv = a.querySelector('div.text-muted-foreground')
+              const name = nameDiv?.textContent?.trim() || ''
+              const img = a.querySelector('img')?.getAttribute('src') || ''
+              if (name && img) {
+                result.lineup.push({ name, image: img })
+              }
             }
           }
 
           return result
         })
+
+
+
 
         detailedEvents.push({ ...event, description, lineup })
       } catch (err) {
@@ -121,7 +127,7 @@ export default class EventScraper {
           startDate: DateTime.fromISO(event.date),
           address: event.location,
           description: event.description,
-          lineup: event.lineup,
+          lineup: JSON.stringify(event.lineup),
           img: event.image ?? null,
         })
       } catch (err) {
