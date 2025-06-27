@@ -1,11 +1,18 @@
 import router from '@adonisjs/core/services/router'
 import { middleware } from '#start/kernel'
 
+// Swagger Controller Import
+const SwaggerController = () => import('#core/controllers/swagger_controller')
+
 // GUEST region Controller's Imports
-const LoginController = () => import('#users/controllers/login_controller')
-const RegisterController = () => import('#users/controllers/register_controller')
-const ResetPasswordController = () => import('#users/controllers/reset_password_controller')
+const LoginController = () => import('#auth/controllers/login_controller')
+const RegisterController = () => import('#auth/controllers/register_controller')
+const ResetPasswordController = () => import('#auth/controllers/reset_password_controller')
 // endregion
+
+// Swagger Documentation Routes
+router.get('/docs', [SwaggerController, 'ui']).as('swagger.ui')
+router.get('/docs/json', [SwaggerController, 'json']).as('swagger.json')
 
 router.group(() => {
   router.post('login', [LoginController]).as('users.login')
@@ -19,9 +26,9 @@ const GetEventsController = () => import('#events/controllers/get_events_control
 const GetEventController = () => import('#events/controllers/get_event_controller')
 const UpdateEventController = () => import('#events/controllers/update_event_controller')
 const DeleteEventController = () => import('#events/controllers/delete_event_controller')
-const UpdateUserController = () => import('#users/controllers/update_user_controller')
-const DeleteUserController = () => import('#users/controllers/delete_user_controller')
-const UploadUserBannerController = () => import('#users/controllers/upload_user_banner_controller')
+const UpdateUserController = () => import('#auth/controllers/update_user_controller')
+const DeleteUserController = () => import('#auth/controllers/delete_user_controller')
+const UploadUserBannerController = () => import('#auth/controllers/upload_user_banner_controller')
 // endregion
 
 // Pages CLIENT

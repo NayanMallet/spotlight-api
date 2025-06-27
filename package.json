@@ -15,9 +15,10 @@
   },
   "imports": {
     "#artists/*": "./app/artists/*.js",
+    "#auth/*": "./app/auth/*.js",
+    "#core/*": "./app/core/*.js",
     "#events/*": "./app/events/*.js",
     "#messages/*": "./app/messages/*.js",
-    "#users/*": "./app/users/*.js",
     "#redirects/*": "./app/redirects/*.js",
     "#controllers/*": "./app/controllers/**/*.js",
     "#exceptions/*": "./app/exceptions/*.js",
@@ -33,7 +34,7 @@
     "#database/*": "./database/**/*.js",
     "#start/*": "./start/*.js",
     "#tests/*": "./tests/**/*.js",
-    "#config/*": "./config/**/*.js"
+    "#config/*": "./config/*.js"
   },
   "devDependencies": {
     "@adonisjs/assembler": "^7.8.2",
@@ -60,10 +61,14 @@
     "@adonisjs/cors": "^2.2.1",
     "@adonisjs/drive": "^3.4.1",
     "@adonisjs/lucid": "^21.6.1",
+    "@types/swagger-jsdoc": "^6.0.4",
+    "@types/swagger-ui-express": "^4.1.8",
     "@vinejs/vine": "^3.0.1",
     "luxon": "^3.6.1",
     "mysql2": "^3.14.1",
-    "reflect-metadata": "^0.2.2"
+    "reflect-metadata": "^0.2.2",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
   },
   "hotHook": {
     "boundaries": [
@@ -71,5 +76,6 @@
       "./app/middleware/*.ts"
     ]
   },
-  "prettier": "@adonisjs/prettier-config"
+  "prettier": "@adonisjs/prettier-config",
+  "packageManager": "pnpm@10.6.2+sha512.47870716bea1572b53df34ad8647b42962bc790ce2bf4562ba0f643237d7302a3d6a8ecef9e4bdfc01d23af1969aa90485d4cebb0b9638fa5ef1daef656f6c1b"
 }

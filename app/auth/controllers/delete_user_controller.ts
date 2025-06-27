@@ -1,6 +1,6 @@
 import type { HttpContext } from '@adonisjs/core/http'
-import { UsersService } from '#users/services/users_service'
-import User from '#users/models/user'
+import { UsersService } from '#auth/services/users_service'
+import User from '#auth/models/user'
 import { inject } from '@adonisjs/core'
 
 @inject()

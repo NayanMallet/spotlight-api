@@ -2,7 +2,7 @@ import { BaseModel, column, belongsTo } from '@adonisjs/lucid/orm'
 import { type BelongsTo } from '@adonisjs/lucid/types/relations'
 
 import Event from '#events/models/event'
-import User from '#users/models/user'
+import User from '#auth/models/user'
 
 export default class EventUser extends BaseModel {
   @column({ isPrimary: true })

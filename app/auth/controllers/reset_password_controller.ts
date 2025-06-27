@@ -1,6 +1,6 @@
 import type { HttpContext } from '@adonisjs/core/http'
-import { resetPasswordValidator } from '#users/validators/users'
-import { UsersService } from '#users/services/users_service'
+import { resetPasswordValidator } from '#auth/validators/users'
+import { UsersService } from '#auth/services/users_service'
 import { inject } from '@adonisjs/core'
 
 @inject()

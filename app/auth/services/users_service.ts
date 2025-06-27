@@ -1,4 +1,4 @@
-import User from '#users/models/user'
+import User from '#auth/models/user'
 import { MultipartFile } from '@adonisjs/core/bodyparser'
 import app from '@adonisjs/core/services/app'
 import { inject } from '@adonisjs/core'
