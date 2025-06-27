@@ -35,6 +35,11 @@ const DeleteEventController = () => import('#events/controllers/delete_event_con
 const UpdateUserController = () => import('#auth/controllers/update_user_controller')
 const DeleteUserController = () => import('#auth/controllers/delete_user_controller')
 const UploadUserBannerController = () => import('#auth/controllers/upload_user_banner_controller')
+const CreateMessageController = () => import('#messages/controllers/create_message_controller')
+const GetMessagesController = () => import('#messages/controllers/get_messages_controller')
+const GetMessageController = () => import('#messages/controllers/get_message_controller')
+const UpdateMessageController = () => import('#messages/controllers/update_message_controller')
+const DeleteMessageController = () => import('#messages/controllers/delete_message_controller')
 // endregion
 
 // Pages CLIENT
@@ -47,6 +52,14 @@ router
     router.put('/events/:id', [UpdateEventController]).as('events.update')
     router.patch('/events/:id', [UpdateEventController]).as('events.patch')
     router.delete('/events/:id', [DeleteEventController]).as('events.destroy')
+
+    // Messages CRUD routes
+    router.post('/messages', [CreateMessageController]).as('messages.store')
+    router.get('/events/:eventId/messages', [GetMessagesController]).as('messages.index')
+    router.get('/messages/:id', [GetMessageController]).as('messages.show')
+    router.put('/messages/:id', [UpdateMessageController]).as('messages.update')
+    router.patch('/messages/:id', [UpdateMessageController]).as('messages.patch')
+    router.delete('/messages/:id', [DeleteMessageController]).as('messages.destroy')
 
     // Users management routes
     router.put('/users/me', [UpdateUserController]).as('users.update-me')
