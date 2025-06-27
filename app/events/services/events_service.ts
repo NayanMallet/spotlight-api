@@ -62,9 +62,8 @@ export class EventsService {
     try {
       // Upload banner file
       const fileName = `event_${event.id}_${cuid()}.${banner.extname}`
-      const uploadPath = app.publicPath('uploads/events')
 
-      await banner.move(uploadPath, {
+      await banner.move(app.publicPath('uploads/events'), {
         name: fileName,
         overwrite: true,
       })
