@@ -7,6 +7,17 @@ import { inject } from '@adonisjs/core'
 export default class ResetPasswordController {
   constructor(protected usersService: UsersService) {}
 
+  /**
+   * @resetPassword
+   * @summary Reset user password
+   * @description Reset a user's password using email verification
+   * @tag Authentication
+   * @requestBody {"email": {"type": "string", "format": "email", "example": "user@example.com"}, "newPassword": {"type": "string", "format": "password", "minLength": 8, "example": "newpassword123"}}
+   * @responseBody 200 - {"message": "Password reset successfully", "data": {"id": 1, "email": "user@example.com"}} - Password reset successful
+   * @responseBody 400 - {"message": "Validation failed", "errors": []} - Validation errors
+   * @responseBody 404 - {"message": "User with this email address not found"} - User not found
+   * @responseBody 500 - {"message": "An error occurred while resetting the password", "error": "string"} - Internal server error
+   */
   async handle({ request, response }: HttpContext) {
     try {
       const payload = await request.validateUsing(resetPasswordValidator)

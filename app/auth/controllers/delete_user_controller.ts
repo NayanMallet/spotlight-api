@@ -7,6 +7,18 @@ import { inject } from '@adonisjs/core'
 export default class DeleteUserController {
   constructor(protected usersService: UsersService) {}
 
+  /**
+   * @destroy
+   * @summary Delete user account
+   * @description Delete a user account and revoke all associated tokens
+   * @tag Users
+   * @paramPath id - The ID of the user to delete (optional, defaults to current user) - @type(number)
+   * @responseBody 200 - {"message": "User deleted successfully"} - User deleted successfully
+   * @responseBody 401 - {"message": "Authentication required"} - Authentication required
+   * @responseBody 403 - {"message": "You can only delete your own profile"} - Forbidden access
+   * @responseBody 404 - {"message": "User not found"} - User not found
+   * @responseBody 500 - {"message": "An error occurred while deleting the user", "error": "string"} - Internal server error
+   */
   async handle({ response, auth, params }: HttpContext) {
     try {
       // Ensure user is authenticated

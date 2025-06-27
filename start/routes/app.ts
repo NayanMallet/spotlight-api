@@ -1,8 +1,7 @@
 import router from '@adonisjs/core/services/router'
 import { middleware } from '#start/kernel'
-
-// Swagger Controller Import
-const SwaggerController = () => import('#core/controllers/swagger_controller')
+import AutoSwagger from 'adonis-autoswagger'
+import swagger from '#config/swagger'
 
 // GUEST region Controller's Imports
 const LoginController = () => import('#auth/controllers/login_controller')
@@ -11,8 +10,15 @@ const ResetPasswordController = () => import('#auth/controllers/reset_password_c
 // endregion
 
 // Swagger Documentation Routes
-router.get('/docs', [SwaggerController, 'ui']).as('swagger.ui')
-router.get('/docs/json', [SwaggerController, 'json']).as('swagger.json')
+// returns swagger in YAML
+router.get('/swagger', async () => {
+  return AutoSwagger.default.docs(router.toJSON(), swagger)
+})
+
+// Renders Swagger-UI and passes YAML-output of /swagger
+router.get('/docs', async () => {
+  return AutoSwagger.default.ui('/swagger', swagger)
+})
 
 router.group(() => {
   router.post('login', [LoginController]).as('users.login')

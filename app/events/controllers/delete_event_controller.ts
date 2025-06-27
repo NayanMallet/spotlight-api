@@ -6,6 +6,17 @@ import { inject } from '@adonisjs/core'
 export default class DeleteEventController {
   constructor(protected eventsService: EventsService) {}
 
+  /**
+   * @destroy
+   * @summary Delete an event
+   * @description Delete an existing event by its ID
+   * @tag Events
+   * @paramPath id - The ID of the event to delete - @type(number) @required
+   * @responseBody 200 - {"message": "Event deleted successfully", "data": {"id": 1, "deleted": true}} - Event deleted successfully
+   * @responseBody 400 - {"message": "Invalid event ID", "error": "INVALID_EVENT_ID"} - Invalid event ID provided
+   * @responseBody 404 - {"message": "Event not found", "error": "EVENT_NOT_FOUND"} - Event not found
+   * @responseBody 500 - {"message": "An error occurred while deleting the event", "error": "string"} - Internal server error
+   */
   async handle({ response, params }: HttpContext) {
     try {
       const eventId = Number(params.id)

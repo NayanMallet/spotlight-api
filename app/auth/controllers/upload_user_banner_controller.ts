@@ -6,6 +6,20 @@ import { inject } from '@adonisjs/core'
 export default class UploadUserBannerController {
   constructor(protected usersService: UsersService) {}
 
+  /**
+   * @uploadBanner
+   * @summary Upload user banner image
+   * @description Upload a banner image for a user profile
+   * @tag Users
+   * @paramPath id - The ID of the user to upload banner for - @type(number) @required
+   * @requestFormDataBody {"banner":{"type":"string","format":"binary","description":"Banner image file (required)"}}
+   * @responseBody 200 - {"message": "Banner uploaded successfully", "data": {"id": 1, "full_name": "John Doe", "email": "user@example.com", "bannerUrl": "https://example.com/banner.jpg"}} - Banner uploaded successfully
+   * @responseBody 400 - {"message": "Banner image is required", "error": "MISSING_BANNER_FILE"} - Banner image is required
+   * @responseBody 400 - {"message": "Validation failed", "errors": []} - Validation errors
+   * @responseBody 401 - {"message": "Authentication required"} - Authentication required
+   * @responseBody 403 - {"message": "You can only upload banner for your own profile"} - Forbidden access
+   * @responseBody 500 - {"message": "An error occurred while uploading the banner", "error": "string"} - Internal server error
+   */
   async handle({ request, response, auth, params }: HttpContext) {
     try {
       // Ensure user is authenticated

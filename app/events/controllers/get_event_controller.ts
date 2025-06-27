@@ -7,6 +7,17 @@ import { inject } from '@adonisjs/core'
 export default class GetEventController {
   constructor(protected eventsService: EventsService) {}
 
+  /**
+   * @show
+   * @summary Get a single event by ID
+   * @description Retrieve detailed information about a specific event
+   * @tag Events
+   * @paramPath id - The ID of the event to retrieve - @type(number) @required
+   * @responseBody 200 - <Event> - Event retrieved successfully
+   * @responseBody 400 - {"message": "Validation failed", "errors": []} - Validation errors
+   * @responseBody 404 - {"message": "Event not found", "error": "EVENT_NOT_FOUND"} - Event not found
+   * @responseBody 500 - {"message": "An error occurred while retrieving the event", "error": "string"} - Internal server error
+   */
   async handle({ request, response }: HttpContext) {
     try {
       const { id } = await request.validateUsing(eventIdValidator)

@@ -61,14 +61,11 @@
     "@adonisjs/cors": "^2.2.1",
     "@adonisjs/drive": "^3.4.1",
     "@adonisjs/lucid": "^21.6.1",
-    "@types/swagger-jsdoc": "^6.0.4",
-    "@types/swagger-ui-express": "^4.1.8",
     "@vinejs/vine": "^3.0.1",
+    "adonis-autoswagger": "^3.65.0",
     "luxon": "^3.6.1",
     "mysql2": "^3.14.1",
-    "reflect-metadata": "^0.2.2",
-    "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^5.0.1"
+    "reflect-metadata": "^0.2.2"
   },
   "hotHook": {
     "boundaries": [

@@ -9,81 +9,14 @@ export default class LoginController {
   constructor(protected usersService: UsersService) {}
 
   /**
-   * @swagger
-   * /login:
-   *   post:
-   *     tags:
-   *       - Authentication
-   *     summary: User login
-   *     description: Authenticate user with email and password
-   *     security: []
-   *     requestBody:
-   *       required: true
-   *       content:
-   *         application/json:
-   *           schema:
-   *             type: object
-   *             required:
-   *               - email
-   *               - password
-   *             properties:
-   *               email:
-   *                 type: string
-   *                 format: email
-   *                 example: user@example.com
-   *               password:
-   *                 type: string
-   *                 format: password
-   *                 example: password123
-   *     responses:
-   *       200:
-   *         description: Login successful
-   *         content:
-   *           application/json:
-   *             schema:
-   *               type: object
-   *               properties:
-   *                 user:
-   *                   type: object
-   *                   properties:
-   *                     id:
-   *                       type: integer
-   *                       example: 1
-   *                     full_name:
-   *                       type: string
-   *                       example: John Doe
-   *                     email:
-   *                       type: string
-   *                       example: user@example.com
-   *                 token:
-   *                   type: object
-   *                   properties:
-   *                     type:
-   *                       type: string
-   *                       example: bearer
-   *                     value:
-   *                       type: string
-   *                       example: oat_1.abc123...
-   *       400:
-   *         description: Bad request - Already logged in or validation error
-   *         content:
-   *           application/json:
-   *             schema:
-   *               type: object
-   *               properties:
-   *                 message:
-   *                   type: string
-   *                   example: You are already logged in
-   *       401:
-   *         description: Invalid credentials
-   *         content:
-   *           application/json:
-   *             schema:
-   *               type: object
-   *               properties:
-   *                 message:
-   *                   type: string
-   *                   example: Invalid credentials
+   * @login
+   * @summary User login
+   * @description Authenticate user with email and password
+   * @tag Authentication
+   * @requestBody {"email": {"type": "string", "format": "email", "example": "user@example.com"}, "password": {"type": "string", "format": "password", "example": "password123"}}
+   * @responseBody 200 - {"user": {"id": 1, "full_name": "John Doe", "email": "user@example.com"}, "token": {"type": "bearer", "value": "oat_1.abc123..."}} - Login successful
+   * @responseBody 400 - {"message": "You are already logged in"} - Already logged in
+   * @responseBody 401 - {"message": "Invalid credentials"} - Invalid credentials
    */
   async handle({ request, response, auth }: HttpContext) {
     if (auth.user) {

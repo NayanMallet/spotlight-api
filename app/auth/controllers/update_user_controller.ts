@@ -7,6 +7,19 @@ import { inject } from '@adonisjs/core'
 export default class UpdateUserController {
   constructor(protected usersService: UsersService) {}
 
+  /**
+   * @update
+   * @summary Update user profile
+   * @description Update user profile information with optional banner image upload
+   * @tag Users
+   * @paramPath id - The ID of the user to update (optional, defaults to current user) - @type(number)
+   * @requestFormDataBody {"full_name":{"type":"string","minLength":3,"maxLength":255},"email":{"type":"string","format":"email"},"bannerUrl":{"type":"string","format":"uri"},"banner":{"type":"string","format":"binary","description":"Optional banner image file"}}
+   * @responseBody 200 - {"message": "User updated successfully", "data": {"id": 1, "full_name": "John Doe", "email": "user@example.com", "bannerUrl": "https://example.com/banner.jpg"}} - User updated successfully
+   * @responseBody 400 - {"message": "Validation failed", "errors": []} - Validation errors
+   * @responseBody 401 - {"message": "Authentication required"} - Authentication required
+   * @responseBody 403 - {"message": "You can only update your own profile"} - Forbidden access
+   * @responseBody 500 - {"message": "An error occurred while updating the user", "error": "string"} - Internal server error
+   */
   async handle({ request, response, auth, params }: HttpContext) {
     try {
       // Ensure user is authenticated
