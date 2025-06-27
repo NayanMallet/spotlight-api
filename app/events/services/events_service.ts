@@ -112,15 +112,7 @@ export class EventsService {
    * @return A promise that resolves to paginated events.
    */
   async getAll(options: GetEventsOptions = {}) {
-    const {
-      page = 1,
-      limit = 20,
-      type,
-      subtype,
-      city,
-      startDate,
-      endDate,
-    } = options
+    const { page = 1, limit = 20, type, subtype, city, startDate, endDate } = options
 
     const query = Event.query()
 
