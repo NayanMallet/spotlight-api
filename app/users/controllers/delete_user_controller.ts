@@ -1,5 +1,6 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import { UsersService } from '#users/services/users_service'
+import User from '#users/models/user'
 import { inject } from '@adonisjs/core'
 
 @inject()
@@ -15,7 +16,7 @@ export default class DeleteUserController {
         })
       }
 
-      const userId = params.id ? parseInt(params.id) : auth.user.id
+      const userId = params.id ? Number.parseInt(params.id) : auth.user.id
 
       // Users can only delete their own profile unless they're admin
       if (userId !== auth.user.id) {
@@ -33,7 +34,10 @@ export default class DeleteUserController {
       }
 
       // Revoke all tokens for the user
-      await auth.user.currentAccessToken.delete()
+      const userTokens = await User.accessTokens.all(auth.user)
+      for (const token of userTokens) {
+        await User.accessTokens.delete(auth.user, token.identifier)
+      }
 
       return response.ok({
         message: 'User deleted successfully',

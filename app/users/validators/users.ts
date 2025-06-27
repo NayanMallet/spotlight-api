@@ -12,6 +12,7 @@ export const registerValidator = vine.compile(
     full_name: vine.string().trim().minLength(3).maxLength(255),
     email: vine.string().trim().toLowerCase().email().unique({ table: 'users', column: 'email' }),
     password: vine.string().trim().minLength(8).maxLength(255),
+    bannerUrl: vine.string().trim().url().optional(),
   })
 )
 
