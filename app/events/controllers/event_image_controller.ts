@@ -13,13 +13,15 @@ export default class EventImageController {
       return response.badRequest({ message: 'No image provided' })
     }
 
-    const filename = `${cuid()}.${image.extname}`
-    await image.move(app.makePath('public/uploads'), {
-      name: filename,
+    const fileName = `${cuid()}.${image.extname}`
+
+    await image.move(app.publicPath('uploads/events'), {
+      name: fileName,
+      overwrite: true,
     })
 
     return {
-      url: `/uploads/${filename}`,
+      url: `/uploads/events/${fileName}`,
     }
   }
 }

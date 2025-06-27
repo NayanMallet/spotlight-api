@@ -4,6 +4,23 @@ import app from '@adonisjs/core/services/app'
 import { inject } from '@adonisjs/core'
 import { DateTime } from 'luxon'
 import { EventType, EventSubtype } from '#events/enums/events'
+import { cuid } from '@adonisjs/core/helpers'
+
+export interface CreateEventData {
+  title: string
+  description?: string | null
+  startDate: Date
+  endDate: Date
+  startHour: Date
+  openHour?: Date | null
+  latitude: number
+  longitude: number
+  placeName: string
+  address: string
+  city: string
+  type: EventType
+  subtype: EventSubtype
+}
 
 @inject()
 export class EventsService {
@@ -12,44 +29,55 @@ export class EventsService {
    * @param data - The event data excluding the banner.
    * @param banner - The banner file to be uploaded.
    * @return A promise that resolves to the created Event instance.
+   * @throws Error if banner is not provided or file upload fails
    */
-  async create(
-    data: {
-      description?: string | null | undefined
-      openHour?: Date | null | undefined
-      title: string
-      startDate: Date
-      endDate: Date
-      startHour: Date
-      latitude: number
-      longitude: number
-      placeName: string
-      address: string
-      city: string
-      type: EventType
-      subtype: EventSubtype
-    },
-    banner: MultipartFile
-  ): Promise<Event> {
-    const eventData = {
-      ...data,
-      startDate: data.startDate ? DateTime.fromJSDate(data.startDate) : undefined,
-      endDate: data.endDate ? DateTime.fromJSDate(data.endDate) : undefined,
-      startHour: data.startHour ? DateTime.fromJSDate(data.startHour) : undefined,
-      openHour: data.openHour ? DateTime.fromJSDate(data.openHour) : null,
+  async create(data: CreateEventData, banner: MultipartFile): Promise<Event> {
+    if (!banner) {
+      throw new Error('Banner image is required')
     }
 
-    const event = await Event.create(eventData)
+    // Validate file type
+    const allowedExtensions = ['jpg', 'jpeg', 'png', 'webp']
+    if (!allowedExtensions.includes(banner.extname || '')) {
+      throw new Error(`Invalid file type. Allowed types: ${allowedExtensions.join(', ')}`)
+    }
 
-    const fileName = `events/banner_${event.id}.${banner.extname}`
-    await banner.move(app.makePath('storage/uploads/events'), {
-      name: fileName,
-      overwrite: true,
+    // Create event record
+    const event = await Event.create({
+      title: data.title,
+      description: data.description ?? null,
+      startDate: DateTime.fromJSDate(data.startDate),
+      endDate: DateTime.fromJSDate(data.endDate),
+      startHour: DateTime.fromJSDate(data.startHour),
+      openHour: data.openHour ? DateTime.fromJSDate(data.openHour) : null,
+      latitude: data.latitude,
+      longitude: data.longitude,
+      placeName: data.placeName,
+      address: data.address,
+      city: data.city,
+      type: data.type,
+      subtype: data.subtype,
     })
 
-    event.bannerUrl = `/uploads/events/${fileName}`
-    await event.save()
+    try {
+      // Upload banner file
+      const fileName = `event_${event.id}_${cuid()}.${banner.extname}`
+      const uploadPath = app.publicPath('uploads/events')
 
-    return event
+      await banner.move(uploadPath, {
+        name: fileName,
+        overwrite: true,
+      })
+
+      // Update event with banner URL
+      event.bannerUrl = `/uploads/events/${fileName}`
+      await event.save()
+
+      return event
+    } catch (error) {
+      // If file upload fails, delete the created event to maintain consistency
+      await event.delete()
+      throw new Error(`Failed to upload banner image: ${error.message}`)
+    }
   }
 }
