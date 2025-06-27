@@ -21,6 +21,7 @@ const UpdateEventController = () => import('#events/controllers/update_event_con
 const DeleteEventController = () => import('#events/controllers/delete_event_controller')
 const UpdateUserController = () => import('#users/controllers/update_user_controller')
 const DeleteUserController = () => import('#users/controllers/delete_user_controller')
+const UploadUserBannerController = () => import('#users/controllers/upload_user_banner_controller')
 // endregion
 
 // Pages CLIENT
@@ -39,5 +40,6 @@ router
     router.put('/users/:id', [UpdateUserController]).as('users.update')
     router.delete('/users/me', [DeleteUserController]).as('users.delete-me')
     router.delete('/users/:id', [DeleteUserController]).as('users.delete')
+    router.post('/users/:id/banner', [UploadUserBannerController]).as('users.upload-banner')
   })
   .middleware([middleware.auth()])

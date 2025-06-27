@@ -1,10 +1,9 @@
 import type { HttpContext } from '@adonisjs/core/http'
-import { updateUserValidator } from '#users/validators/users'
 import { UsersService } from '#users/services/users_service'
 import { inject } from '@adonisjs/core'
 
 @inject()
-export default class UpdateUserController {
+export default class UploadUserBannerController {
   constructor(protected usersService: UsersService) {}
 
   async handle({ request, response, auth, params }: HttpContext) {
@@ -16,22 +15,27 @@ export default class UpdateUserController {
         })
       }
 
-      const userId = params.id ? Number.parseInt(params.id) : auth.user.id
+      const userId = params.id ? parseInt(params.id) : auth.user.id
 
-      // Users can only update their own profile unless they're admin
+      // Users can only upload banner for their own profile unless they're admin
       if (userId !== auth.user.id) {
         return response.forbidden({
-          message: 'You can only update your own profile',
+          message: 'You can only upload banner for your own profile',
         })
       }
 
-      const payload = await request.validateUsing(updateUserValidator)
       const banner = request.file('banner')
+      if (!banner) {
+        return response.badRequest({
+          message: 'Banner image is required',
+          error: 'MISSING_BANNER_FILE',
+        })
+      }
 
-      const user = await this.usersService.update(userId, payload, banner || undefined)
+      const user = await this.usersService.uploadBanner(userId, banner)
 
       return response.ok({
-        message: 'User updated successfully',
+        message: 'Banner uploaded successfully',
         data: {
           id: user.id,
           full_name: user.full_name,
@@ -50,7 +54,7 @@ export default class UpdateUserController {
 
       // Handle other errors
       return response.internalServerError({
-        message: 'An error occurred while updating the user',
+        message: 'An error occurred while uploading the banner',
         error: error.message,
       })
     }

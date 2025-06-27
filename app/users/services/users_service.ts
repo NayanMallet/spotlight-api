@@ -34,7 +34,13 @@ export class UsersService {
    * @returns {Promise<User>} - The registered user.
    */
   async register(data: Partial<User>): Promise<User> {
-    const user = await User.create(data)
+    // Generate default banner URL using unavatar.io with fallback to avatar.vercel.sh
+    const bannerUrl = `https://unavatar.io/${data.email}?fallback=https://avatar.vercel.sh/${data.full_name}?size=128`
+
+    const user = await User.create({
+      ...data,
+      bannerUrl,
+    })
 
     return user
   }
