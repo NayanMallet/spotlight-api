@@ -3,12 +3,6 @@ import { middleware } from '#start/kernel'
 import AutoSwagger from 'adonis-autoswagger'
 import swagger from '#config/swagger'
 
-// GUEST region Controller's Imports
-const LoginController = () => import('#auth/controllers/login_controller')
-const RegisterController = () => import('#auth/controllers/register_controller')
-const ResetPasswordController = () => import('#auth/controllers/reset_password_controller')
-// endregion
-
 // Swagger Documentation Routes
 // returns swagger in YAML
 router.get('/swagger', async () => {
@@ -19,6 +13,12 @@ router.get('/swagger', async () => {
 router.get('/docs', async () => {
   return AutoSwagger.default.ui('/swagger', swagger)
 })
+
+// GUEST region Controller's Imports
+const LoginController = () => import('#auth/controllers/login_controller')
+const RegisterController = () => import('#auth/controllers/register_controller')
+const ResetPasswordController = () => import('#auth/controllers/reset_password_controller')
+// endregion
 
 router.group(() => {
   router.post('login', [LoginController]).as('users.login')
@@ -40,6 +40,9 @@ const GetMessagesController = () => import('#messages/controllers/get_messages_c
 const GetMessageController = () => import('#messages/controllers/get_message_controller')
 const UpdateMessageController = () => import('#messages/controllers/update_message_controller')
 const DeleteMessageController = () => import('#messages/controllers/delete_message_controller')
+const CreateArtistController = () => import('#artists/controllers/create_artist_controller')
+const UpdateArtistController = () => import('#artists/controllers/update_artist_controller')
+const DeleteArtistController = () => import('#artists/controllers/delete_artist_controller')
 // endregion
 
 // Pages CLIENT
@@ -60,6 +63,12 @@ router
     router.put('/messages/:id', [UpdateMessageController]).as('messages.update')
     router.patch('/messages/:id', [UpdateMessageController]).as('messages.patch')
     router.delete('/messages/:id', [DeleteMessageController]).as('messages.destroy')
+
+    // Artists CRUD routes
+    router.post('/artists', [CreateArtistController]).as('artists.store')
+    router.put('/artists/:id', [UpdateArtistController]).as('artists.update')
+    router.patch('/artists/:id', [UpdateArtistController]).as('artists.patch')
+    router.delete('/artists/:id', [DeleteArtistController]).as('artists.destroy')
 
     // Users management routes
     router.put('/users/me', [UpdateUserController]).as('users.update-me')

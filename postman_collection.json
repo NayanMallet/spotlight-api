@@ -1,0 +1,643 @@
+{
+	"info": {
+		"_postman_id": "9ec2cc3e-6a79-4d07-a179-2c7fe7cdaa6f",
+		"name": "Spotlight API - Users",
+		"description": "Complete collection for testing all user features in Spotlight API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "18509415"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Register User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    const response = pm.response.json();",
+									"    pm.collectionVariables.set('auth_token', response.token.value.release());",
+									"    pm.collectionVariables.set('user_id', response.user.id);",
+									"    pm.test('Registration successful', () => {",
+									"        pm.expect(response.user).to.have.property('id');",
+									"        pm.expect(response.user).to.have.property('email');",
+									"        pm.expect(response.token).to.have.property('value');",
+									"    });",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"full_name\": \"John Doe\",\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"password123\"\n}"
+						},
+						"url": "{{base_url}}/register",
+						"description": "Register a new user account"
+					},
+					"response": []
+				},
+				{
+					"name": "Login User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    pm.collectionVariables.set('auth_token', response.token.value.release());",
+									"    pm.collectionVariables.set('user_id', response.user.id);",
+									"    pm.test('Login successful', () => {",
+									"        pm.expect(response.user).to.have.property('id');",
+									"        pm.expect(response.user).to.have.property('email');",
+									"        pm.expect(response.token).to.have.property('value');",
+									"    });",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"password123\"\n}"
+						},
+						"url": "{{base_url}}/login",
+						"description": "Login with existing user credentials"
+					},
+					"response": []
+				}
+			],
+			"description": "Authentication endpoints for user registration and login"
+		},
+		{
+			"name": "User Management",
+			"item": [
+				{
+					"name": "Update User Profile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "full_name",
+									"value": "John Updated Doe",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "john.updated@example.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "newpassword123",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "banner",
+									"type": "file",
+									"src": [],
+									"disabled": true
+								}
+							]
+						},
+						"url": "{{base_url}}/users/{{user_id}}",
+						"description": "Update user profile information with optional banner image upload. You can enable/disable fields as needed."
+					},
+					"response": []
+				},
+				{
+					"name": "Update User Profile (JSON)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"full_name\": \"John Updated Doe\",\n  \"email\": \"john.updated@example.com\"\n}"
+						},
+						"url": "{{base_url}}/users/{{user_id}}",
+						"description": "Update user profile information (JSON format, without file upload)"
+					},
+					"response": []
+				},
+				{
+					"name": "Update User Profile (Current User)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"full_name\": \"John Current User\"\n}"
+						},
+						"url": "{{base_url}}/users/me",
+						"description": "Update current authenticated user's profile"
+					},
+					"response": []
+				},
+				{
+					"name": "Upload User Banner",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "banner",
+									"type": "file",
+									"src": []
+								}
+							]
+						},
+						"url": "{{base_url}}/users/{{user_id}}/banner",
+						"description": "Upload a banner image for the user profile"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User Account",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    pm.collectionVariables.set('auth_token', '');",
+									"    pm.collectionVariables.set('user_id', '');",
+									"    pm.test('User deleted successfully', () => {",
+									"        pm.expect(pm.response.json().message).to.include('deleted');",
+									"    });",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": "{{base_url}}/users/{{user_id}}",
+						"description": "Delete user account (requires authentication). This will also revoke all access tokens."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Current User Account",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    pm.collectionVariables.set('auth_token', '');",
+									"    pm.collectionVariables.set('user_id', '');",
+									"    pm.test('User deleted successfully', () => {",
+									"        pm.expect(pm.response.json().message).to.include('deleted');",
+									"    });",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": "{{base_url}}/users/me",
+						"description": "Delete current authenticated user's account"
+					},
+					"response": []
+				}
+			],
+			"description": "User profile management endpoints"
+		},
+		{
+			"name": "Password Management",
+			"item": [
+				{
+					"name": "Reset Password",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"john.doe@example.com\",\n  \"newPassword\": \"newpassword123\"\n}"
+						},
+						"url": "{{base_url}}/reset-password",
+						"description": "Reset user password using email address"
+					},
+					"response": []
+				},
+				{
+					"name": "Change Password (Authenticated)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"password\": \"newpassword123\"\n}"
+						},
+						"url": "{{base_url}}/users/me",
+						"description": "Change password for authenticated user"
+					},
+					"response": []
+				}
+			],
+			"description": "Password management endpoints"
+		},
+		{
+			"name": "Artists Management",
+			"item": [
+				{
+					"name": "Create Artist",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    const response = pm.response.json();",
+									"    pm.collectionVariables.set('artist_id', response.data.id);",
+									"    pm.test('Artist created successfully', () => {",
+									"        pm.expect(response.data).to.have.property('id');",
+									"        pm.expect(response.data).to.have.property('name');",
+									"        pm.expect(response.data).to.have.property('image');",
+									"    });",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Taylor Swift",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": []
+								}
+							]
+						},
+						"url": "{{base_url}}/artists",
+						"description": "Create a new artist with name and image"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Artist",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Taylor Swift (Updated)",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": [],
+									"disabled": true
+								}
+							]
+						},
+						"url": "{{base_url}}/artists/{{artist_id}}",
+						"description": "Update an existing artist. Image upload is optional."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Artist (JSON)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Taylor Swift (JSON Update)\"\n}"
+						},
+						"url": "{{base_url}}/artists/{{artist_id}}",
+						"description": "Update artist name only (JSON format, without file upload)"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Artist",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    pm.collectionVariables.set('artist_id', '');",
+									"    pm.test('Artist deleted successfully', () => {",
+									"        pm.expect(pm.response.json().message).to.include('deleted');",
+									"    });",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": "{{base_url}}/artists/{{artist_id}}",
+						"description": "Delete an artist by ID"
+					},
+					"response": []
+				}
+			],
+			"description": "Artist management endpoints for creating, updating, and deleting artists"
+		},
+		{
+			"name": "Testing Scenarios",
+			"item": [
+				{
+					"name": "Complete User Workflow",
+					"item": [
+						{
+							"name": "1. Register New User",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"if (pm.response.code === 201) {",
+											"    const response = pm.response.json();",
+											"    pm.collectionVariables.set('auth_token', response.token.value.release());",
+											"    pm.collectionVariables.set('user_id', response.user.id);",
+											"}"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"full_name\": \"Test User Workflow\",\n  \"email\": \"workflow.test@example.com\",\n  \"password\": \"testpassword123\"\n}"
+								},
+								"url": "{{base_url}}/register"
+							},
+							"response": []
+						},
+						{
+							"name": "2. Update Profile",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "{{auth_token}}"
+									}
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"full_name\": \"Updated Test User\"\n}"
+								},
+								"url": "{{base_url}}/users/{{user_id}}"
+							},
+							"response": []
+						},
+						{
+							"name": "3. Reset Password",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"email\": \"workflow.test@example.com\",\n  \"newPassword\": \"resetpassword123\"\n}"
+								},
+								"url": "{{base_url}}/reset-password"
+							},
+							"response": []
+						},
+						{
+							"name": "4. Login with New Password",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"if (pm.response.code === 200) {",
+											"    const response = pm.response.json();",
+											"    pm.collectionVariables.set('auth_token', response.token.value.release());",
+											"}"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"email\": \"workflow.test@example.com\",\n  \"password\": \"resetpassword123\"\n}"
+								},
+								"url": "{{base_url}}/login"
+							},
+							"response": []
+						},
+						{
+							"name": "5. Delete Account",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "{{auth_token}}"
+									}
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": "{{base_url}}/users/{{user_id}}"
+							},
+							"response": []
+						}
+					],
+					"description": "Complete workflow testing all user features in sequence"
+				}
+			],
+			"description": "Pre-configured testing scenarios"
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": {
+			"token": "{{auth_token}}"
+		}
+	},
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:3333",
+			"type": "string"
+		},
+		{
+			"key": "auth_token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "user_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "artist_id",
+			"value": "",
+			"type": "string"
+		}
+	]
+}

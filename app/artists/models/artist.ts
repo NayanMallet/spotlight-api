@@ -1,3 +1,4 @@
+import { DateTime } from 'luxon'
 import { BaseModel, column, hasMany } from '@adonisjs/lucid/orm'
 import { type HasMany } from '@adonisjs/lucid/types/relations'
 import EventArtist from '#events/models/event_artist'
@@ -18,6 +19,16 @@ export default class Artist extends BaseModel {
   // @format(uri)
   // @required
   declare image: string
+
+  @column.dateTime({ autoCreate: true })
+  // @example(2024-01-01T00:00:00.000Z)
+  // @format(date-time)
+  declare createdAt: DateTime
+
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  // @example(2024-01-01T00:00:00.000Z)
+  // @format(date-time)
+  declare updatedAt: DateTime
 
   @hasMany(() => EventArtist)
   // @no-swagger
