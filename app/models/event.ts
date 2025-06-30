@@ -18,6 +18,15 @@ export default class Event extends BaseModel {
   declare address: string
 
   @column()
+  declare location: string
+
+  @column()
+  declare lat: number | null
+
+  @column()
+  declare lng: number | null
+
+  @column()
   declare description: string
 
   @column()
