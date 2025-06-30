@@ -1,5 +1,5 @@
 import type { HttpContext } from '@adonisjs/core/http'
-import Event from '#models/event'
+import Event from '../models/event.ts'
 
 export default class AuthController {
     async get({ response }: HttpContext) {

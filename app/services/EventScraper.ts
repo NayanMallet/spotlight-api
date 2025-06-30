@@ -1,6 +1,6 @@
 import puppeteer from 'puppeteer'
 
-import EventModel from '#models/event'
+import EventModel from '../events/models/event.ts'
 import { DateTime } from 'luxon'
 
 interface Event {

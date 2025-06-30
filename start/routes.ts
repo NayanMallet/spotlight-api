@@ -10,8 +10,8 @@ import './routes/redirect.js'
 */
 
 import router from '@adonisjs/core/services/router'
-import EventScraper from '#services/EventScraper'
-const EventController = () => import('#controllers/event_controller')
+import EventScraper from '../app/services/EventScraper.ts'
+const EventController = () => import('../app/controllers/event_controller.ts')
 
 
 router.get('/scrap/events/toulouse', async () => {
