@@ -3,6 +3,8 @@ import { MultipartFile } from '@adonisjs/core/bodyparser'
 import app from '@adonisjs/core/services/app'
 import { inject } from '@adonisjs/core'
 import { cuid } from '@adonisjs/core/helpers'
+import { unlink } from 'node:fs/promises'
+import { join } from 'node:path'
 
 export interface CreateArtistData {
   name: string
@@ -121,6 +123,18 @@ export class ArtistsService {
         throw new Error(`Invalid file type. Allowed types: ${allowedExtensions.join(', ')}`)
       }
 
+      // Delete old artist image if it exists
+      if (artist.image && artist.image.startsWith('/uploads/artists/')) {
+        try {
+          const oldFileName = artist.image.replace('/uploads/artists/', '')
+          const oldFilePath = join(app.publicPath('uploads/artists'), oldFileName)
+          await unlink(oldFilePath)
+        } catch (error) {
+          // Log the error but continue with upload
+          console.warn(`Failed to delete old image for artist ${artist.id}:`, error.message)
+        }
+      }
+
       try {
         // Upload new image file
         const fileName = `artist_${artist.id}_${cuid()}.${image.extname}`
@@ -142,7 +156,7 @@ export class ArtistsService {
   }
 
   /**
-   * Deletes an artist by ID.
+   * Deletes an artist by ID and their associated image.
    * @param id - The artist ID.
    * @return A promise that resolves to true if deleted, false if not found.
    */
@@ -150,6 +164,18 @@ export class ArtistsService {
     const artist = await Artist.find(id)
     if (!artist) {
       return false
+    }
+
+    // Delete the artist image file if it exists
+    if (artist.image && artist.image.startsWith('/uploads/artists/')) {
+      try {
+        const fileName = artist.image.replace('/uploads/artists/', '')
+        const filePath = join(app.publicPath('uploads/artists'), fileName)
+        await unlink(filePath)
+      } catch (error) {
+        // Log the error but don't fail the deletion if file doesn't exist
+        console.warn(`Failed to delete image for artist ${id}:`, error.message)
+      }
     }
 
     await artist.delete()

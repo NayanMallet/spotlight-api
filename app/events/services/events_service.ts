@@ -5,6 +5,8 @@ import { inject } from '@adonisjs/core'
 import { DateTime } from 'luxon'
 import { EventType, EventSubtype } from '#events/enums/events'
 import { cuid } from '@adonisjs/core/helpers'
+import { unlink } from 'node:fs/promises'
+import { join } from 'node:path'
 
 export interface CreateEventData {
   title: string
@@ -192,6 +194,18 @@ export class EventsService {
         throw new Error(`Invalid file type. Allowed types: ${allowedExtensions.join(', ')}`)
       }
 
+      // Delete old banner image if it exists
+      if (event.bannerUrl && event.bannerUrl.startsWith('/uploads/events/')) {
+        try {
+          const oldFileName = event.bannerUrl.replace('/uploads/events/', '')
+          const oldFilePath = join(app.publicPath('uploads/events'), oldFileName)
+          await unlink(oldFilePath)
+        } catch (error) {
+          // Log the error but continue with upload
+          console.warn(`Failed to delete old banner image for event ${event.id}:`, error.message)
+        }
+      }
+
       try {
         // Upload new banner file
         const fileName = `event_${event.id}_${cuid()}.${banner.extname}`
@@ -213,7 +227,7 @@ export class EventsService {
   }
 
   /**
-   * Deletes an event by ID.
+   * Deletes an event by ID and its associated banner image.
    * @param id - The event ID.
    * @return A promise that resolves to true if deleted, false if not found.
    */
@@ -221,6 +235,18 @@ export class EventsService {
     const event = await Event.find(id)
     if (!event) {
       return false
+    }
+
+    // Delete the banner image file if it exists
+    if (event.bannerUrl && event.bannerUrl.startsWith('/uploads/events/')) {
+      try {
+        const fileName = event.bannerUrl.replace('/uploads/events/', '')
+        const filePath = join(app.publicPath('uploads/events'), fileName)
+        await unlink(filePath)
+      } catch (error) {
+        // Log the error but don't fail the deletion if file doesn't exist
+        console.warn(`Failed to delete banner image for event ${id}:`, error.message)
+      }
     }
 
     await event.delete()

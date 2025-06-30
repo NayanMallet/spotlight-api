@@ -4,6 +4,8 @@ import app from '@adonisjs/core/services/app'
 import { inject } from '@adonisjs/core'
 import { cuid } from '@adonisjs/core/helpers'
 import hash from '@adonisjs/core/services/hash'
+import { unlink } from 'node:fs/promises'
+import { join } from 'node:path'
 
 export interface UpdateUserData {
   full_name?: string
@@ -72,6 +74,18 @@ export class UsersService {
         throw new Error(`Invalid file type. Allowed types: ${allowedExtensions.join(', ')}`)
       }
 
+      // Delete old banner image if it's a local file
+      if (user.bannerUrl && user.bannerUrl.startsWith('/uploads/users/')) {
+        try {
+          const oldFileName = user.bannerUrl.replace('/uploads/users/', '')
+          const oldFilePath = join(app.publicPath('uploads/users'), oldFileName)
+          await unlink(oldFilePath)
+        } catch (error) {
+          // Log the error but continue with upload
+          console.warn(`Failed to delete old banner image for user ${user.id}:`, error.message)
+        }
+      }
+
       try {
         // Upload new banner file
         const fileName = `user_${user.id}_${cuid()}.${banner.extname}`
@@ -93,7 +107,7 @@ export class UsersService {
   }
 
   /**
-   * Deletes a user by ID.
+   * Deletes a user by ID and their associated banner image.
    * @param id - The user ID.
    * @return A promise that resolves to true if deleted, false if not found.
    */
@@ -101,6 +115,18 @@ export class UsersService {
     const user = await User.find(id)
     if (!user) {
       return false
+    }
+
+    // Delete the user banner image file if it's a local file
+    if (user.bannerUrl && user.bannerUrl.startsWith('/uploads/users/')) {
+      try {
+        const fileName = user.bannerUrl.replace('/uploads/users/', '')
+        const filePath = join(app.publicPath('uploads/users'), fileName)
+        await unlink(filePath)
+      } catch (error) {
+        // Log the error but don't fail the deletion if file doesn't exist
+        console.warn(`Failed to delete banner image for user ${id}:`, error.message)
+      }
     }
 
     await user.delete()
@@ -146,6 +172,18 @@ export class UsersService {
     const allowedExtensions = ['jpg', 'jpeg', 'png', 'webp']
     if (!allowedExtensions.includes(banner.extname || '')) {
       throw new Error(`Invalid file type. Allowed types: ${allowedExtensions.join(', ')}`)
+    }
+
+    // Delete old banner image if it's a local file
+    if (user.bannerUrl && user.bannerUrl.startsWith('/uploads/users/')) {
+      try {
+        const oldFileName = user.bannerUrl.replace('/uploads/users/', '')
+        const oldFilePath = join(app.publicPath('uploads/users'), oldFileName)
+        await unlink(oldFilePath)
+      } catch (error) {
+        // Log the error but continue with upload
+        console.warn(`Failed to delete old banner image for user ${user.id}:`, error.message)
+      }
     }
 
     try {
