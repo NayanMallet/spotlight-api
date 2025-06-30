@@ -1,4 +1,6 @@
 import Event from '#events/models/event'
+import EventArtist from '#events/models/event_artist'
+import Artist from '#artists/models/artist'
 import { MultipartFile } from '@adonisjs/core/bodyparser'
 import app from '@adonisjs/core/services/app'
 import { inject } from '@adonisjs/core'
@@ -22,6 +24,7 @@ export interface CreateEventData {
   city: string
   type: EventType
   subtype: EventSubtype
+  artistIds?: number[]
 }
 
 export interface UpdateEventData {
@@ -38,6 +41,7 @@ export interface UpdateEventData {
   city?: string
   type?: EventType
   subtype?: EventSubtype
+  artistIds?: number[]
 }
 
 export interface GetEventsOptions {
@@ -70,6 +74,16 @@ export class EventsService {
       throw new Error(`Invalid file type. Allowed types: ${allowedExtensions.join(', ')}`)
     }
 
+    // Validate artists exist if provided
+    if (data.artistIds && data.artistIds.length > 0) {
+      const existingArtists = await Artist.query().whereIn('id', data.artistIds)
+      if (existingArtists.length !== data.artistIds.length) {
+        const existingIds = existingArtists.map(artist => artist.id)
+        const missingIds = data.artistIds.filter(id => !existingIds.includes(id))
+        throw new Error(`Artists not found: ${missingIds.join(', ')}`)
+      }
+    }
+
     // Create event record
     const event = await Event.create({
       title: data.title,
@@ -100,11 +114,20 @@ export class EventsService {
       event.bannerUrl = `/uploads/events/${fileName}`
       await event.save()
 
+      // Create event-artist relationships if artists are provided
+      if (data.artistIds && data.artistIds.length > 0) {
+        const eventArtistData = data.artistIds.map(artistId => ({
+          eventId: event.id,
+          artistId: artistId,
+        }))
+        await EventArtist.createMany(eventArtistData)
+      }
+
       return event
     } catch (error) {
-      // If file upload fails, delete the created event to maintain consistency
+      // If file upload or artist association fails, delete the created event to maintain consistency
       await event.delete()
-      throw new Error(`Failed to upload banner image: ${error.message}`)
+      throw new Error(`Failed to upload banner image or associate artists: ${error.message}`)
     }
   }
 
@@ -169,6 +192,18 @@ export class EventsService {
       throw new Error('Event not found')
     }
 
+    // Validate artists exist if provided
+    if (data.artistIds !== undefined) {
+      if (data.artistIds.length > 0) {
+        const existingArtists = await Artist.query().whereIn('id', data.artistIds)
+        if (existingArtists.length !== data.artistIds.length) {
+          const existingIds = existingArtists.map(artist => artist.id)
+          const missingIds = data.artistIds.filter(id => !existingIds.includes(id))
+          throw new Error(`Artists not found: ${missingIds.join(', ')}`)
+        }
+      }
+    }
+
     // Update event fields
     if (data.title !== undefined) event.title = data.title
     if (data.description !== undefined) event.description = data.description
@@ -219,6 +254,21 @@ export class EventsService {
         event.bannerUrl = `/uploads/events/${fileName}`
       } catch (error) {
         throw new Error(`Failed to upload banner image: ${error.message}`)
+      }
+    }
+
+    // Handle artist associations update if provided
+    if (data.artistIds !== undefined) {
+      // Remove existing artist associations
+      await EventArtist.query().where('eventId', event.id).delete()
+
+      // Create new artist associations if any
+      if (data.artistIds.length > 0) {
+        const eventArtistData = data.artistIds.map(artistId => ({
+          eventId: event.id,
+          artistId: artistId,
+        }))
+        await EventArtist.createMany(eventArtistData)
       }
     }
 

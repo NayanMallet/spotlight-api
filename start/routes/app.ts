@@ -41,8 +41,13 @@ const GetMessageController = () => import('#messages/controllers/get_message_con
 const UpdateMessageController = () => import('#messages/controllers/update_message_controller')
 const DeleteMessageController = () => import('#messages/controllers/delete_message_controller')
 const CreateArtistController = () => import('#artists/controllers/create_artist_controller')
+const GetArtistsController = () => import('#artists/controllers/get_artists_controller')
+const GetArtistController = () => import('#artists/controllers/get_artist_controller')
 const UpdateArtistController = () => import('#artists/controllers/update_artist_controller')
 const DeleteArtistController = () => import('#artists/controllers/delete_artist_controller')
+const AddEventArtistsController = () => import('#events/controllers/add_event_artists_controller')
+const RemoveEventArtistsController = () => import('#events/controllers/remove_event_artists_controller')
+const GetEventArtistsController = () => import('#events/controllers/get_event_artists_controller')
 // endregion
 
 // Pages CLIENT
@@ -65,10 +70,17 @@ router
     router.delete('/messages/:id', [DeleteMessageController]).as('messages.destroy')
 
     // Artists CRUD routes
+    router.get('/artists', [GetArtistsController]).as('artists.index')
     router.post('/artists', [CreateArtistController]).as('artists.store')
+    router.get('/artists/:id', [GetArtistController]).as('artists.show')
     router.put('/artists/:id', [UpdateArtistController]).as('artists.update')
     router.patch('/artists/:id', [UpdateArtistController]).as('artists.patch')
     router.delete('/artists/:id', [DeleteArtistController]).as('artists.destroy')
+
+    // Event-Artist relationship management routes
+    router.get('/events/:id/artists', [GetEventArtistsController]).as('events.artists.index')
+    router.post('/events/:id/artists', [AddEventArtistsController]).as('events.artists.add')
+    router.delete('/events/:id/artists', [RemoveEventArtistsController]).as('events.artists.remove')
 
     // Users management routes
     router.put('/users/me', [UpdateUserController]).as('users.update-me')

@@ -386,6 +386,64 @@
 					"response": []
 				},
 				{
+					"name": "Get All Artists",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/artists?page=1&limit=10&name=Taylor",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"artists"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1",
+									"description": "Page number for pagination"
+								},
+								{
+									"key": "limit",
+									"value": "10",
+									"description": "Number of artists per page (max 100)"
+								},
+								{
+									"key": "name",
+									"value": "Taylor",
+									"description": "Filter by artist name (partial match)",
+									"disabled": true
+								}
+							]
+						},
+						"description": "Retrieve a paginated list of artists with optional filtering by name."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Single Artist",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "{{base_url}}/artists/{{artist_id}}",
+						"description": "Retrieve detailed information about a specific artist by its ID."
+					},
+					"response": []
+				},
+				{
 					"name": "Update Artist",
 					"request": {
 						"auth": {
@@ -579,6 +637,13 @@
 									"key": "banner",
 									"type": "file",
 									"src": []
+								},
+								{
+									"key": "artistIds",
+									"value": "[1, 2]",
+									"description": "Array of artist IDs to associate with the event (optional)",
+									"type": "text",
+									"disabled": true
 								}
 							]
 						},
@@ -758,6 +823,13 @@
 									"type": "file",
 									"src": [],
 									"disabled": true
+								},
+								{
+									"key": "artistIds",
+									"value": "[1, 3]",
+									"description": "Array of artist IDs to associate with the event (optional, replaces existing associations)",
+									"type": "text",
+									"disabled": true
 								}
 							]
 						},
@@ -822,9 +894,75 @@
 						"description": "Delete an event by its ID. This will also delete the associated banner image."
 					},
 					"response": []
+				},
+				{
+					"name": "Get Event Artists",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "{{base_url}}/events/{{event_id}}/artists",
+						"description": "Retrieve all artists associated with a specific event."
+					},
+					"response": []
+				},
+				{
+					"name": "Add Artists to Event",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"artistIds\": [1, 2]\n}"
+						},
+						"url": "{{base_url}}/events/{{event_id}}/artists",
+						"description": "Add one or more artists to an existing event. Artists that are already associated will be ignored."
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Artists from Event",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"artistIds\": [1]\n}"
+						},
+						"url": "{{base_url}}/events/{{event_id}}/artists",
+						"description": "Remove one or more artists from an existing event. Artists that are not associated will be ignored."
+					},
+					"response": []
 				}
 			],
-			"description": "Event management endpoints for creating, reading, updating, and deleting events"
+			"description": "Event management endpoints for creating, reading, updating, and deleting events, including artist associations"
 		},
 		{
 			"name": "Testing Scenarios",

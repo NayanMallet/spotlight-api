@@ -31,6 +31,7 @@ export const createEventValidator = vine.compile(
       extnames: ['jpg', 'jpeg', 'png', 'webp'],
       size: '5mb',
     }),
+    artistIds: vine.array(vine.number().min(1)).optional(),
   })
 )
 
@@ -38,15 +39,21 @@ export const updateEventValidator = vine.compile(
   vine.object({
     title: vine.string().trim().minLength(3).maxLength(255).optional(),
     description: vine.string().trim().maxLength(1000).optional().nullable(),
-    startDate: vine.date({
-      formats: ['YYYY-MM-DD'],
-    }).optional(),
-    endDate: vine.date({
-      formats: ['YYYY-MM-DD'],
-    }).optional(),
-    startHour: vine.date({
-      formats: ['YYYY-MM-DD HH:mm:ss', 'YYYY-MM-DDTHH:mm:ss.SSSZ', 'YYYY-MM-DDTHH:mm:ssZ'],
-    }).optional(),
+    startDate: vine
+      .date({
+        formats: ['YYYY-MM-DD'],
+      })
+      .optional(),
+    endDate: vine
+      .date({
+        formats: ['YYYY-MM-DD'],
+      })
+      .optional(),
+    startHour: vine
+      .date({
+        formats: ['YYYY-MM-DD HH:mm:ss', 'YYYY-MM-DDTHH:mm:ss.SSSZ', 'YYYY-MM-DDTHH:mm:ssZ'],
+      })
+      .optional(),
     openHour: vine
       .date({
         formats: ['YYYY-MM-DD HH:mm:ss', 'YYYY-MM-DDTHH:mm:ss.SSSZ', 'YYYY-MM-DDTHH:mm:ssZ'],
@@ -60,10 +67,13 @@ export const updateEventValidator = vine.compile(
     city: vine.string().trim().minLength(2).maxLength(100).optional(),
     type: vine.enum(Object.values(EventType)).optional(),
     subtype: vine.enum(Object.values(EventSubtype)).optional(),
-    banner: vine.file({
-      extnames: ['jpg', 'jpeg', 'png', 'webp'],
-      size: '5mb',
-    }).optional(),
+    banner: vine
+      .file({
+        extnames: ['jpg', 'jpeg', 'png', 'webp'],
+        size: '5mb',
+      })
+      .optional(),
+    artistIds: vine.array(vine.number().min(1)).optional(),
   })
 )
 
@@ -74,12 +84,16 @@ export const getEventsValidator = vine.compile(
     type: vine.enum(Object.values(EventType)).optional(),
     subtype: vine.enum(Object.values(EventSubtype)).optional(),
     city: vine.string().trim().minLength(2).maxLength(100).optional(),
-    startDate: vine.date({
-      formats: ['YYYY-MM-DD'],
-    }).optional(),
-    endDate: vine.date({
-      formats: ['YYYY-MM-DD'],
-    }).optional(),
+    startDate: vine
+      .date({
+        formats: ['YYYY-MM-DD'],
+      })
+      .optional(),
+    endDate: vine
+      .date({
+        formats: ['YYYY-MM-DD'],
+      })
+      .optional(),
   })
 )
 
