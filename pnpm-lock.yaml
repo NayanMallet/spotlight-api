@@ -4,6 +4,92 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+importers:
+
+  .:
+    dependencies:
+      '@adonisjs/auth':
+        specifier: ^9.4.0
+        version: 9.4.0(@adonisjs/assembler@7.8.2(typescript@5.8.3))(@adonisjs/core@6.19.0(@adonisjs/assembler@7.8.2(typescript@5.8.3))(@vinejs/vine@3.0.1))(@adonisjs/lucid@21.6.1(@adonisjs/assembler@7.8.2(typescript@5.8.3))(@adonisjs/core@6.19.0(@adonisjs/assembler@7.8.2(typescript@5.8.3))(@vinejs/vine@3.0.1))(@vinejs/vine@3.0.1)(luxon@3.6.1)(mysql2@3.14.1))(@japa/api-client@3.1.0(@japa/assert@4.0.1(@japa/runner@4.2.0))(@japa/runner@4.2.0))(@japa/plugin-adonisjs@4.0.0(@adonisjs/core@6.19.0(@adonisjs/assembler@7.8.2(typescript@5.8.3))(@vinejs/vine@3.0.1))(@japa/api-client@3.1.0(@japa/assert@4.0.1(@japa/runner@4.2.0))(@japa/runner@4.2.0))(@japa/runner@4.2.0))
+      '@adonisjs/core':
+        specifier: ^6.18.0
+        version: 6.19.0(@adonisjs/assembler@7.8.2(typescript@5.8.3))(@vinejs/vine@3.0.1)
+      '@adonisjs/cors':
+        specifier: ^2.2.1
+        version: 2.2.1(@adonisjs/core@6.19.0(@adonisjs/assembler@7.8.2(typescript@5.8.3))(@vinejs/vine@3.0.1))
+      '@adonisjs/drive':
+        specifier: ^3.4.1
+        version: 3.4.1(@adonisjs/core@6.19.0(@adonisjs/assembler@7.8.2(typescript@5.8.3))(@vinejs/vine@3.0.1))
+      '@adonisjs/lucid':
+        specifier: ^21.6.1
+        version: 21.6.1(@adonisjs/assembler@7.8.2(typescript@5.8.3))(@adonisjs/core@6.19.0(@adonisjs/assembler@7.8.2(typescript@5.8.3))(@vinejs/vine@3.0.1))(@vinejs/vine@3.0.1)(luxon@3.6.1)(mysql2@3.14.1)
+      '@vinejs/vine':
+        specifier: ^3.0.1
+        version: 3.0.1
+      adonis-autoswagger:
+        specifier: ^3.65.0
+        version: 3.73.0
+      luxon:
+        specifier: ^3.6.1
+        version: 3.6.1
+      mysql2:
+        specifier: ^3.14.1
+        version: 3.14.1
+      reflect-metadata:
+        specifier: ^0.2.2
+        version: 0.2.2
+    devDependencies:
+      '@adonisjs/assembler':
+        specifier: ^7.8.2
+        version: 7.8.2(typescript@5.8.3)
+      '@adonisjs/eslint-config':
+        specifier: ^2.0.0
+        version: 2.1.0(eslint@9.29.0)(prettier@3.6.1)(typescript@5.8.3)
+      '@adonisjs/prettier-config':
+        specifier: ^1.4.4
+        version: 1.4.5
+      '@adonisjs/tsconfig':
+        specifier: ^1.4.0
+        version: 1.4.1
+      '@japa/api-client':
+        specifier: ^3.1.0
+        version: 3.1.0(@japa/assert@4.0.1(@japa/runner@4.2.0))(@japa/runner@4.2.0)
+      '@japa/assert':
+        specifier: ^4.0.1
+        version: 4.0.1(@japa/runner@4.2.0)
+      '@japa/plugin-adonisjs':
+        specifier: ^4.0.0
+        version: 4.0.0(@adonisjs/core@6.19.0(@adonisjs/assembler@7.8.2(typescript@5.8.3))(@vinejs/vine@3.0.1))(@japa/api-client@3.1.0(@japa/assert@4.0.1(@japa/runner@4.2.0))(@japa/runner@4.2.0))(@japa/runner@4.2.0)
+      '@japa/runner':
+        specifier: ^4.2.0
+        version: 4.2.0
+      '@swc/core':
+        specifier: 1.11.24
+        version: 1.11.24
+      '@types/luxon':
+        specifier: ^3.6.2
+        version: 3.6.2
+      '@types/node':
+        specifier: ^22.15.18
+        version: 22.15.33
+      eslint:
+        specifier: ^9.26.0
+        version: 9.29.0
+      hot-hook:
+        specifier: ^0.4.0
+        version: 0.4.0
+      pino-pretty:
+        specifier: ^13.0.0
+        version: 13.0.0
+      prettier:
+        specifier: ^3.5.3
+        version: 3.6.1
+      ts-node-maintained:
+        specifier: ^10.9.5
+        version: 10.9.5(@swc/core@1.11.24)(@types/node@22.15.33)(typescript@5.8.3)
+      typescript:
+        specifier: ~5.8
+        version: 5.8.3
 dependencies:
   '@adonisjs/auth':
     specifier: ^9.4.0
@@ -279,7 +365,7 @@ packages:
       '@adonisjs/core': 6.19.0(@adonisjs/assembler@7.8.2)(@vinejs/vine@3.0.1)
     dev: false
 
-  /@adonisjs/encryption@6.0.2:
+  '@adonisjs/encryption@6.0.2':
     resolution: {integrity: sha512-37XqVPsZi6zXMbC0Me1/qlcTP0uE+KAtYOFx7D7Tvtz377NL/6gqxqgpW/BopgOSD+CVDXjzO/Wx3M2UrbkJRQ==}
     engines: {node: '>=18.16.0'}
     dependencies:
@@ -1394,11 +1480,11 @@ packages:
       eslint-visitor-keys: 4.2.1
     dev: true
 
-  /@vinejs/compiler@3.0.0:
+  '@vinejs/compiler@3.0.0':
     resolution: {integrity: sha512-v9Lsv59nR56+bmy2p0+czjZxsLHwaibJ+SV5iK9JJfehlJMa501jUJQqqz4X/OqKXrxtE3uTQmSqjUqzF3B2mw==}
     engines: {node: '>=18.0.0'}
 
-  /@vinejs/vine@3.0.1:
+  '@vinejs/vine@3.0.1':
     resolution: {integrity: sha512-ZtvYkYpZOYdvbws3uaOAvTFuvFXoQGAtmzeiXu+XSMGxi5GVsODpoI9Xu9TplEMuD/5fmAtBbKb9cQHkWkLXDQ==}
     engines: {node: '>=18.16.0'}
     dependencies:
@@ -1414,7 +1500,7 @@ packages:
   /abstract-logging@2.0.1:
     resolution: {integrity: sha512-2BjRTZxTPvheOvGbBslFSYOUkr+SjPtOnrLP33f+VIWLzezQpZcqVg7ja3L4dBXmzzgwT+a029jRx5PCi3JuiA==}
 
-  /accepts@1.3.8:
+  accepts@1.3.8:
     resolution: {integrity: sha512-PYAthTa2m2VKxuvSD3DPC/Gy+U+sOA1LAuT8mkmRuvw+NACSaeXEQ+NHcVF7rONl6qcaxV3Uuemwawk+7+SJLw==}
     engines: {node: '>= 0.6'}
     dependencies:
@@ -1447,7 +1533,7 @@ packages:
     engines: {node: '>= 14'}
     dev: false
 
-  /ajv@6.12.6:
+  ajv@6.12.6:
     resolution: {integrity: sha512-j3fVLgvTo527anyYyJOGTYJbG+vnnQYvE0m5mmkc1TK+nxAppkCLMIL0aZ4dblVCNoGShhm+kzE4ZUykBoMg4g==}
     dependencies:
       fast-deep-equal: 3.1.3
@@ -1507,14 +1593,7 @@ packages:
     resolution: {integrity: sha512-Izi8RQcffqCeNVgFigKli1ssklIbpHnCYc6AknXGYoB6grJqyeby7jv12JUQgmTAnIDnbck1uxksT4dzN3PWBA==}
     engines: {node: '>=12'}
 
-  /ast-types@0.13.4:
-    resolution: {integrity: sha512-x1FCFnFifvYDDzTaLII71vG5uvDwgtmDTEVWAxrgeiR8VjMONcCXJx7E+USjDtHlwFmt9MysbqgF9b9Vjr6w+w==}
-    engines: {node: '>=4'}
-    dependencies:
-      tslib: 2.8.1
-    dev: false
-
-  /async-retry@1.3.3:
+  async-retry@1.3.3:
     resolution: {integrity: sha512-wfr/jstw9xNi/0teMHrRW7dsz3Lt5ARhYNZ2ewpadnhaIp5mbALhOAP+EAdsC7t4Z6wqsDVv9+W6gm1Dk9mEyw==}
     dependencies:
       retry: 0.13.1
@@ -1678,7 +1757,7 @@ packages:
     resolution: {integrity: sha512-P8BjAsXvZS+VIDUI11hHCQEv74YT67YUi5JJFNWIqL235sBmjX4+qx9Muvls5ivyNENctx46xQLQ3aTuE7ssaQ==}
     engines: {node: '>=6'}
 
-  /camelcase@8.0.0:
+  camelcase@8.0.0:
     resolution: {integrity: sha512-8WB3Jcas3swSvjIeA2yvCJ+Miyz5l1ZmB6HFb9R1317dt9LCQoswg/BGrmAmkWVEszSrrg4RwmO46qIm2OEnSA==}
     engines: {node: '>=16'}
 
@@ -1686,7 +1765,7 @@ packages:
     resolution: {integrity: sha512-VQAUIUzBiZ/UnlM28fSp2CRF3ivUn1BWEvxMcVTNwpw91Py1pGbPIyIKtd+tzct9C3ouceCVdGAXxZOpZAsgdw==}
     dev: true
 
-  /case-anything@3.1.2:
+  case-anything@3.1.2:
     resolution: {integrity: sha512-wljhAjDDIv/hM2FzgJnYQg90AWmZMNtESCjTeLH680qTzdo0nErlCxOmgzgX4ZsZAtIvqHyD87ES8QyriXB+BQ==}
     engines: {node: '>=18'}
 
@@ -1707,7 +1786,7 @@ packages:
       ansi-styles: 4.3.0
       supports-color: 7.2.0
 
-  /check-disk-space@3.4.0:
+  check-disk-space@3.4.0:
     resolution: {integrity: sha512-drVkSqfwA+TvuEhFipiR1OC9boEGZL5RrWvVsOthdcvQNXyCCuKkEiTOTXZ7qxSf/GLwq4GvzfrQD/Wz325hgw==}
     engines: {node: '>=16'}
 
@@ -1857,7 +1936,7 @@ packages:
     resolution: {integrity: sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==}
     dev: true
 
-  /content-disposition@0.5.4:
+  content-disposition@0.5.4:
     resolution: {integrity: sha512-FveZTNuGw04cxlAiWbzi6zTAL/lhehaWbTtgluJh4/E95DqMwTmha3KZN1aAWA8cFIhHzMZUvLevkw5Rqk+tSQ==}
     engines: {node: '>= 0.6'}
     dependencies:
@@ -2051,34 +2130,7 @@ packages:
   /dlv@1.1.3:
     resolution: {integrity: sha512-+HlytyjlPKnIG8XuRG8WvmBP8xs8P71y+SKKS6ZXWoEgLuePxtDoUEiH7WkdePWrQ5JBpE6aoVqfZfJUQkjXwA==}
 
-  /dom-serializer@2.0.0:
-    resolution: {integrity: sha512-wIkAryiqt/nV5EQKqQpo3SToSOV9J0DnbJqwK7Wv/Trc92zIAYZ4FlMu+JPFW1DfGFt81ZTCGgDEabffXeLyJg==}
-    dependencies:
-      domelementtype: 2.3.0
-      domhandler: 5.0.3
-      entities: 4.5.0
-    dev: false
-
-  /domelementtype@2.3.0:
-    resolution: {integrity: sha512-OLETBj6w0OsagBwdXnPdN0cnMfF9opN69co+7ZrbfPGrdpPVNBUj02spi6B1N7wChLQiPn4CSH/zJvXw56gmHw==}
-    dev: false
-
-  /domhandler@5.0.3:
-    resolution: {integrity: sha512-cgwlv/1iFQiFnU96XXgROh8xTeetsnJiDsTc7TYCLFd9+/WNkIqPTxiM/8pSd8VIrhXGTf1Ny1q1hquVqDJB5w==}
-    engines: {node: '>= 4'}
-    dependencies:
-      domelementtype: 2.3.0
-    dev: false
-
-  /domutils@3.2.2:
-    resolution: {integrity: sha512-6kZKyUajlDuqlHKVX1w7gyslj9MPIXzIFiz/rGu35uC1wMi+kMhQwGhl4lt9unC9Vb9INnY9Z3/ZA3+FhASLaw==}
-    dependencies:
-      dom-serializer: 2.0.0
-      domelementtype: 2.3.0
-      domhandler: 5.0.3
-    dev: false
-
-  /dotenv@16.5.0:
+  dotenv@16.5.0:
     resolution: {integrity: sha512-m/C+AwOAr9/W1UOIZUo232ejMNnJAJtYQjUbHoNTBNTJSvqzzDh7vnrei3o3r3m9blf6ZoDkvcw0VmozNRFJxg==}
     engines: {node: '>=12'}
 
@@ -2359,7 +2411,7 @@ packages:
     hasBin: true
     dev: false
 
-  /esquery@1.6.0:
+  esquery@1.6.0:
     resolution: {integrity: sha512-ca9pw9fomFcKPvFLXhBKUK90ZvGibiGOvRJNbjljY7s7uq/5YO4BOzcYtJqExdx99rF6aAcnRxHmcUHcz6sQsg==}
     engines: {node: '>=0.10'}
     dependencies:
@@ -2388,35 +2440,8 @@ packages:
   /execa@9.6.0:
     resolution: {integrity: sha512-jpWzZ1ZhwUmeWRhS7Qv3mhpOhLfwI+uAX4e5fOcXqwMR7EcJ0pj2kV1CVzHVMX/LphnKWD3LObjZCoJ71lKpHw==}
     engines: {node: ^18.19.0 || >=20.5.0}
-    dependencies:
-      '@sindresorhus/merge-streams': 4.0.0
-      cross-spawn: 7.0.6
-      figures: 6.1.0
-      get-stream: 9.0.1
-      human-signals: 8.0.1
-      is-plain-obj: 4.1.0
-      is-stream: 4.0.1
-      npm-run-path: 6.0.0
-      pretty-ms: 9.2.0
-      signal-exit: 4.1.0
-      strip-final-newline: 4.0.0
-      yoctocolors: 2.1.1
 
-  /extract-zip@2.0.1:
-    resolution: {integrity: sha512-GDhU9ntwuKyGXdZBUgTIe+vXnWj0fppUEtMDL0+idd5Sta8TGpHssn/eusA9mrPr9qNDym6SxAYZjNvCn/9RBg==}
-    engines: {node: '>= 10.17.0'}
-    hasBin: true
-    dependencies:
-      debug: 4.4.1
-      get-stream: 5.2.0
-      yauzl: 2.10.0
-    optionalDependencies:
-      '@types/yauzl': 2.10.3
-    transitivePeerDependencies:
-      - supports-color
-    dev: false
-
-  /fast-copy@3.0.2:
+  fast-copy@3.0.2:
     resolution: {integrity: sha512-dl0O9Vhju8IrcLndv2eU4ldt1ftXMqqfgN4H1cpmGV7P6jeB9FwpN9a2c8DPGE1Ys88rNUJVYDHq73CGAGOPfQ==}
     dev: true
 
@@ -2547,17 +2572,7 @@ packages:
     resolution: {integrity: sha512-9UbaD6XdAL97+k/n+N7JwX46K/M6Zc6KcFYskrYL8wbBV/Uyk0CTAMY0VT+qiK5PM7AIc9aTWYtq65U7T+aCNQ==}
     engines: {node: '>=8'}
 
-  /follow-redirects@1.15.9:
-    resolution: {integrity: sha512-gew4GsXizNgdoRyqmyfMHyAmXsZDk6mHkSxZFCzW9gwlbtOW44CDtYavM+y+72qD/Vq2l550kMF52DT8fOLJqQ==}
-    engines: {node: '>=4.0'}
-    peerDependencies:
-      debug: '*'
-    peerDependenciesMeta:
-      debug:
-        optional: true
-    dev: false
-
-  /form-data@4.0.3:
+  form-data@4.0.3:
     resolution: {integrity: sha512-qsITQPfmvMOSAdeyZ+12I1c+CKSstAFAwu+97zrnWAbIr5u8wfsExUzCesVLC8NgHuRUqNN4Zy6UPWUTRGslcA==}
     engines: {node: '>= 6'}
     dependencies:
@@ -2734,7 +2749,7 @@ packages:
     resolution: {integrity: sha512-F/1DnUGPopORZi0ni+CvrCgHQ5FyEAHRLSApuYWMmrbSwoN2Mn/7k+Gl38gJnR7yyDZk6WLXwiGod1JOWNDKGw==}
     hasBin: true
 
-  /help-me@5.0.0:
+  help-me@5.0.0:
     resolution: {integrity: sha512-7xgomUX6ADmcYzFik0HzAxh/73YlKR9bmFzf51CZwR+b6YtzU2m0u49hQCqV6SvlqIqsaxovfwdvbnsw3b/zpg==}
     dev: true
 
@@ -2767,34 +2782,8 @@ packages:
   /http-errors@2.0.0:
     resolution: {integrity: sha512-FtwrG/euBzaEjYeRqOgly7G0qviiXoJWnvEH2Z1plBdXgbyjv34pHTSb9zoeHMyDy33+DWy5Wt9Wo+TURtOYSQ==}
     engines: {node: '>= 0.8'}
-    dependencies:
-      depd: 2.0.0
-      inherits: 2.0.4
-      setprototypeof: 1.2.0
-      statuses: 2.0.1
-      toidentifier: 1.0.1
 
-  /http-proxy-agent@7.0.2:
-    resolution: {integrity: sha512-T1gkAiYYDWYx3V5Bmyu7HcfcvL7mUrTWiM6yOfa3PIphViJ/gFPbvidQ+veqSOHci/PxBcDabeUNCzpOODJZig==}
-    engines: {node: '>= 14'}
-    dependencies:
-      agent-base: 7.1.3
-      debug: 4.4.1
-    transitivePeerDependencies:
-      - supports-color
-    dev: false
-
-  /https-proxy-agent@7.0.6:
-    resolution: {integrity: sha512-vK9P5/iUfdl95AI+JVyUuIcVtd4ofvtrOr3HNtM2yxC9bnMbEdp3x01OhQNnjb8IJYi38VlTE3mBXwcfvywuSw==}
-    engines: {node: '>= 14'}
-    dependencies:
-      agent-base: 7.1.3
-      debug: 4.4.1
-    transitivePeerDependencies:
-      - supports-color
-    dev: false
-
-  /human-signals@8.0.1:
+  human-signals@8.0.1:
     resolution: {integrity: sha512-eKCa6bwnJhvxj14kZk5NCPc6Hb6BdsU9DZcOnmQKSnO1VKrfV0zCvtttPZUsBvjmNDn8rpcJfpwSYnHBjc95MQ==}
     engines: {node: '>=18.18.0'}
 
@@ -2991,7 +2980,7 @@ packages:
     resolution: {integrity: sha512-Bdboy+l7tA3OGW6FjyFHWkP5LuByj1Tk33Ljyq0axyzdk9//JSi2u3fP1QSmd1KNwq6VOKYGlAu87CisVir6Pw==}
     dev: true
 
-  /jsonschema@1.5.0:
+  jsonschema@1.5.0:
     resolution: {integrity: sha512-K+A9hhqbn0f3pJX17Q/7H6yQfD/5OXgdrR5UE12gMXCiN9D5Xq2o5mddV2QEcX/bjla99ASsAAQUyMCCRWAEhw==}
 
   /junk@4.0.1:
@@ -3126,7 +3115,7 @@ packages:
   /loupe@3.1.4:
     resolution: {integrity: sha512-wJzkKwJrheKtknCOKNEtDK4iqg/MxmZheEMtSTYvnzRdEYaZzmgH976nenp8WdJRdx5Vc1X/9MO0Oszl6ezeXg==}
 
-  /lru-cache@10.4.3:
+  lru-cache@10.4.3:
     resolution: {integrity: sha512-JNAzZcXrCt42VGLuYz0zfAzDfAvJWW6AfYlDBQyDV5DClI2m5sAmK+OIO7s59XfsRsWHp02jAJrRadPRGTt6SQ==}
     dev: true
 
@@ -3167,7 +3156,7 @@ packages:
     resolution: {integrity: sha512-8q7VEgMJW4J8tcfVPy8g09NcQwZdbwFEqhe/WZkoIzjn/3TGDwtOCYtXGxA3O8tPzpczCCDgv+P2P5y00ZJOOg==}
     engines: {node: '>= 8'}
 
-  /methods@1.1.2:
+  methods@1.1.2:
     resolution: {integrity: sha512-iclAHeNqNm68zFtnZ0e+1L2yUIdvzNoauKU4WBA3VvH/vPFieF7qfRlwUZU+DA9P9bPXIS90ulxoUoCH23sV2w==}
     engines: {node: '>= 0.6'}
 
@@ -3278,12 +3267,7 @@ packages:
     resolution: {integrity: sha512-+EUsqGPLsM+j/zdChZjsnX51g4XrHFOIXwfnCVPGlQk/k5giakcKsuxCObBRu6DSm9opw/O6slWbJdghQM4bBg==}
     engines: {node: '>= 0.6'}
 
-  /netmask@2.0.2:
-    resolution: {integrity: sha512-dBpDMdxv9Irdq66304OLfEmQ9tbNRFnFTuZiLo+bD+r332bBmMJ8GBLXklIXXgxd3+v9+KUnZaUR5PJMa75Gsg==}
-    engines: {node: '>= 0.4.0'}
-    dev: false
-
-  /node-releases@2.0.19:
+  node-releases@2.0.19:
     resolution: {integrity: sha512-xxOWJsBKtzAq7DY0J+DTzuz58K8e7sJbdgwkbMWQe8UYB6ekmsQ45q0M/tJDsGaZmbC+l7n57UV8Hl5tHxO9uw==}
     dev: true
 
@@ -3428,13 +3412,13 @@ packages:
   /package-manager-detector@1.3.0:
     resolution: {integrity: sha512-ZsEbbZORsyHuO00lY1kV3/t72yp6Ysay6Pd17ZAlNGuGwmWDLCJxFpRs0IzfXfj1o4icJOkUEioexFHzyPurSQ==}
 
-  /parent-module@1.0.1:
+  parent-module@1.0.1:
     resolution: {integrity: sha512-GQ2EWRpQV8/o+Aw8YqtfZZPfNRWZYkbidE9k5rpl/hC3vtHHBfGm2Ifi6qWV+coDGkrUKZAxE3Lot5kcsRlh+g==}
     engines: {node: '>=6'}
     dependencies:
       callsites: 3.1.0
 
-  /parse-imports@2.2.1:
+  parse-imports@2.2.1:
     resolution: {integrity: sha512-OL/zLggRp8mFhKL0rNORUTR4yBYujK/uU+xZL+/0Rgm2QE4nLO9v8PzEweSJEbMGKmDRjJE4R3IMJlL2di4JeQ==}
     engines: {node: '>= 18'}
     dependencies:
@@ -3464,29 +3448,10 @@ packages:
     resolution: {integrity: sha512-TXfryirbmq34y8QBwgqCVLi+8oA3oWx2eAnSn62ITyEhEYaWRlVZ2DvMM9eZbMs/RfxPu/PK/aBLyGj4IrqMHw==}
     engines: {node: '>=18'}
 
-  /parse5-htmlparser2-tree-adapter@7.1.0:
-    resolution: {integrity: sha512-ruw5xyKs6lrpo9x9rCZqZZnIUntICjQAd0Wsmp396Ul9lN/h+ifgVV1x1gZHi8euej6wTfpqX8j+BFQxF0NS/g==}
-    dependencies:
-      domhandler: 5.0.3
-      parse5: 7.3.0
-    dev: false
-
-  /parse5-parser-stream@7.1.2:
-    resolution: {integrity: sha512-JyeQc9iwFLn5TbvvqACIF/VXG6abODeB3Fwmv/TGdLk2LfbWkaySGY72at4+Ty7EkPZj854u4CrICqNk2qIbow==}
-    dependencies:
-      parse5: 7.3.0
-    dev: false
-
-  /parse5@7.3.0:
-    resolution: {integrity: sha512-IInvU7fabl34qmi9gY8XOVxhYyMyuH2xUNpb2q8/Y+7552KlejkRvqvD19nMoUW/uQGGbqNpA6Tufu5FL5BZgw==}
-    dependencies:
-      entities: 6.0.1
-    dev: false
-
-  /path-browserify@1.0.1:
+  path-browserify@1.0.1:
     resolution: {integrity: sha512-b7uo2UCUOYZcnF/3ID0lulOJi/bafxa1xPe7ZPsammBSpjSWQkjNxlt635YGS2MiR9GjvuXCtz2emr3jbsz98g==}
 
-  /path-exists@4.0.0:
+  path-exists@4.0.0:
     resolution: {integrity: sha512-ak9Qy5Q7jYb2Wwcey5Fpvg2KoAc/ZIhLSLOSBmRmygPsGwkVVt0fZa0qrtMz+m6tJTAHfZQ8FnmB4MG4LWy7/w==}
     engines: {node: '>=8'}
     dev: true
@@ -3681,44 +3646,7 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
-  /puppeteer-core@24.10.2:
-    resolution: {integrity: sha512-CnzhOgrZj8DvkDqI+Yx+9or33i3Y9uUYbKyYpP4C13jWwXx/keQ38RMTMmxuLCWQlxjZrOH0Foq7P2fGP7adDQ==}
-    engines: {node: '>=18'}
-    dependencies:
-      '@puppeteer/browsers': 2.10.5
-      chromium-bidi: 5.1.0(devtools-protocol@0.0.1452169)
-      debug: 4.4.1
-      devtools-protocol: 0.0.1452169
-      typed-query-selector: 2.12.0
-      ws: 8.18.2
-    transitivePeerDependencies:
-      - bare-buffer
-      - bufferutil
-      - supports-color
-      - utf-8-validate
-    dev: false
-
-  /puppeteer@24.10.2(typescript@5.8.3):
-    resolution: {integrity: sha512-+k26rCz6akFZntx0hqUoFjCojgOLIxZs6p2k53LmEicwsT8F/FMBKfRfiBw1sitjiCvlR/15K7lBqfjXa251FA==}
-    engines: {node: '>=18'}
-    hasBin: true
-    requiresBuild: true
-    dependencies:
-      '@puppeteer/browsers': 2.10.5
-      chromium-bidi: 5.1.0(devtools-protocol@0.0.1452169)
-      cosmiconfig: 9.0.0(typescript@5.8.3)
-      devtools-protocol: 0.0.1452169
-      puppeteer-core: 24.10.2
-      typed-query-selector: 2.12.0
-    transitivePeerDependencies:
-      - bare-buffer
-      - bufferutil
-      - supports-color
-      - typescript
-      - utf-8-validate
-    dev: false
-
-  /qs@6.14.0:
+  qs@6.14.0:
     resolution: {integrity: sha512-YWWTjgABSKcvs/nWBi9PycY/JiPJqOD4JA6o9Sej2AtvSGarXxKC3OQSk4pAarbdQlKAh5D4FCQkJNkW+GAn3w==}
     engines: {node: '>=0.6'}
     dependencies:
@@ -3805,7 +3733,7 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: false
 
-  /resolve-from@4.0.0:
+  resolve-from@4.0.0:
     resolution: {integrity: sha512-pb/MYmXstAkysRFx8piNI1tGFNQIFA3vkE3Gq4EuA1dF6gHp/+vgZqsCGJapvy8N3Q+4o7FwvquPJcnZ7RYy4g==}
     engines: {node: '>=4'}
 
@@ -3870,7 +3798,7 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
 
-  /seq-queue@0.0.5:
+  seq-queue@0.0.5:
     resolution: {integrity: sha512-hr3Wtp/GZIc/6DAGPDcV4/9WoZhjrkXsi5B/07QgX8tsdc6ilr7BFM6PM6rbdAX1kFSDYeZGLipIZZKyQP0O5Q==}
     dev: false
 
@@ -3961,31 +3889,7 @@ packages:
     resolution: {integrity: sha512-h+z7HKHYXj6wJU+AnS/+IH8Uh9fdcX1Lrhg1/VMdf9PwoBQXFcXiAdsy2tSK0P6gKwJLXp02r90ahUCqHk9rrw==}
     engines: {node: '>=8.0.0'}
 
-  /smart-buffer@4.2.0:
-    resolution: {integrity: sha512-94hK0Hh8rPqQl2xXc3HsaBoOXKV20MToPkcXvwbISWLEs+64sBq5kFgn2kJDHb1Pry9yrP0dxrCI9RRci7RXKg==}
-    engines: {node: '>= 6.0.0', npm: '>= 3.0.0'}
-    dev: false
-
-  /socks-proxy-agent@8.0.5:
-    resolution: {integrity: sha512-HehCEsotFqbPW9sJ8WVYB6UbmIMv7kUUORIF2Nncq4VQvBfNBLibW9YZR5dlYCSUhwcD628pRllm7n+E+YTzJw==}
-    engines: {node: '>= 14'}
-    dependencies:
-      agent-base: 7.1.3
-      debug: 4.4.1
-      socks: 2.8.5
-    transitivePeerDependencies:
-      - supports-color
-    dev: false
-
-  /socks@2.8.5:
-    resolution: {integrity: sha512-iF+tNDQla22geJdTyJB1wM/qrX9DMRwWrciEPwWLPRWAUEM8sQiyxgckLxWT1f7+9VabJS0jTGGr4QgBuvi6Ww==}
-    engines: {node: '>= 10.0.0', npm: '>= 3.0.0'}
-    dependencies:
-      ip-address: 9.0.5
-      smart-buffer: 4.2.0
-    dev: false
-
-  /sonic-boom@4.2.0:
+  sonic-boom@4.2.0:
     resolution: {integrity: sha512-INb7TM37/mAcsGmc9hyyI6+QR3rR1zVRu36B0NeGXKnOOLiZOfER5SA+N7X7k3yUYRzLWafduTDvJAfDswwEww==}
     dependencies:
       atomic-sleep: 1.0.0
@@ -3994,7 +3898,7 @@ packages:
     resolution: {integrity: sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==}
     engines: {node: '>=0.10.0'}
 
-  /spdx-correct@3.2.0:
+  spdx-correct@3.2.0:
     resolution: {integrity: sha512-kN9dJbvnySHULIluDHy32WHRUu3Og7B9sbY7tsFLctQkIqnMh3hErYgdMjTYuqmcXX+lK5T1lnUt3G7zNswmZA==}
     dependencies:
       spdx-expression-parse: 3.0.1
@@ -4091,7 +3995,7 @@ packages:
       min-indent: 1.0.1
     dev: true
 
-  /strip-json-comments@3.1.1:
+  strip-json-comments@3.1.1:
     resolution: {integrity: sha512-6fPc+R4ihwqP6N/aIv2f1gMH8lOVtWQHoqC4yK6oSDVVocumAsfCqjkXnqiYMhmMwS/mEHLp7Vehlt3ql6lEig==}
     engines: {node: '>=8'}
     dev: true
@@ -4253,30 +4157,8 @@ packages:
         optional: true
       '@swc/wasm':
         optional: true
-    dependencies:
-      '@cspotcode/source-map-support': 0.8.1
-      '@swc/core': 1.11.24
-      '@tsconfig/node10': 1.0.11
-      '@tsconfig/node12': 1.0.11
-      '@tsconfig/node14': 1.0.3
-      '@tsconfig/node16': 1.0.4
-      '@types/node': 22.15.33
-      acorn: 8.15.0
-      acorn-walk: 8.3.4
-      arg: 4.1.3
-      create-require: 1.1.1
-      diff: 4.0.2
-      make-error: 1.3.6
-      typescript: 5.8.3
-      v8-compile-cache-lib: 3.0.1
-      yn: 3.1.1
-    dev: true
 
-  /tslib@2.8.1:
-    resolution: {integrity: sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==}
-    dev: false
-
-  /type-check@0.4.0:
+  type-check@0.4.0:
     resolution: {integrity: sha512-XleUoc9uwGXqjWwXaUTZAmzMcFZ5858QA2vvx1Ur5xIcixXIP+8LnFDgRplU30us6teqdlskFfu+ae4K79Ooew==}
     engines: {node: '>= 0.8.0'}
     dependencies:
@@ -4315,7 +4197,7 @@ packages:
       - supports-color
     dev: true
 
-  /typescript@5.8.3:
+  typescript@5.8.3:
     resolution: {integrity: sha512-p1diW6TqL9L07nNxvRMM7hMMw4c5XOo/1ibL4aAIGmSAt9slTE1Xgw5KWuof2uTOvCg9BY7ZRi+GaF+7sfgPeQ==}
     engines: {node: '>=14.17'}
     hasBin: true
@@ -4368,7 +4250,7 @@ packages:
       picocolors: 1.1.1
     dev: true
 
-  /uri-js@4.4.1:
+  uri-js@4.4.1:
     resolution: {integrity: sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==}
     dependencies:
       punycode: 2.3.1
@@ -4423,60 +4305,2298 @@ packages:
   /wrap-ansi@7.0.0:
     resolution: {integrity: sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q==}
     engines: {node: '>=10'}
+
+  yocto-queue@1.2.1:
+    resolution: {integrity: sha512-AyeEbWOu/TAXdxlV9wmGcR0+yh2j3vYPGOECcIj2S7MkrLyC7ne+oye2BKTItt0ii2PHk4cDy+95+LshzbXnGg==}
+    engines: {node: '>=12.20'}
+
+  yoctocolors@2.1.1:
+    resolution: {integrity: sha512-GQHQqAopRhwU8Kt1DDM8NjibDXHC8eoh1erhGAJPEyveY9qqVeXvVikNKrDz69sHowPMorbPUrH/mx8c50eiBQ==}
+    engines: {node: '>=18'}
+
+  youch-core@0.3.2:
+    resolution: {integrity: sha512-fusrlIMLeRvTFYLUjJ9KzlGC3N+6MOPJ68HNj/yJv2nz7zq8t4HEviLms2gkdRPUS7F5rZ5n+pYx9r88m6IE1g==}
+    engines: {node: '>=18'}
+
+  youch-terminal@2.2.3:
+    resolution: {integrity: sha512-/PE77ZwG072tXBvF47S9RL9/G80u86icZ5QwyjblyM67L4n/T5qQeM3Xrecbu8kkDDr/9T/PTj/X+6G/OSRQug==}
+
+  youch@3.3.4:
+    resolution: {integrity: sha512-UeVBXie8cA35DS6+nBkls68xaBBXCye0CNznrhszZjTbRVnJKQuNsyLKBTTL4ln1o1rh2PKtv35twV7irj5SEg==}
+
+  youch@4.1.0-beta.8:
+    resolution: {integrity: sha512-rY2A2lSF7zC+l7HH9Mq+83D1dLlsPnEvy8jTouzaptDZM6geqZ3aJe/b7ULCwRURPtWV3vbDjA2DDMdoBol0HQ==}
+    engines: {node: '>=18'}
+
+snapshots:
+
+  '@adobe/css-tools@4.4.3': {}
+
+  '@adonisjs/ace@13.3.0':
+    dependencies:
+      '@poppinss/cliui': 6.4.3
+      '@poppinss/hooks': 7.2.5
+      '@poppinss/macroable': 1.0.4
+      '@poppinss/prompts': 3.1.4
+      '@poppinss/utils': 6.10.0
+      fastest-levenshtein: 1.0.16
+      jsonschema: 1.5.0
+      string-width: 7.2.0
+      yargs-parser: 21.1.1
+      youch: 3.3.4
+      youch-terminal: 2.2.3
+
+  '@adonisjs/application@8.4.1(@adonisjs/config@5.0.3)(@adonisjs/fold@10.2.0)':
+    dependencies:
+      '@adonisjs/config': 5.0.3
+      '@adonisjs/fold': 10.2.0
+      '@poppinss/hooks': 7.2.5
+      '@poppinss/macroable': 1.0.4
+      '@poppinss/utils': 6.10.0
+      glob-parent: 6.0.2
+      tempura: 0.4.1
+
+  '@adonisjs/assembler@7.8.2(typescript@5.8.3)':
+    dependencies:
+      '@adonisjs/env': 6.2.0
+      '@antfu/install-pkg': 0.4.1
+      '@poppinss/chokidar-ts': 4.1.9(typescript@5.8.3)
+      '@poppinss/cliui': 6.4.3
+      '@poppinss/hooks': 7.2.5
+      '@poppinss/utils': 6.10.0
+      cpy: 11.1.0
+      dedent: 1.6.0
+      execa: 9.6.0
+      fast-glob: 3.3.3
+      get-port: 7.1.0
+      junk: 4.0.1
+      picomatch: 4.0.2
+      pretty-hrtime: 1.0.3
+      slash: 5.1.0
+      ts-morph: 23.0.0
+      typescript: 5.8.3
+    transitivePeerDependencies:
+      - babel-plugin-macros
+
+  '@adonisjs/auth@9.4.0(@adonisjs/assembler@7.8.2(typescript@5.8.3))(@adonisjs/core@6.19.0(@adonisjs/assembler@7.8.2(typescript@5.8.3))(@vinejs/vine@3.0.1))(@adonisjs/lucid@21.6.1(@adonisjs/assembler@7.8.2(typescript@5.8.3))(@adonisjs/core@6.19.0(@adonisjs/assembler@7.8.2(typescript@5.8.3))(@vinejs/vine@3.0.1))(@vinejs/vine@3.0.1)(luxon@3.6.1)(mysql2@3.14.1))(@japa/api-client@3.1.0(@japa/assert@4.0.1(@japa/runner@4.2.0))(@japa/runner@4.2.0))(@japa/plugin-adonisjs@4.0.0(@adonisjs/core@6.19.0(@adonisjs/assembler@7.8.2(typescript@5.8.3))(@vinejs/vine@3.0.1))(@japa/api-client@3.1.0(@japa/assert@4.0.1(@japa/runner@4.2.0))(@japa/runner@4.2.0))(@japa/runner@4.2.0))':
+    dependencies:
+      '@adonisjs/core': 6.19.0(@adonisjs/assembler@7.8.2(typescript@5.8.3))(@vinejs/vine@3.0.1)
+      '@adonisjs/presets': 2.6.4(@adonisjs/assembler@7.8.2(typescript@5.8.3))(@adonisjs/core@6.19.0(@adonisjs/assembler@7.8.2(typescript@5.8.3))(@vinejs/vine@3.0.1))
+      '@poppinss/utils': 6.10.0
+      basic-auth: 2.0.1
+    optionalDependencies:
+      '@adonisjs/lucid': 21.6.1(@adonisjs/assembler@7.8.2(typescript@5.8.3))(@adonisjs/core@6.19.0(@adonisjs/assembler@7.8.2(typescript@5.8.3))(@vinejs/vine@3.0.1))(@vinejs/vine@3.0.1)(luxon@3.6.1)(mysql2@3.14.1)
+      '@japa/api-client': 3.1.0(@japa/assert@4.0.1(@japa/runner@4.2.0))(@japa/runner@4.2.0)
+      '@japa/plugin-adonisjs': 4.0.0(@adonisjs/core@6.19.0(@adonisjs/assembler@7.8.2(typescript@5.8.3))(@vinejs/vine@3.0.1))(@japa/api-client@3.1.0(@japa/assert@4.0.1(@japa/runner@4.2.0))(@japa/runner@4.2.0))(@japa/runner@4.2.0)
+    transitivePeerDependencies:
+      - '@adonisjs/assembler'
+
+  '@adonisjs/bodyparser@10.1.0(@adonisjs/http-server@7.7.0(@adonisjs/application@8.4.1(@adonisjs/config@5.0.3)(@adonisjs/fold@10.2.0))(@adonisjs/encryption@6.0.2)(@adonisjs/events@9.0.2(@adonisjs/application@8.4.1(@adonisjs/config@5.0.3)(@adonisjs/fold@10.2.0))(@adonisjs/fold@10.2.0))(@adonisjs/fold@10.2.0)(@adonisjs/logger@6.0.6))':
+    dependencies:
+      '@adonisjs/http-server': 7.7.0(@adonisjs/application@8.4.1(@adonisjs/config@5.0.3)(@adonisjs/fold@10.2.0))(@adonisjs/encryption@6.0.2)(@adonisjs/events@9.0.2(@adonisjs/application@8.4.1(@adonisjs/config@5.0.3)(@adonisjs/fold@10.2.0))(@adonisjs/fold@10.2.0))(@adonisjs/fold@10.2.0)(@adonisjs/logger@6.0.6)
+      '@paralleldrive/cuid2': 2.2.2
+      '@poppinss/macroable': 1.0.4
+      '@poppinss/multiparty': 2.0.1
+      '@poppinss/utils': 6.10.0
+      '@types/qs': 6.14.0
+      bytes: 3.1.2
+      file-type: 20.5.0
+      inflation: 2.1.0
+      media-typer: 1.1.0
+      qs: 6.14.0
+      raw-body: 3.0.0
+    transitivePeerDependencies:
+      - supports-color
+
+  '@adonisjs/config@5.0.3':
+    dependencies:
+      '@poppinss/utils': 6.10.0
+
+  '@adonisjs/core@6.19.0(@adonisjs/assembler@7.8.2(typescript@5.8.3))(@vinejs/vine@3.0.1)':
+    dependencies:
+      '@adonisjs/ace': 13.3.0
+      '@adonisjs/application': 8.4.1(@adonisjs/config@5.0.3)(@adonisjs/fold@10.2.0)
+      '@adonisjs/bodyparser': 10.1.0(@adonisjs/http-server@7.7.0(@adonisjs/application@8.4.1(@adonisjs/config@5.0.3)(@adonisjs/fold@10.2.0))(@adonisjs/encryption@6.0.2)(@adonisjs/events@9.0.2(@adonisjs/application@8.4.1(@adonisjs/config@5.0.3)(@adonisjs/fold@10.2.0))(@adonisjs/fold@10.2.0))(@adonisjs/fold@10.2.0)(@adonisjs/logger@6.0.6))
+      '@adonisjs/config': 5.0.3
+      '@adonisjs/encryption': 6.0.2
+      '@adonisjs/env': 6.2.0
+      '@adonisjs/events': 9.0.2(@adonisjs/application@8.4.1(@adonisjs/config@5.0.3)(@adonisjs/fold@10.2.0))(@adonisjs/fold@10.2.0)
+      '@adonisjs/fold': 10.2.0
+      '@adonisjs/hash': 9.1.1
+      '@adonisjs/health': 2.0.0
+      '@adonisjs/http-server': 7.7.0(@adonisjs/application@8.4.1(@adonisjs/config@5.0.3)(@adonisjs/fold@10.2.0))(@adonisjs/encryption@6.0.2)(@adonisjs/events@9.0.2(@adonisjs/application@8.4.1(@adonisjs/config@5.0.3)(@adonisjs/fold@10.2.0))(@adonisjs/fold@10.2.0))(@adonisjs/fold@10.2.0)(@adonisjs/logger@6.0.6)
+      '@adonisjs/logger': 6.0.6
+      '@adonisjs/repl': 4.1.0
+      '@antfu/install-pkg': 1.1.0
+      '@paralleldrive/cuid2': 2.2.2
+      '@poppinss/colors': 4.1.4
+      '@poppinss/dumper': 0.6.3
+      '@poppinss/macroable': 1.0.4
+      '@poppinss/utils': 6.10.0
+      '@sindresorhus/is': 7.0.2
+      '@types/he': 1.2.3
+      error-stack-parser-es: 1.0.5
+      he: 1.2.0
+      parse-imports: 2.2.1
+      pretty-hrtime: 1.0.3
+      string-width: 7.2.0
+      youch: 3.3.4
+      youch-terminal: 2.2.3
+    optionalDependencies:
+      '@adonisjs/assembler': 7.8.2(typescript@5.8.3)
+      '@vinejs/vine': 3.0.1
+    transitivePeerDependencies:
+      - supports-color
+
+  '@adonisjs/cors@2.2.1(@adonisjs/core@6.19.0(@adonisjs/assembler@7.8.2(typescript@5.8.3))(@vinejs/vine@3.0.1))':
+    dependencies:
+      '@adonisjs/core': 6.19.0(@adonisjs/assembler@7.8.2(typescript@5.8.3))(@vinejs/vine@3.0.1)
+
+  '@adonisjs/encryption@6.0.2':
+    dependencies:
+      '@poppinss/utils': 6.10.0
+
+  '@adonisjs/env@6.2.0':
+    dependencies:
+      '@poppinss/utils': 6.10.0
+      '@poppinss/validator-lite': 2.1.0
+      dotenv: 16.5.0
+      split-lines: 3.0.0
+
+  '@adonisjs/eslint-config@2.1.0(eslint@9.29.0)(prettier@3.6.1)(typescript@5.8.3)':
+    dependencies:
+      '@adonisjs/eslint-plugin': 2.0.0(eslint@9.29.0)(typescript@5.8.3)
+      '@stylistic/eslint-plugin-ts': 4.4.1(eslint@9.29.0)(typescript@5.8.3)
+      eslint: 9.29.0
+      eslint-config-prettier: 10.1.5(eslint@9.29.0)
+      eslint-plugin-prettier: 5.5.1(eslint-config-prettier@10.1.5(eslint@9.29.0))(eslint@9.29.0)(prettier@3.6.1)
+      eslint-plugin-unicorn: 59.0.1(eslint@9.29.0)
+      prettier: 3.6.1
+      typescript-eslint: 8.35.0(eslint@9.29.0)(typescript@5.8.3)
+    transitivePeerDependencies:
+      - '@types/eslint'
+      - supports-color
+      - typescript
+
+  '@adonisjs/eslint-plugin@2.0.0(eslint@9.29.0)(typescript@5.8.3)':
+    dependencies:
+      '@typescript-eslint/utils': 8.35.0(eslint@9.29.0)(typescript@5.8.3)
+      eslint: 9.29.0
+    transitivePeerDependencies:
+      - supports-color
+      - typescript
+
+  '@adonisjs/events@9.0.2(@adonisjs/application@8.4.1(@adonisjs/config@5.0.3)(@adonisjs/fold@10.2.0))(@adonisjs/fold@10.2.0)':
+    dependencies:
+      '@adonisjs/application': 8.4.1(@adonisjs/config@5.0.3)(@adonisjs/fold@10.2.0)
+      '@adonisjs/fold': 10.2.0
+      '@poppinss/utils': 6.10.0
+      '@sindresorhus/is': 6.3.1
+      emittery: 1.2.0
+
+  '@adonisjs/fold@10.2.0':
+    dependencies:
+      '@poppinss/utils': 7.0.0-next.3
+      parse-imports: 2.2.1
+
+  '@adonisjs/hash@9.1.1':
+    dependencies:
+      '@phc/format': 1.0.0
+      '@poppinss/utils': 6.10.0
+
+  '@adonisjs/health@2.0.0':
+    dependencies:
+      '@poppinss/utils': 6.10.0
+      check-disk-space: 3.4.0
+
+  '@adonisjs/http-server@7.7.0(@adonisjs/application@8.4.1(@adonisjs/config@5.0.3)(@adonisjs/fold@10.2.0))(@adonisjs/encryption@6.0.2)(@adonisjs/events@9.0.2(@adonisjs/application@8.4.1(@adonisjs/config@5.0.3)(@adonisjs/fold@10.2.0))(@adonisjs/fold@10.2.0))(@adonisjs/fold@10.2.0)(@adonisjs/logger@6.0.6)':
+    dependencies:
+      '@adonisjs/application': 8.4.1(@adonisjs/config@5.0.3)(@adonisjs/fold@10.2.0)
+      '@adonisjs/encryption': 6.0.2
+      '@adonisjs/events': 9.0.2(@adonisjs/application@8.4.1(@adonisjs/config@5.0.3)(@adonisjs/fold@10.2.0))(@adonisjs/fold@10.2.0)
+      '@adonisjs/fold': 10.2.0
+      '@adonisjs/logger': 6.0.6
+      '@paralleldrive/cuid2': 2.2.2
+      '@poppinss/macroable': 1.0.4
+      '@poppinss/matchit': 3.1.2
+      '@poppinss/middleware': 3.2.5
+      '@poppinss/utils': 6.10.0
+      '@sindresorhus/is': 7.0.2
+      accepts: 1.3.8
+      content-disposition: 0.5.4
+      cookie: 1.0.2
+      destroy: 1.2.0
+      encodeurl: 2.0.0
+      etag: 1.8.1
+      fresh: 0.5.2
+      mime-types: 3.0.1
+      on-finished: 2.4.1
+      proxy-addr: 2.0.7
+      qs: 6.14.0
+      tmp-cache: 1.1.0
+      type-is: 2.0.1
+      vary: 1.1.2
+      youch: 3.3.4
+
+  '@adonisjs/logger@6.0.6':
+    dependencies:
+      '@poppinss/utils': 6.10.0
+      abstract-logging: 2.0.1
+      pino: 9.7.0
+
+  '@adonisjs/lucid@21.6.1(@adonisjs/assembler@7.8.2(typescript@5.8.3))(@adonisjs/core@6.19.0(@adonisjs/assembler@7.8.2(typescript@5.8.3))(@vinejs/vine@3.0.1))(@vinejs/vine@3.0.1)(luxon@3.6.1)(mysql2@3.14.1)':
+    dependencies:
+      '@adonisjs/core': 6.19.0(@adonisjs/assembler@7.8.2(typescript@5.8.3))(@vinejs/vine@3.0.1)
+      '@adonisjs/presets': 2.6.4(@adonisjs/assembler@7.8.2(typescript@5.8.3))(@adonisjs/core@6.19.0(@adonisjs/assembler@7.8.2(typescript@5.8.3))(@vinejs/vine@3.0.1))
+      '@faker-js/faker': 9.8.0
+      '@poppinss/hooks': 7.2.5
+      '@poppinss/macroable': 1.0.4
+      '@poppinss/utils': 6.10.0
+      fast-deep-equal: 3.1.3
+      igniculus: 1.5.0
+      kleur: 4.1.5
+      knex: 3.1.0(mysql2@3.14.1)
+      knex-dynamic-connection: 3.2.0(mysql2@3.14.1)
+      pretty-hrtime: 1.0.3
+      qs: 6.14.0
+      slash: 5.1.0
+      tarn: 3.0.2
+    optionalDependencies:
+      '@adonisjs/assembler': 7.8.2(typescript@5.8.3)
+      '@vinejs/vine': 3.0.1
+      luxon: 3.6.1
+    transitivePeerDependencies:
+      - better-sqlite3
+      - mysql
+      - mysql2
+      - pg
+      - pg-native
+      - sqlite3
+      - supports-color
+      - tedious
+
+  '@adonisjs/presets@2.6.4(@adonisjs/assembler@7.8.2(typescript@5.8.3))(@adonisjs/core@6.19.0(@adonisjs/assembler@7.8.2(typescript@5.8.3))(@vinejs/vine@3.0.1))':
+    dependencies:
+      '@adonisjs/core': 6.19.0(@adonisjs/assembler@7.8.2(typescript@5.8.3))(@vinejs/vine@3.0.1)
+      '@poppinss/utils': 6.10.0
+    optionalDependencies:
+      '@adonisjs/assembler': 7.8.2(typescript@5.8.3)
+
+  '@adonisjs/prettier-config@1.4.5':
+    dependencies:
+      prettier-plugin-edgejs: 1.0.2
+
+  '@adonisjs/repl@4.1.0':
+    dependencies:
+      '@poppinss/colors': 4.1.4
+      string-width: 7.2.0
+
+  '@adonisjs/tsconfig@1.4.1': {}
+
+  '@antfu/install-pkg@0.4.1':
+    dependencies:
+      package-manager-detector: 0.2.11
+      tinyexec: 0.3.2
+
+  '@antfu/install-pkg@1.1.0':
+    dependencies:
+      package-manager-detector: 1.3.0
+      tinyexec: 1.0.1
+
+  '@arr/every@1.0.1': {}
+
+  '@babel/code-frame@7.27.1':
+    dependencies:
+      '@babel/helper-validator-identifier': 7.27.1
+      js-tokens: 4.0.0
+      picocolors: 1.1.1
+
+  '@babel/helper-validator-identifier@7.27.1': {}
+
+  '@chevrotain/cst-dts-gen@11.0.3':
+    dependencies:
+      '@chevrotain/gast': 11.0.3
+      '@chevrotain/types': 11.0.3
+      lodash-es: 4.17.21
+
+  '@chevrotain/gast@11.0.3':
+    dependencies:
+      '@chevrotain/types': 11.0.3
+      lodash-es: 4.17.21
+
+  '@chevrotain/regexp-to-ast@11.0.3': {}
+
+  '@chevrotain/types@11.0.3': {}
+
+  '@chevrotain/utils@11.0.3': {}
+
+  '@colors/colors@1.5.0':
+    optional: true
+
+  '@cspotcode/source-map-support@0.8.1':
+    dependencies:
+      '@jridgewell/trace-mapping': 0.3.9
+
+  '@eslint-community/eslint-utils@4.7.0(eslint@9.29.0)':
+    dependencies:
+      eslint: 9.29.0
+      eslint-visitor-keys: 3.4.3
+
+  '@eslint-community/regexpp@4.12.1': {}
+
+  '@eslint/config-array@0.20.1':
+    dependencies:
+      '@eslint/object-schema': 2.1.6
+      debug: 4.4.1
+      minimatch: 3.1.2
+    transitivePeerDependencies:
+      - supports-color
+
+  '@eslint/config-helpers@0.2.3': {}
+
+  '@eslint/core@0.13.0':
+    dependencies:
+      '@types/json-schema': 7.0.15
+
+  '@eslint/core@0.14.0':
+    dependencies:
+      '@types/json-schema': 7.0.15
+
+  '@eslint/core@0.15.0':
+    dependencies:
+      '@types/json-schema': 7.0.15
+
+  '@eslint/eslintrc@3.3.1':
+    dependencies:
+      ajv: 6.12.6
+      debug: 4.4.1
+      espree: 10.4.0
+      globals: 14.0.0
+      ignore: 5.3.2
+      import-fresh: 3.3.1
+      js-yaml: 4.1.0
+      minimatch: 3.1.2
+      strip-json-comments: 3.1.1
+    transitivePeerDependencies:
+      - supports-color
+
+  '@eslint/js@9.29.0': {}
+
+  '@eslint/object-schema@2.1.6': {}
+
+  '@eslint/plugin-kit@0.2.8':
+    dependencies:
+      '@eslint/core': 0.13.0
+      levn: 0.4.1
+
+  '@eslint/plugin-kit@0.3.2':
+    dependencies:
+      '@eslint/core': 0.15.0
+      levn: 0.4.1
+
+  '@faker-js/faker@9.8.0': {}
+
+  '@humanfs/core@0.19.1': {}
+
+  '@humanfs/node@0.16.6':
+    dependencies:
+      '@humanfs/core': 0.19.1
+      '@humanwhocodes/retry': 0.3.1
+
+  '@humanwhocodes/module-importer@1.0.1': {}
+
+  '@humanwhocodes/retry@0.3.1': {}
+
+  '@humanwhocodes/retry@0.4.3': {}
+
+  '@japa/api-client@3.1.0(@japa/assert@4.0.1(@japa/runner@4.2.0))(@japa/runner@4.2.0)':
+    dependencies:
+      '@japa/runner': 4.2.0
+      '@poppinss/hooks': 7.2.5
+      '@poppinss/macroable': 1.0.4
+      '@types/superagent': 8.1.9
+      cookie: 1.0.2
+      set-cookie-parser: 2.7.1
+      superagent: 10.2.1
+    optionalDependencies:
+      '@japa/assert': 4.0.1(@japa/runner@4.2.0)
+    transitivePeerDependencies:
+      - supports-color
+
+  '@japa/assert@4.0.1(@japa/runner@4.2.0)':
+    dependencies:
+      '@japa/runner': 4.2.0
+      '@poppinss/macroable': 1.0.4
+      '@types/chai': 5.2.2
+      assertion-error: 2.0.1
+      chai: 5.2.0
+
+  '@japa/core@10.3.0':
+    dependencies:
+      '@poppinss/hooks': 7.2.5
+      '@poppinss/macroable': 1.0.4
+      '@poppinss/string': 1.6.0
+      async-retry: 1.3.3
+      emittery: 1.2.0
+      string-width: 7.2.0
+      time-span: 5.1.0
+
+  '@japa/errors-printer@4.1.2':
+    dependencies:
+      '@poppinss/colors': 4.1.4
+      jest-diff: 29.7.0
+      supports-color: 10.0.0
+      youch: 4.1.0-beta.8
+
+  '@japa/plugin-adonisjs@4.0.0(@adonisjs/core@6.19.0(@adonisjs/assembler@7.8.2(typescript@5.8.3))(@vinejs/vine@3.0.1))(@japa/api-client@3.1.0(@japa/assert@4.0.1(@japa/runner@4.2.0))(@japa/runner@4.2.0))(@japa/runner@4.2.0)':
+    dependencies:
+      '@adonisjs/core': 6.19.0(@adonisjs/assembler@7.8.2(typescript@5.8.3))(@vinejs/vine@3.0.1)
+      '@japa/runner': 4.2.0
+    optionalDependencies:
+      '@japa/api-client': 3.1.0(@japa/assert@4.0.1(@japa/runner@4.2.0))(@japa/runner@4.2.0)
+
+  '@japa/runner@4.2.0':
+    dependencies:
+      '@japa/core': 10.3.0
+      '@japa/errors-printer': 4.1.2
+      '@poppinss/colors': 4.1.4
+      '@poppinss/hooks': 7.2.5
+      fast-glob: 3.3.3
+      find-cache-dir: 5.0.0
+      getopts: 2.3.0
+      ms: 2.1.3
+      serialize-error: 12.0.0
+      slash: 5.1.0
+      supports-color: 10.0.0
+
+  '@jest/schemas@29.6.3':
+    dependencies:
+      '@sinclair/typebox': 0.27.8
+
+  '@jridgewell/resolve-uri@3.1.2': {}
+
+  '@jridgewell/sourcemap-codec@1.5.0': {}
+
+  '@jridgewell/trace-mapping@0.3.9':
+    dependencies:
+      '@jridgewell/resolve-uri': 3.1.2
+      '@jridgewell/sourcemap-codec': 1.5.0
+
+  '@lukeed/ms@2.0.2': {}
+
+  '@noble/hashes@1.8.0': {}
+
+  '@nodelib/fs.scandir@2.1.5':
+    dependencies:
+      '@nodelib/fs.stat': 2.0.5
+      run-parallel: 1.2.0
+
+  '@nodelib/fs.stat@2.0.5': {}
+
+  '@nodelib/fs.walk@1.2.8':
+    dependencies:
+      '@nodelib/fs.scandir': 2.1.5
+      fastq: 1.19.1
+
+  '@paralleldrive/cuid2@2.2.2':
+    dependencies:
+      '@noble/hashes': 1.8.0
+
+  '@phc/format@1.0.0': {}
+
+  '@pkgr/core@0.2.7': {}
+
+  '@poppinss/chokidar-ts@4.1.9(typescript@5.8.3)':
+    dependencies:
+      chokidar: 4.0.3
+      emittery: 1.2.0
+      memoize: 10.1.0
+      picomatch: 4.0.2
+      slash: 5.1.0
+      typescript: 5.8.3
+
+  '@poppinss/cliui@6.4.3':
+    dependencies:
+      '@poppinss/colors': 4.1.4
+      cli-boxes: 4.0.1
+      cli-table3: 0.6.5
+      cli-truncate: 4.0.0
+      log-update: 6.1.0
+      pretty-hrtime: 1.0.3
+      string-width: 7.2.0
+      supports-color: 10.0.0
+      terminal-size: 4.0.0
+      wordwrap: 1.0.0
+
+  '@poppinss/colors@4.1.4':
+    dependencies:
+      kleur: 4.1.5
+
+  '@poppinss/dumper@0.6.3':
+    dependencies:
+      '@poppinss/colors': 4.1.4
+      '@sindresorhus/is': 7.0.2
+      supports-color: 10.0.0
+
+  '@poppinss/exception@1.2.1': {}
+
+  '@poppinss/hooks@7.2.5': {}
+
+  '@poppinss/macroable@1.0.4': {}
+
+  '@poppinss/matchit@3.1.2':
+    dependencies:
+      '@arr/every': 1.0.1
+
+  '@poppinss/middleware@3.2.5': {}
+
+  '@poppinss/multiparty@2.0.1':
+    dependencies:
+      http-errors: 2.0.0
+      safe-buffer: 5.2.1
+      uid-safe: 2.1.5
+
+  '@poppinss/object-builder@1.1.0': {}
+
+  '@poppinss/prompts@3.1.4':
+    dependencies:
+      '@poppinss/colors': 4.1.4
+      '@poppinss/exception': 1.2.1
+      '@poppinss/object-builder': 1.1.0
+      enquirer: 2.4.1
+
+  '@poppinss/string@1.6.0':
+    dependencies:
+      '@lukeed/ms': 2.0.2
+      '@types/bytes': 3.1.5
+      '@types/pluralize': 0.0.33
+      bytes: 3.1.2
+      case-anything: 3.1.2
+      pluralize: 8.0.0
+      slugify: 1.6.6
+      truncatise: 0.0.8
+
+  '@poppinss/types@1.1.0': {}
+
+  '@poppinss/utils@6.10.0':
+    dependencies:
+      '@poppinss/exception': 1.2.1
+      '@poppinss/object-builder': 1.1.0
+      '@poppinss/string': 1.6.0
+      flattie: 1.1.1
+      safe-stable-stringify: 2.5.0
+      secure-json-parse: 4.0.0
+
+  '@poppinss/utils@7.0.0-next.3':
+    dependencies:
+      '@poppinss/exception': 1.2.1
+      '@poppinss/object-builder': 1.1.0
+      '@poppinss/string': 1.6.0
+      '@poppinss/types': 1.1.0
+      flattie: 1.1.1
+      safe-stable-stringify: 2.5.0
+      secure-json-parse: 4.0.0
+
+  '@poppinss/validator-lite@2.1.0': {}
+
+  '@sec-ant/readable-stream@0.4.1': {}
+
+  '@sinclair/typebox@0.27.8': {}
+
+  '@sindresorhus/is@6.3.1': {}
+
+  '@sindresorhus/is@7.0.2': {}
+
+  '@sindresorhus/merge-streams@2.3.0': {}
+
+  '@sindresorhus/merge-streams@4.0.0': {}
+
+  '@speed-highlight/core@1.2.7': {}
+
+  '@stylistic/eslint-plugin-ts@4.4.1(eslint@9.29.0)(typescript@5.8.3)':
+    dependencies:
+      '@typescript-eslint/utils': 8.35.0(eslint@9.29.0)(typescript@5.8.3)
+      eslint: 9.29.0
+      eslint-visitor-keys: 4.2.1
+      espree: 10.4.0
+    transitivePeerDependencies:
+      - supports-color
+      - typescript
+
+  '@swc/core-darwin-arm64@1.11.24':
+    optional: true
+
+  '@swc/core-darwin-x64@1.11.24':
+    optional: true
+
+  '@swc/core-linux-arm-gnueabihf@1.11.24':
+    optional: true
+
+  '@swc/core-linux-arm64-gnu@1.11.24':
+    optional: true
+
+  '@swc/core-linux-arm64-musl@1.11.24':
+    optional: true
+
+  '@swc/core-linux-x64-gnu@1.11.24':
+    optional: true
+
+  '@swc/core-linux-x64-musl@1.11.24':
+    optional: true
+
+  '@swc/core-win32-arm64-msvc@1.11.24':
+    optional: true
+
+  '@swc/core-win32-ia32-msvc@1.11.24':
+    optional: true
+
+  '@swc/core-win32-x64-msvc@1.11.24':
+    optional: true
+
+  '@swc/core@1.11.24':
+    dependencies:
+      '@swc/counter': 0.1.3
+      '@swc/types': 0.1.23
+    optionalDependencies:
+      '@swc/core-darwin-arm64': 1.11.24
+      '@swc/core-darwin-x64': 1.11.24
+      '@swc/core-linux-arm-gnueabihf': 1.11.24
+      '@swc/core-linux-arm64-gnu': 1.11.24
+      '@swc/core-linux-arm64-musl': 1.11.24
+      '@swc/core-linux-x64-gnu': 1.11.24
+      '@swc/core-linux-x64-musl': 1.11.24
+      '@swc/core-win32-arm64-msvc': 1.11.24
+      '@swc/core-win32-ia32-msvc': 1.11.24
+      '@swc/core-win32-x64-msvc': 1.11.24
+
+  '@swc/counter@0.1.3': {}
+
+  '@swc/types@0.1.23':
+    dependencies:
+      '@swc/counter': 0.1.3
+
+  '@tokenizer/inflate@0.2.7':
+    dependencies:
+      debug: 4.4.1
+      fflate: 0.8.2
+      token-types: 6.0.0
+    transitivePeerDependencies:
+      - supports-color
+
+  '@tokenizer/token@0.3.0': {}
+
+  '@ts-morph/common@0.24.0':
+    dependencies:
+      fast-glob: 3.3.3
+      minimatch: 9.0.5
+      mkdirp: 3.0.1
+      path-browserify: 1.0.1
+
+  '@tsconfig/node10@1.0.11': {}
+
+  '@tsconfig/node12@1.0.11': {}
+
+  '@tsconfig/node14@1.0.3': {}
+
+  '@tsconfig/node16@1.0.4': {}
+
+  '@types/bytes@3.1.5': {}
+
+  '@types/chai@5.2.2':
+    dependencies:
+      '@types/deep-eql': 4.0.2
+
+  '@types/cookiejar@2.1.5': {}
+
+  '@types/deep-eql@4.0.2': {}
+
+  '@types/estree@1.0.8': {}
+
+  '@types/he@1.2.3': {}
+
+  '@types/json-schema@7.0.15': {}
+
+  '@types/luxon@3.6.2': {}
+
+  '@types/methods@1.1.4': {}
+
+  '@types/node@22.15.33':
+    dependencies:
+      undici-types: 6.21.0
+
+  '@types/normalize-package-data@2.4.4': {}
+
+  '@types/pluralize@0.0.33': {}
+
+  '@types/qs@6.14.0': {}
+
+  '@types/superagent@8.1.9':
+    dependencies:
+      '@types/cookiejar': 2.1.5
+      '@types/methods': 1.1.4
+      '@types/node': 22.15.33
+      form-data: 4.0.3
+
+  '@types/validator@13.15.2': {}
+
+  '@typescript-eslint/eslint-plugin@8.35.0(@typescript-eslint/parser@8.35.0(eslint@9.29.0)(typescript@5.8.3))(eslint@9.29.0)(typescript@5.8.3)':
+    dependencies:
+      '@eslint-community/regexpp': 4.12.1
+      '@typescript-eslint/parser': 8.35.0(eslint@9.29.0)(typescript@5.8.3)
+      '@typescript-eslint/scope-manager': 8.35.0
+      '@typescript-eslint/type-utils': 8.35.0(eslint@9.29.0)(typescript@5.8.3)
+      '@typescript-eslint/utils': 8.35.0(eslint@9.29.0)(typescript@5.8.3)
+      '@typescript-eslint/visitor-keys': 8.35.0
+      eslint: 9.29.0
+      graphemer: 1.4.0
+      ignore: 7.0.5
+      natural-compare: 1.4.0
+      ts-api-utils: 2.1.0(typescript@5.8.3)
+      typescript: 5.8.3
+    transitivePeerDependencies:
+      - supports-color
+
+  '@typescript-eslint/parser@8.35.0(eslint@9.29.0)(typescript@5.8.3)':
+    dependencies:
+      '@typescript-eslint/scope-manager': 8.35.0
+      '@typescript-eslint/types': 8.35.0
+      '@typescript-eslint/typescript-estree': 8.35.0(typescript@5.8.3)
+      '@typescript-eslint/visitor-keys': 8.35.0
+      debug: 4.4.1
+      eslint: 9.29.0
+      typescript: 5.8.3
+    transitivePeerDependencies:
+      - supports-color
+
+  '@typescript-eslint/project-service@8.35.0(typescript@5.8.3)':
+    dependencies:
+      '@typescript-eslint/tsconfig-utils': 8.35.0(typescript@5.8.3)
+      '@typescript-eslint/types': 8.35.0
+      debug: 4.4.1
+      typescript: 5.8.3
+    transitivePeerDependencies:
+      - supports-color
+
+  '@typescript-eslint/scope-manager@8.35.0':
+    dependencies:
+      '@typescript-eslint/types': 8.35.0
+      '@typescript-eslint/visitor-keys': 8.35.0
+
+  '@typescript-eslint/tsconfig-utils@8.35.0(typescript@5.8.3)':
+    dependencies:
+      typescript: 5.8.3
+
+  '@typescript-eslint/type-utils@8.35.0(eslint@9.29.0)(typescript@5.8.3)':
+    dependencies:
+      '@typescript-eslint/typescript-estree': 8.35.0(typescript@5.8.3)
+      '@typescript-eslint/utils': 8.35.0(eslint@9.29.0)(typescript@5.8.3)
+      debug: 4.4.1
+      eslint: 9.29.0
+      ts-api-utils: 2.1.0(typescript@5.8.3)
+      typescript: 5.8.3
+    transitivePeerDependencies:
+      - supports-color
+
+  '@typescript-eslint/types@8.35.0': {}
+
+  '@typescript-eslint/typescript-estree@8.35.0(typescript@5.8.3)':
+    dependencies:
+      '@typescript-eslint/project-service': 8.35.0(typescript@5.8.3)
+      '@typescript-eslint/tsconfig-utils': 8.35.0(typescript@5.8.3)
+      '@typescript-eslint/types': 8.35.0
+      '@typescript-eslint/visitor-keys': 8.35.0
+      debug: 4.4.1
+      fast-glob: 3.3.3
+      is-glob: 4.0.3
+      minimatch: 9.0.5
+      semver: 7.7.2
+      ts-api-utils: 2.1.0(typescript@5.8.3)
+      typescript: 5.8.3
+    transitivePeerDependencies:
+      - supports-color
+
+  '@typescript-eslint/utils@8.35.0(eslint@9.29.0)(typescript@5.8.3)':
+    dependencies:
+      '@eslint-community/eslint-utils': 4.7.0(eslint@9.29.0)
+      '@typescript-eslint/scope-manager': 8.35.0
+      '@typescript-eslint/types': 8.35.0
+      '@typescript-eslint/typescript-estree': 8.35.0(typescript@5.8.3)
+      eslint: 9.29.0
+      typescript: 5.8.3
+    transitivePeerDependencies:
+      - supports-color
+
+  '@typescript-eslint/visitor-keys@8.35.0':
+    dependencies:
+      '@typescript-eslint/types': 8.35.0
+      eslint-visitor-keys: 4.2.1
+
+  '@vinejs/compiler@3.0.0': {}
+
+  '@vinejs/vine@3.0.1':
+    dependencies:
+      '@poppinss/macroable': 1.0.4
+      '@types/validator': 13.15.2
+      '@vinejs/compiler': 3.0.0
+      camelcase: 8.0.0
+      dayjs: 1.11.13
+      dlv: 1.1.3
+      normalize-url: 8.0.2
+      validator: 13.15.15
+
+  abstract-logging@2.0.1: {}
+
+  accepts@1.3.8:
+    dependencies:
+      mime-types: 2.1.35
+      negotiator: 0.6.3
+
+  acorn-jsx@5.3.2(acorn@8.15.0):
+    dependencies:
+      acorn: 8.15.0
+
+  acorn-walk@8.3.4:
+    dependencies:
+      acorn: 8.15.0
+
+  acorn@8.15.0: {}
+
+  ajv@6.12.6:
+    dependencies:
+      fast-deep-equal: 3.1.3
+      fast-json-stable-stringify: 2.1.0
+      json-schema-traverse: 0.4.1
+      uri-js: 4.4.1
+
+  ansi-colors@4.1.3: {}
+
+  ansi-escapes@7.0.0:
+    dependencies:
+      environment: 1.1.0
+
+  ansi-regex@5.0.1: {}
+
+  ansi-regex@6.1.0: {}
+
+  ansi-styles@4.3.0:
+    dependencies:
+      color-convert: 2.0.1
+
+  ansi-styles@5.2.0: {}
+
+  ansi-styles@6.2.1: {}
+
+  arg@4.1.3: {}
+
+  argparse@2.0.1: {}
+
+  as-table@1.0.55:
+    dependencies:
+      printable-characters: 1.0.42
+
+  asap@2.0.6: {}
+
+  assertion-error@2.0.1: {}
+
+  async-retry@1.3.3:
+    dependencies:
+      retry: 0.13.1
+
+  asynckit@0.4.0: {}
+
+  atomic-sleep@1.0.0: {}
+
+  aws-ssl-profiles@1.1.2: {}
+
+  balanced-match@1.0.2: {}
+
+  basic-auth@2.0.1:
+    dependencies:
+      safe-buffer: 5.1.2
+
+  brace-expansion@1.1.12:
+    dependencies:
+      balanced-match: 1.0.2
+      concat-map: 0.0.1
+
+  brace-expansion@2.0.2:
+    dependencies:
+      balanced-match: 1.0.2
+
+  braces@3.0.3:
+    dependencies:
+      fill-range: 7.1.1
+
+  browserslist@4.25.1:
+    dependencies:
+      caniuse-lite: 1.0.30001726
+      electron-to-chromium: 1.5.173
+      node-releases: 2.0.19
+      update-browserslist-db: 1.1.3(browserslist@4.25.1)
+
+  builtin-modules@5.0.0: {}
+
+  bytes@3.1.2: {}
+
+  call-bind-apply-helpers@1.0.2:
+    dependencies:
+      es-errors: 1.3.0
+      function-bind: 1.1.2
+
+  call-bound@1.0.4:
+    dependencies:
+      call-bind-apply-helpers: 1.0.2
+      get-intrinsic: 1.3.0
+
+  callsites@3.1.0: {}
+
+  camelcase@8.0.0: {}
+
+  caniuse-lite@1.0.30001726: {}
+
+  case-anything@3.1.2: {}
+
+  chai@5.2.0:
+    dependencies:
+      assertion-error: 2.0.1
+      check-error: 2.1.1
+      deep-eql: 5.0.2
+      loupe: 3.1.4
+      pathval: 2.0.1
+
+  chalk@4.1.2:
     dependencies:
       ansi-styles: 4.3.0
-      string-width: 4.2.3
-      strip-ansi: 6.0.1
-    dev: false
+      supports-color: 7.2.0
 
-  /wrap-ansi@9.0.0:
-    resolution: {integrity: sha512-G8ura3S+3Z2G+mkgNRq8dqaFZAuxfsxpBB8OCTGRTCtp+l/v9nbFNmCUP1BZMts3G1142MsZfn6eeUKrr4PD1Q==}
-    engines: {node: '>=18'}
+  check-disk-space@3.4.0: {}
+
+  check-error@2.1.1: {}
+
+  chevrotain@11.0.3:
+    dependencies:
+      '@chevrotain/cst-dts-gen': 11.0.3
+      '@chevrotain/gast': 11.0.3
+      '@chevrotain/regexp-to-ast': 11.0.3
+      '@chevrotain/types': 11.0.3
+      '@chevrotain/utils': 11.0.3
+      lodash-es: 4.17.21
+
+  chokidar@4.0.3:
+    dependencies:
+      readdirp: 4.1.2
+
+  ci-info@4.2.0: {}
+
+  clean-regexp@1.0.0:
+    dependencies:
+      escape-string-regexp: 1.0.5
+
+  cli-boxes@4.0.1: {}
+
+  cli-cursor@5.0.0:
+    dependencies:
+      restore-cursor: 5.1.0
+
+  cli-table3@0.6.5:
+    dependencies:
+      string-width: 4.2.3
+    optionalDependencies:
+      '@colors/colors': 1.5.0
+
+  cli-truncate@4.0.0:
+    dependencies:
+      slice-ansi: 5.0.0
+      string-width: 7.2.0
+
+  code-block-writer@13.0.3: {}
+
+  color-convert@2.0.1:
+    dependencies:
+      color-name: 1.1.4
+
+  color-name@1.1.4: {}
+
+  colorette@2.0.19: {}
+
+  colorette@2.0.20: {}
+
+  combined-stream@1.0.8:
+    dependencies:
+      delayed-stream: 1.0.0
+
+  commander@10.0.1: {}
+
+  common-path-prefix@3.0.0: {}
+
+  component-emitter@1.3.1: {}
+
+  concat-map@0.0.1: {}
+
+  content-disposition@0.5.4:
+    dependencies:
+      safe-buffer: 5.2.1
+
+  content-type@1.0.5: {}
+
+  convert-hrtime@5.0.0: {}
+
+  cookie@0.7.2: {}
+
+  cookie@1.0.2: {}
+
+  cookiejar@2.1.4: {}
+
+  copy-file@11.0.0:
+    dependencies:
+      graceful-fs: 4.2.11
+      p-event: 6.0.1
+
+  core-js-compat@3.43.0:
+    dependencies:
+      browserslist: 4.25.1
+
+  cpy@11.1.0:
+    dependencies:
+      copy-file: 11.0.0
+      globby: 14.1.0
+      junk: 4.0.1
+      micromatch: 4.0.8
+      p-filter: 4.1.0
+      p-map: 7.0.3
+
+  create-require@1.1.1: {}
+
+  cross-spawn@7.0.6:
+    dependencies:
+      path-key: 3.1.1
+      shebang-command: 2.0.0
+      which: 2.0.2
+
+  data-uri-to-buffer@2.0.2: {}
+
+  dateformat@4.6.3: {}
+
+  dayjs@1.11.13: {}
+
+  debug@4.3.4:
+    dependencies:
+      ms: 2.1.2
+
+  debug@4.4.1:
+    dependencies:
+      ms: 2.1.3
+
+  dedent@1.6.0: {}
+
+  deep-eql@5.0.2: {}
+
+  deep-is@0.1.4: {}
+
+  delayed-stream@1.0.0: {}
+
+  denque@2.1.0: {}
+
+  depd@2.0.0: {}
+
+  destroy@1.2.0: {}
+
+  dezalgo@1.0.4:
+    dependencies:
+      asap: 2.0.6
+      wrappy: 1.0.2
+
+  diff-sequences@29.6.3: {}
+
+  diff@4.0.2: {}
+
+  dlv@1.1.3: {}
+
+  dotenv@16.5.0: {}
+
+  dunder-proto@1.0.1:
+    dependencies:
+      call-bind-apply-helpers: 1.0.2
+      es-errors: 1.3.0
+      gopd: 1.2.0
+
+  edgejs-parser@0.2.15:
+    dependencies:
+      chevrotain: 11.0.3
+
+  ee-first@1.1.1: {}
+
+  electron-to-chromium@1.5.173: {}
+
+  emittery@1.2.0: {}
+
+  emoji-regex@10.4.0: {}
+
+  emoji-regex@8.0.0: {}
+
+  encodeurl@2.0.0: {}
+
+  end-of-stream@1.4.5:
+    dependencies:
+      once: 1.4.0
+
+  enquirer@2.4.1:
+    dependencies:
+      ansi-colors: 4.1.3
+      strip-ansi: 6.0.1
+
+  environment@1.1.0: {}
+
+  error-stack-parser-es@1.0.5: {}
+
+  es-define-property@1.0.1: {}
+
+  es-errors@1.3.0: {}
+
+  es-module-lexer@1.7.0: {}
+
+  es-object-atoms@1.1.1:
+    dependencies:
+      es-errors: 1.3.0
+
+  es-set-tostringtag@2.1.0:
+    dependencies:
+      es-errors: 1.3.0
+      get-intrinsic: 1.3.0
+      has-tostringtag: 1.0.2
+      hasown: 2.0.2
+
+  escalade@3.2.0: {}
+
+  escape-string-regexp@1.0.5: {}
+
+  escape-string-regexp@4.0.0: {}
+
+  eslint-config-prettier@10.1.5(eslint@9.29.0):
+    dependencies:
+      eslint: 9.29.0
+
+  eslint-plugin-prettier@5.5.1(eslint-config-prettier@10.1.5(eslint@9.29.0))(eslint@9.29.0)(prettier@3.6.1):
+    dependencies:
+      eslint: 9.29.0
+      prettier: 3.6.1
+      prettier-linter-helpers: 1.0.0
+      synckit: 0.11.8
+    optionalDependencies:
+      eslint-config-prettier: 10.1.5(eslint@9.29.0)
+
+  eslint-plugin-unicorn@59.0.1(eslint@9.29.0):
+    dependencies:
+      '@babel/helper-validator-identifier': 7.27.1
+      '@eslint-community/eslint-utils': 4.7.0(eslint@9.29.0)
+      '@eslint/plugin-kit': 0.2.8
+      ci-info: 4.2.0
+      clean-regexp: 1.0.0
+      core-js-compat: 3.43.0
+      eslint: 9.29.0
+      esquery: 1.6.0
+      find-up-simple: 1.0.1
+      globals: 16.2.0
+      indent-string: 5.0.0
+      is-builtin-module: 5.0.0
+      jsesc: 3.1.0
+      pluralize: 8.0.0
+      regexp-tree: 0.1.27
+      regjsparser: 0.12.0
+      semver: 7.7.2
+      strip-indent: 4.0.0
+
+  eslint-scope@8.4.0:
+    dependencies:
+      esrecurse: 4.3.0
+      estraverse: 5.3.0
+
+  eslint-visitor-keys@3.4.3: {}
+
+  eslint-visitor-keys@4.2.1: {}
+
+  eslint@9.29.0:
+    dependencies:
+      '@eslint-community/eslint-utils': 4.7.0(eslint@9.29.0)
+      '@eslint-community/regexpp': 4.12.1
+      '@eslint/config-array': 0.20.1
+      '@eslint/config-helpers': 0.2.3
+      '@eslint/core': 0.14.0
+      '@eslint/eslintrc': 3.3.1
+      '@eslint/js': 9.29.0
+      '@eslint/plugin-kit': 0.3.2
+      '@humanfs/node': 0.16.6
+      '@humanwhocodes/module-importer': 1.0.1
+      '@humanwhocodes/retry': 0.4.3
+      '@types/estree': 1.0.8
+      '@types/json-schema': 7.0.15
+      ajv: 6.12.6
+      chalk: 4.1.2
+      cross-spawn: 7.0.6
+      debug: 4.4.1
+      escape-string-regexp: 4.0.0
+      eslint-scope: 8.4.0
+      eslint-visitor-keys: 4.2.1
+      espree: 10.4.0
+      esquery: 1.6.0
+      esutils: 2.0.3
+      fast-deep-equal: 3.1.3
+      file-entry-cache: 8.0.0
+      find-up: 5.0.0
+      glob-parent: 6.0.2
+      ignore: 5.3.2
+      imurmurhash: 0.1.4
+      is-glob: 4.0.3
+      json-stable-stringify-without-jsonify: 1.0.1
+      lodash.merge: 4.6.2
+      minimatch: 3.1.2
+      natural-compare: 1.4.0
+      optionator: 0.9.4
+    transitivePeerDependencies:
+      - supports-color
+
+  esm@3.2.25: {}
+
+  espree@10.4.0:
+    dependencies:
+      acorn: 8.15.0
+      acorn-jsx: 5.3.2(acorn@8.15.0)
+      eslint-visitor-keys: 4.2.1
+
+  esquery@1.6.0:
+    dependencies:
+      estraverse: 5.3.0
+
+  esrecurse@4.3.0:
+    dependencies:
+      estraverse: 5.3.0
+
+  estraverse@5.3.0: {}
+
+  esutils@2.0.3: {}
+
+  etag@1.8.1: {}
+
+  execa@9.6.0:
+    dependencies:
+      '@sindresorhus/merge-streams': 4.0.0
+      cross-spawn: 7.0.6
+      figures: 6.1.0
+      get-stream: 9.0.1
+      human-signals: 8.0.1
+      is-plain-obj: 4.1.0
+      is-stream: 4.0.1
+      npm-run-path: 6.0.0
+      pretty-ms: 9.2.0
+      signal-exit: 4.1.0
+      strip-final-newline: 4.0.0
+      yoctocolors: 2.1.1
+
+  fast-copy@3.0.2: {}
+
+  fast-deep-equal@3.1.3: {}
+
+  fast-diff@1.3.0: {}
+
+  fast-glob@3.3.3:
+    dependencies:
+      '@nodelib/fs.stat': 2.0.5
+      '@nodelib/fs.walk': 1.2.8
+      glob-parent: 5.1.2
+      merge2: 1.4.1
+      micromatch: 4.0.8
+
+  fast-json-stable-stringify@2.1.0: {}
+
+  fast-levenshtein@2.0.6: {}
+
+  fast-redact@3.5.0: {}
+
+  fast-safe-stringify@2.1.1: {}
+
+  fastest-levenshtein@1.0.16: {}
+
+  fastq@1.19.1:
+    dependencies:
+      reusify: 1.1.0
+
+  fflate@0.8.2: {}
+
+  figures@6.1.0:
+    dependencies:
+      is-unicode-supported: 2.1.0
+
+  file-entry-cache@8.0.0:
+    dependencies:
+      flat-cache: 4.0.1
+
+  file-type@20.5.0:
+    dependencies:
+      '@tokenizer/inflate': 0.2.7
+      strtok3: 10.3.1
+      token-types: 6.0.0
+      uint8array-extras: 1.4.0
+    transitivePeerDependencies:
+      - supports-color
+
+  fill-range@7.1.1:
+    dependencies:
+      to-regex-range: 5.0.1
+
+  find-cache-dir@5.0.0:
+    dependencies:
+      common-path-prefix: 3.0.0
+      pkg-dir: 7.0.0
+
+  find-up-simple@1.0.1: {}
+
+  find-up@5.0.0:
+    dependencies:
+      locate-path: 6.0.0
+      path-exists: 4.0.0
+
+  find-up@6.3.0:
+    dependencies:
+      locate-path: 7.2.0
+      path-exists: 5.0.0
+
+  flat-cache@4.0.1:
+    dependencies:
+      flatted: 3.3.3
+      keyv: 4.5.4
+
+  flatted@3.3.3: {}
+
+  flattie@1.1.1: {}
+
+  form-data@4.0.3:
+    dependencies:
+      asynckit: 0.4.0
+      combined-stream: 1.0.8
+      es-set-tostringtag: 2.1.0
+      hasown: 2.0.2
+      mime-types: 2.1.35
+
+  formidable@3.5.4:
+    dependencies:
+      '@paralleldrive/cuid2': 2.2.2
+      dezalgo: 1.0.4
+      once: 1.4.0
+
+  forwarded@0.2.0: {}
+
+  fresh@0.5.2: {}
+
+  function-bind@1.1.2: {}
+
+  generate-function@2.3.1:
+    dependencies:
+      is-property: 1.0.2
+
+  get-east-asian-width@1.3.0: {}
+
+  get-intrinsic@1.3.0:
+    dependencies:
+      call-bind-apply-helpers: 1.0.2
+      es-define-property: 1.0.1
+      es-errors: 1.3.0
+      es-object-atoms: 1.1.1
+      function-bind: 1.1.2
+      get-proto: 1.0.1
+      gopd: 1.2.0
+      has-symbols: 1.1.0
+      hasown: 2.0.2
+      math-intrinsics: 1.1.0
+
+  get-package-type@0.1.0: {}
+
+  get-port@7.1.0: {}
+
+  get-proto@1.0.1:
+    dependencies:
+      dunder-proto: 1.0.1
+      es-object-atoms: 1.1.1
+
+  get-source@2.0.12:
+    dependencies:
+      data-uri-to-buffer: 2.0.2
+      source-map: 0.6.1
+
+  get-stream@9.0.1:
+    dependencies:
+      '@sec-ant/readable-stream': 0.4.1
+      is-stream: 4.0.1
+
+  getopts@2.3.0: {}
+
+  glob-parent@5.1.2:
+    dependencies:
+      is-glob: 4.0.3
+
+  glob-parent@6.0.2:
+    dependencies:
+      is-glob: 4.0.3
+
+  globals@14.0.0: {}
+
+  globals@16.2.0: {}
+
+  globby@14.1.0:
+    dependencies:
+      '@sindresorhus/merge-streams': 2.3.0
+      fast-glob: 3.3.3
+      ignore: 7.0.5
+      path-type: 6.0.0
+      slash: 5.1.0
+      unicorn-magic: 0.3.0
+
+  gopd@1.2.0: {}
+
+  graceful-fs@4.2.11: {}
+
+  graphemer@1.4.0: {}
+
+  has-flag@4.0.0: {}
+
+  has-symbols@1.1.0: {}
+
+  has-tostringtag@1.0.2:
+    dependencies:
+      has-symbols: 1.1.0
+
+  hasown@2.0.2:
+    dependencies:
+      function-bind: 1.1.2
+
+  he@1.2.0: {}
+
+  help-me@5.0.0: {}
+
+  hosted-git-info@7.0.2:
+    dependencies:
+      lru-cache: 10.4.3
+
+  hot-hook@0.4.0:
+    dependencies:
+      chokidar: 4.0.3
+      fast-glob: 3.3.3
+      parse-imports: 2.2.1
+      picomatch: 4.0.2
+      read-package-up: 11.0.0
+
+  http-errors@2.0.0:
+    dependencies:
+      depd: 2.0.0
+      inherits: 2.0.4
+      setprototypeof: 1.2.0
+      statuses: 2.0.1
+      toidentifier: 1.0.1
+
+  human-signals@8.0.1: {}
+
+  iconv-lite@0.6.3:
+    dependencies:
+      safer-buffer: 2.1.2
+
+  ieee754@1.2.1: {}
+
+  igniculus@1.5.0: {}
+
+  ignore@5.3.2: {}
+
+  ignore@7.0.5: {}
+
+  import-fresh@3.3.1:
+    dependencies:
+      parent-module: 1.0.1
+      resolve-from: 4.0.0
+
+  imurmurhash@0.1.4: {}
+
+  indent-string@5.0.0: {}
+
+  index-to-position@1.1.0: {}
+
+  inflation@2.1.0: {}
+
+  inherits@2.0.4: {}
+
+  interpret@2.2.0: {}
+
+  ipaddr.js@1.9.1: {}
+
+  is-builtin-module@5.0.0:
+    dependencies:
+      builtin-modules: 5.0.0
+
+  is-core-module@2.16.1:
+    dependencies:
+      hasown: 2.0.2
+
+  is-extglob@2.1.1: {}
+
+  is-fullwidth-code-point@3.0.0: {}
+
+  is-fullwidth-code-point@4.0.0: {}
+
+  is-fullwidth-code-point@5.0.0:
+    dependencies:
+      get-east-asian-width: 1.3.0
+
+  is-glob@4.0.3:
+    dependencies:
+      is-extglob: 2.1.1
+
+  is-number@7.0.0: {}
+
+  is-plain-obj@4.1.0: {}
+
+  is-property@1.0.2: {}
+
+  is-stream@4.0.1: {}
+
+  is-unicode-supported@2.1.0: {}
+
+  isexe@2.0.0: {}
+
+  jest-diff@29.7.0:
+    dependencies:
+      chalk: 4.1.2
+      diff-sequences: 29.6.3
+      jest-get-type: 29.6.3
+      pretty-format: 29.7.0
+
+  jest-get-type@29.6.3: {}
+
+  joycon@3.1.1: {}
+
+  js-tokens@4.0.0: {}
+
+  js-yaml@4.1.0:
+    dependencies:
+      argparse: 2.0.1
+
+  jsesc@3.0.2: {}
+
+  jsesc@3.1.0: {}
+
+  json-buffer@3.0.1: {}
+
+  json-schema-traverse@0.4.1: {}
+
+  json-stable-stringify-without-jsonify@1.0.1: {}
+
+  jsonschema@1.5.0: {}
+
+  junk@4.0.1: {}
+
+  keyv@4.5.4:
+    dependencies:
+      json-buffer: 3.0.1
+
+  kleur@4.1.5: {}
+
+  knex-dynamic-connection@3.2.0(mysql2@3.14.1):
+    dependencies:
+      debug: 4.4.1
+      knex: 3.1.0(mysql2@3.14.1)
+    transitivePeerDependencies:
+      - better-sqlite3
+      - mysql
+      - mysql2
+      - pg
+      - pg-native
+      - sqlite3
+      - supports-color
+      - tedious
+
+  knex@3.1.0(mysql2@3.14.1):
+    dependencies:
+      colorette: 2.0.19
+      commander: 10.0.1
+      debug: 4.3.4
+      escalade: 3.2.0
+      esm: 3.2.25
+      get-package-type: 0.1.0
+      getopts: 2.3.0
+      interpret: 2.2.0
+      lodash: 4.17.21
+      pg-connection-string: 2.6.2
+      rechoir: 0.8.0
+      resolve-from: 5.0.0
+      tarn: 3.0.2
+      tildify: 2.0.0
+    optionalDependencies:
+      mysql2: 3.14.1
+    transitivePeerDependencies:
+      - supports-color
+
+  levn@0.4.1:
+    dependencies:
+      prelude-ls: 1.2.1
+      type-check: 0.4.0
+
+  locate-path@6.0.0:
+    dependencies:
+      p-locate: 5.0.0
+
+  locate-path@7.2.0:
+    dependencies:
+      p-locate: 6.0.0
+
+  lodash-es@4.17.21: {}
+
+  lodash.merge@4.6.2: {}
+
+  lodash@4.17.21: {}
+
+  log-update@6.1.0:
+    dependencies:
+      ansi-escapes: 7.0.0
+      cli-cursor: 5.0.0
+      slice-ansi: 7.1.0
+      strip-ansi: 7.1.0
+      wrap-ansi: 9.0.0
+
+  long@5.3.2: {}
+
+  loupe@3.1.4: {}
+
+  lru-cache@10.4.3: {}
+
+  lru-cache@7.18.3: {}
+
+  lru.min@1.1.2: {}
+
+  luxon@3.6.1: {}
+
+  make-error@1.3.6: {}
+
+  math-intrinsics@1.1.0: {}
+
+  media-typer@1.1.0: {}
+
+  memoize@10.1.0:
+    dependencies:
+      mimic-function: 5.0.1
+
+  merge2@1.4.1: {}
+
+  methods@1.1.2: {}
+
+  micromatch@4.0.8:
+    dependencies:
+      braces: 3.0.3
+      picomatch: 2.3.1
+
+  mime-db@1.52.0: {}
+
+  mime-db@1.54.0: {}
+
+  mime-types@2.1.35:
+    dependencies:
+      mime-db: 1.52.0
+
+  mime-types@3.0.1:
+    dependencies:
+      mime-db: 1.54.0
+
+  mime@2.6.0: {}
+
+  mimic-function@5.0.1: {}
+
+  min-indent@1.0.1: {}
+
+  minimatch@3.1.2:
+    dependencies:
+      brace-expansion: 1.1.12
+
+  minimatch@9.0.5:
+    dependencies:
+      brace-expansion: 2.0.2
+
+  minimist@1.2.8: {}
+
+  mkdirp@3.0.1: {}
+
+  ms@2.1.2: {}
+
+  ms@2.1.3: {}
+
+  mustache@4.2.0: {}
+
+  mysql2@3.14.1:
+    dependencies:
+      aws-ssl-profiles: 1.1.2
+      denque: 2.1.0
+      generate-function: 2.3.1
+      iconv-lite: 0.6.3
+      long: 5.3.2
+      lru.min: 1.1.2
+      named-placeholders: 1.1.3
+      seq-queue: 0.0.5
+      sqlstring: 2.3.3
+
+  named-placeholders@1.1.3:
+    dependencies:
+      lru-cache: 7.18.3
+
+  natural-compare@1.4.0: {}
+
+  negotiator@0.6.3: {}
+
+  node-releases@2.0.19: {}
+
+  normalize-package-data@6.0.2:
+    dependencies:
+      hosted-git-info: 7.0.2
+      semver: 7.7.2
+      validate-npm-package-license: 3.0.4
+
+  normalize-url@8.0.2: {}
+
+  npm-run-path@6.0.0:
+    dependencies:
+      path-key: 4.0.0
+      unicorn-magic: 0.3.0
+
+  object-inspect@1.13.4: {}
+
+  on-exit-leak-free@2.1.2: {}
+
+  on-finished@2.4.1:
+    dependencies:
+      ee-first: 1.1.1
+
+  once@1.4.0:
+    dependencies:
+      wrappy: 1.0.2
+
+  onetime@7.0.0:
+    dependencies:
+      mimic-function: 5.0.1
+
+  optionator@0.9.4:
+    dependencies:
+      deep-is: 0.1.4
+      fast-levenshtein: 2.0.6
+      levn: 0.4.1
+      prelude-ls: 1.2.1
+      type-check: 0.4.0
+      word-wrap: 1.2.5
+
+  p-event@6.0.1:
+    dependencies:
+      p-timeout: 6.1.4
+
+  p-filter@4.1.0:
+    dependencies:
+      p-map: 7.0.3
+
+  p-limit@3.1.0:
+    dependencies:
+      yocto-queue: 0.1.0
+
+  p-limit@4.0.0:
+    dependencies:
+      yocto-queue: 1.2.1
+
+  p-locate@5.0.0:
+    dependencies:
+      p-limit: 3.1.0
+
+  p-locate@6.0.0:
+    dependencies:
+      p-limit: 4.0.0
+
+  p-map@7.0.3: {}
+
+  p-timeout@6.1.4: {}
+
+  package-manager-detector@0.2.11:
+    dependencies:
+      quansync: 0.2.10
+
+  package-manager-detector@1.3.0: {}
+
+  parent-module@1.0.1:
+    dependencies:
+      callsites: 3.1.0
+
+  parse-imports@2.2.1:
+    dependencies:
+      es-module-lexer: 1.7.0
+      slashes: 3.0.12
+
+  parse-json@8.3.0:
+    dependencies:
+      '@babel/code-frame': 7.27.1
+      index-to-position: 1.1.0
+      type-fest: 4.41.0
+
+  parse-ms@4.0.0: {}
+
+  path-browserify@1.0.1: {}
+
+  path-exists@4.0.0: {}
+
+  path-exists@5.0.0: {}
+
+  path-key@3.1.1: {}
+
+  path-key@4.0.0: {}
+
+  path-parse@1.0.7: {}
+
+  path-type@6.0.0: {}
+
+  pathval@2.0.1: {}
+
+  pg-connection-string@2.6.2: {}
+
+  picocolors@1.1.1: {}
+
+  picomatch@2.3.1: {}
+
+  picomatch@4.0.2: {}
+
+  pino-abstract-transport@2.0.0:
+    dependencies:
+      split2: 4.2.0
+
+  pino-pretty@13.0.0:
+    dependencies:
+      colorette: 2.0.20
+      dateformat: 4.6.3
+      fast-copy: 3.0.2
+      fast-safe-stringify: 2.1.1
+      help-me: 5.0.0
+      joycon: 3.1.1
+      minimist: 1.2.8
+      on-exit-leak-free: 2.1.2
+      pino-abstract-transport: 2.0.0
+      pump: 3.0.3
+      secure-json-parse: 2.7.0
+      sonic-boom: 4.2.0
+      strip-json-comments: 3.1.1
+
+  pino-std-serializers@7.0.0: {}
+
+  pino@9.7.0:
+    dependencies:
+      atomic-sleep: 1.0.0
+      fast-redact: 3.5.0
+      on-exit-leak-free: 2.1.2
+      pino-abstract-transport: 2.0.0
+      pino-std-serializers: 7.0.0
+      process-warning: 5.0.0
+      quick-format-unescaped: 4.0.4
+      real-require: 0.2.0
+      safe-stable-stringify: 2.5.0
+      sonic-boom: 4.2.0
+      thread-stream: 3.1.0
+
+  pkg-dir@7.0.0:
+    dependencies:
+      find-up: 6.3.0
+
+  pluralize@8.0.0: {}
+
+  prelude-ls@1.2.1: {}
+
+  prettier-linter-helpers@1.0.0:
+    dependencies:
+      fast-diff: 1.3.0
+
+  prettier-plugin-edgejs@1.0.2:
+    dependencies:
+      '@adobe/css-tools': 4.4.3
+      edgejs-parser: 0.2.15
+      prettier: 3.6.1
+      uglify-js: 3.19.3
+
+  prettier@3.6.1: {}
+
+  pretty-format@29.7.0:
+    dependencies:
+      '@jest/schemas': 29.6.3
+      ansi-styles: 5.2.0
+      react-is: 18.3.1
+
+  pretty-hrtime@1.0.3: {}
+
+  pretty-ms@9.2.0:
+    dependencies:
+      parse-ms: 4.0.0
+
+  printable-characters@1.0.42: {}
+
+  process-warning@5.0.0: {}
+
+  proxy-addr@2.0.7:
+    dependencies:
+      forwarded: 0.2.0
+      ipaddr.js: 1.9.1
+
+  pump@3.0.3:
+    dependencies:
+      end-of-stream: 1.4.5
+      once: 1.4.0
+
+  punycode@2.3.1: {}
+
+  qs@6.14.0:
+    dependencies:
+      side-channel: 1.1.0
+
+  quansync@0.2.10: {}
+
+  queue-microtask@1.2.3: {}
+
+  quick-format-unescaped@4.0.4: {}
+
+  random-bytes@1.0.0: {}
+
+  raw-body@3.0.0:
+    dependencies:
+      bytes: 3.1.2
+      http-errors: 2.0.0
+      iconv-lite: 0.6.3
+      unpipe: 1.0.0
+
+  react-is@18.3.1: {}
+
+  read-package-up@11.0.0:
+    dependencies:
+      find-up-simple: 1.0.1
+      read-pkg: 9.0.1
+      type-fest: 4.41.0
+
+  read-pkg@9.0.1:
+    dependencies:
+      '@types/normalize-package-data': 2.4.4
+      normalize-package-data: 6.0.2
+      parse-json: 8.3.0
+      type-fest: 4.41.0
+      unicorn-magic: 0.1.0
+
+  readdirp@4.1.2: {}
+
+  real-require@0.2.0: {}
+
+  rechoir@0.8.0:
+    dependencies:
+      resolve: 1.22.10
+
+  reflect-metadata@0.2.2: {}
+
+  regexp-tree@0.1.27: {}
+
+  regjsparser@0.12.0:
+    dependencies:
+      jsesc: 3.0.2
+
+  resolve-from@4.0.0: {}
+
+  resolve-from@5.0.0: {}
+
+  resolve@1.22.10:
+    dependencies:
+      is-core-module: 2.16.1
+      path-parse: 1.0.7
+      supports-preserve-symlinks-flag: 1.0.0
+
+  restore-cursor@5.1.0:
+    dependencies:
+      onetime: 7.0.0
+      signal-exit: 4.1.0
+
+  retry@0.13.1: {}
+
+  reusify@1.1.0: {}
+
+  run-parallel@1.2.0:
+    dependencies:
+      queue-microtask: 1.2.3
+
+  safe-buffer@5.1.2: {}
+
+  safe-buffer@5.2.1: {}
+
+  safe-stable-stringify@2.5.0: {}
+
+  safer-buffer@2.1.2: {}
+
+  secure-json-parse@2.7.0: {}
+
+  secure-json-parse@4.0.0: {}
+
+  semver@7.7.2: {}
+
+  seq-queue@0.0.5: {}
+
+  serialize-error@12.0.0:
+    dependencies:
+      type-fest: 4.41.0
+
+  set-cookie-parser@2.7.1: {}
+
+  setprototypeof@1.2.0: {}
+
+  shebang-command@2.0.0:
+    dependencies:
+      shebang-regex: 3.0.0
+
+  shebang-regex@3.0.0: {}
+
+  side-channel-list@1.0.0:
+    dependencies:
+      es-errors: 1.3.0
+      object-inspect: 1.13.4
+
+  side-channel-map@1.0.1:
+    dependencies:
+      call-bound: 1.0.4
+      es-errors: 1.3.0
+      get-intrinsic: 1.3.0
+      object-inspect: 1.13.4
+
+  side-channel-weakmap@1.0.2:
+    dependencies:
+      call-bound: 1.0.4
+      es-errors: 1.3.0
+      get-intrinsic: 1.3.0
+      object-inspect: 1.13.4
+      side-channel-map: 1.0.1
+
+  side-channel@1.1.0:
+    dependencies:
+      es-errors: 1.3.0
+      object-inspect: 1.13.4
+      side-channel-list: 1.0.0
+      side-channel-map: 1.0.1
+      side-channel-weakmap: 1.0.2
+
+  signal-exit@4.1.0: {}
+
+  slash@5.1.0: {}
+
+  slashes@3.0.12: {}
+
+  slice-ansi@5.0.0:
     dependencies:
       ansi-styles: 6.2.1
-      string-width: 7.2.0
+      is-fullwidth-code-point: 4.0.0
+
+  slice-ansi@7.1.0:
+    dependencies:
+      ansi-styles: 6.2.1
+      is-fullwidth-code-point: 5.0.0
+
+  slugify@1.6.6: {}
+
+  sonic-boom@4.2.0:
+    dependencies:
+      atomic-sleep: 1.0.0
+
+  source-map@0.6.1: {}
+
+  spdx-correct@3.2.0:
+    dependencies:
+      spdx-expression-parse: 3.0.1
+      spdx-license-ids: 3.0.21
+
+  spdx-exceptions@2.5.0: {}
+
+  spdx-expression-parse@3.0.1:
+    dependencies:
+      spdx-exceptions: 2.5.0
+      spdx-license-ids: 3.0.21
+
+  spdx-license-ids@3.0.21: {}
+
+  split-lines@3.0.0: {}
+
+  split2@4.2.0: {}
+
+  sqlstring@2.3.3: {}
+
+  stacktracey@2.1.8:
+    dependencies:
+      as-table: 1.0.55
+      get-source: 2.0.12
+
+  statuses@2.0.1: {}
+
+  string-width@4.2.3:
+    dependencies:
+      emoji-regex: 8.0.0
+      is-fullwidth-code-point: 3.0.0
+      strip-ansi: 6.0.1
+
+  string-width@7.2.0:
+    dependencies:
+      emoji-regex: 10.4.0
+      get-east-asian-width: 1.3.0
       strip-ansi: 7.1.0
 
-  /wrappy@1.0.2:
-    resolution: {integrity: sha512-l4Sp/DRseor9wL6EvV2+TuQn63dMkPjZ/sp9XkghTEbV9KlPS1xUsZ3u7/IQO4wxtcFB4bgpQPRcR3QCvezPcQ==}
-
-  /ws@8.18.2:
-    resolution: {integrity: sha512-DMricUmwGZUVr++AEAe2uiVM7UoO9MAVZMDu05UQOaUII0lp+zOzLLU4Xqh/JvTqklB1T4uELaaPBKyjE1r4fQ==}
-    engines: {node: '>=10.0.0'}
-    peerDependencies:
-      bufferutil: ^4.0.1
-      utf-8-validate: '>=5.0.2'
-    peerDependenciesMeta:
-      bufferutil:
-        optional: true
-      utf-8-validate:
-        optional: true
-    dev: false
-
-  /y18n@5.0.8:
-    resolution: {integrity: sha512-0pfFzegeDWJHJIAmTLRP2DwHjdF5s7jo9tuztdQxAhINCdvS+3nGINqPd00AphqJR/0LhANUS6/+7SCb98YOfA==}
-    engines: {node: '>=10'}
-    dev: false
-
-  /yargs-parser@21.1.1:
-    resolution: {integrity: sha512-tVpsJW7DdjecAiFpbIB1e3qxIQsE6NoPc5/eTdrbbIC4h0LVsWhnoa3g+m2HclBIujHzsxZ4VJVA+GUuc2/LBw==}
-    engines: {node: '>=12'}
-
-  /yargs@17.7.2:
-    resolution: {integrity: sha512-7dSzzRQ++CKnNI/krKnYRV7JKKPUXMEh61soaHKg9mrWEhzFWhFnxPxGl+69cD1Ou63C13NUPCnmIcrvqCuM6w==}
-    engines: {node: '>=12'}
+  strip-ansi@6.0.1:
     dependencies:
-      cliui: 8.0.1
-      escalade: 3.2.0
-      get-caller-file: 2.0.5
-      require-directory: 2.1.1
-      string-width: 4.2.3
-      y18n: 5.0.8
-      yargs-parser: 21.1.1
-    dev: false
+      ansi-regex: 5.0.1
 
-  /yauzl@2.10.0:
-    resolution: {integrity: sha512-p4a9I6X6nu6IhoGmBqAcbJy1mlC4j27vEPZX9F4L4/vZT3Lyq1VkFHw/V/PUcB9Buo+DG3iHkT0x3Qya58zc3g==}
+  strip-ansi@7.1.0:
+    dependencies:
+      ansi-regex: 6.1.0
+
+  strip-final-newline@4.0.0: {}
+
+  strip-indent@4.0.0:
+    dependencies:
+      min-indent: 1.0.1
+
+  strip-json-comments@3.1.1: {}
+
+  strtok3@10.3.1:
+    dependencies:
+      '@tokenizer/token': 0.3.0
+
+  superagent@10.2.1:
+    dependencies:
+      component-emitter: 1.3.1
+      cookiejar: 2.1.4
+      debug: 4.4.1
+      fast-safe-stringify: 2.1.1
+      form-data: 4.0.3
+      formidable: 3.5.4
+      methods: 1.1.2
+      mime: 2.6.0
+      qs: 6.14.0
+    transitivePeerDependencies:
+      - supports-color
+
+  supports-color@10.0.0: {}
+
+  supports-color@7.2.0:
+    dependencies:
+      has-flag: 4.0.0
+
+  supports-preserve-symlinks-flag@1.0.0: {}
+
+  synckit@0.11.8:
+    dependencies:
+      '@pkgr/core': 0.2.7
+
+  tarn@3.0.2: {}
+
+  tempura@0.4.1: {}
+
+  terminal-size@4.0.0: {}
+
+  thread-stream@3.1.0:
+    dependencies:
+      real-require: 0.2.0
+
+  tildify@2.0.0: {}
+
+  time-span@5.1.0:
+    dependencies:
+      convert-hrtime: 5.0.0
+
+  tinyexec@0.3.2: {}
+
+  tinyexec@1.0.1: {}
+
+  tmp-cache@1.1.0: {}
+
+  to-regex-range@5.0.1:
+    dependencies:
+      is-number: 7.0.0
+
+  toidentifier@1.0.1: {}
+
+  token-types@6.0.0:
+    dependencies:
+      '@tokenizer/token': 0.3.0
+      ieee754: 1.2.1
+
+  truncatise@0.0.8: {}
+
+  ts-api-utils@2.1.0(typescript@5.8.3):
+    dependencies:
+      typescript: 5.8.3
+
+  ts-morph@23.0.0:
+    dependencies:
+      '@ts-morph/common': 0.24.0
+      code-block-writer: 13.0.3
+
+  ts-node-maintained@10.9.5(@swc/core@1.11.24)(@types/node@22.15.33)(typescript@5.8.3):
+    dependencies:
+      '@cspotcode/source-map-support': 0.8.1
+      '@tsconfig/node10': 1.0.11
+      '@tsconfig/node12': 1.0.11
+      '@tsconfig/node14': 1.0.3
+      '@tsconfig/node16': 1.0.4
+      '@types/node': 22.15.33
+      acorn: 8.15.0
+      acorn-walk: 8.3.4
+      arg: 4.1.3
+      create-require: 1.1.1
+      diff: 4.0.2
+      make-error: 1.3.6
+      typescript: 5.8.3
+      v8-compile-cache-lib: 3.0.1
+      yn: 3.1.1
+    optionalDependencies:
+      '@swc/core': 1.11.24
+
+  type-check@0.4.0:
+    dependencies:
+      prelude-ls: 1.2.1
+
+  type-fest@4.41.0: {}
+
+  type-is@2.0.1:
+    dependencies:
+      content-type: 1.0.5
+      media-typer: 1.1.0
+      mime-types: 3.0.1
+
+  typescript-eslint@8.35.0(eslint@9.29.0)(typescript@5.8.3):
+    dependencies:
+      '@typescript-eslint/eslint-plugin': 8.35.0(@typescript-eslint/parser@8.35.0(eslint@9.29.0)(typescript@5.8.3))(eslint@9.29.0)(typescript@5.8.3)
+      '@typescript-eslint/parser': 8.35.0(eslint@9.29.0)(typescript@5.8.3)
+      '@typescript-eslint/utils': 8.35.0(eslint@9.29.0)(typescript@5.8.3)
+      eslint: 9.29.0
+      typescript: 5.8.3
+    transitivePeerDependencies:
+      - supports-color
+
+  typescript@5.8.3: {}
+
+  uglify-js@3.19.3: {}
+
+  uid-safe@2.1.5:
+    dependencies:
+      random-bytes: 1.0.0
+
+  uint8array-extras@1.4.0: {}
+
+  undici-types@6.21.0: {}
+
+  unicorn-magic@0.1.0: {}
+
+  unicorn-magic@0.3.0: {}
+
+  unpipe@1.0.0: {}
+
+  update-browserslist-db@1.1.3(browserslist@4.25.1):
+    dependencies:
+      browserslist: 4.25.1
+      escalade: 3.2.0
+      picocolors: 1.1.1
+
+  uri-js@4.4.1:
     dependencies:
       buffer-crc32: 0.2.13
       fd-slicer: 1.1.0
