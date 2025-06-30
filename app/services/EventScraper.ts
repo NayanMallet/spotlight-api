@@ -5,15 +5,18 @@ import { DateTime } from 'luxon'
 
 interface Event {
   title: string
-  date: string
+  startDate: string
   address: string
-  location: string
-  lat: number | null
-  lng: number | null
+  city: string
+  placeName: string
+  latitude: number | null
+  longitude: number | null
   url: string
-  image: string
+  type: string
+  subtype: string
+  bannerUrl: string
   description: string
-  lineup: { name: string, image: string }[]
+  artists: { name: string, image: string }[]
 }
 
 
@@ -151,16 +154,36 @@ export default class EventScraper {
         const coords = location ? await geocodeAddress(location) : null
 
         detailedEvents.push({
-          ...event,
+          title: event.title,
+          startDate: event.date,
           address: location,
+          city: 'Toulouse', // You may extract city from location if possible
+          placeName: location,
+          latitude: coords?.lat || null,
+          longitude: coords?.lng || null,
+          url: event.url,
+          type: '', // Set appropriate type if available
+          subtype: '', // Set appropriate subtype if available
+          bannerUrl: event.image ?? '',
           description,
-          lineup,
-          location,
-          lat: coords?.lat || null,
-          lng: coords?.lng || null,
+          artists: lineup,
         })
       } catch (err) {
-        detailedEvents.push({ ...event, address: '', description: '', lineup: [], location: '', lat: null, lng: null })
+        detailedEvents.push({
+          title: event.title ?? '',
+          startDate: event.date ?? '',
+          address: '',
+          city: 'Toulouse',
+          placeName: '',
+          latitude: null,
+          longitude: null,
+          url: event.url ?? '',
+          type: '',
+          subtype: '',
+          bannerUrl: event.image ?? '',
+          description: '',
+          artists: [],
+        })
       }
     }
 
@@ -170,15 +193,18 @@ export default class EventScraper {
     for (const event of detailedEvents) {
       try {
         await EventModel.create({
-          name: event.title,
-          startDate: DateTime.fromISO(event.date),
+          title: event.title,
+          startDate: DateTime.fromISO(event.startDate),
           address: event.address,
-          location: event.location,
-          lat: event.lat,
-          lng: event.lng,
+          city: event.city,
+          placeName: event.placeName,
+          type: event.type,
+          subtype: event.subtype,
+          latitude: event.latitude,
+          longitude: event.longitude,
           description: event.description,
-          lineup: JSON.stringify(event.lineup),
-          img: event.image ?? null,
+          artists: JSON.stringify(event.artists),
+          bannerUrl: event.bannerUrl ?? null,
         })
 
       } catch (err) {

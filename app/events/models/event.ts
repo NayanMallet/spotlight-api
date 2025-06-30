@@ -35,14 +35,12 @@ export default class Event extends BaseModel {
   @column.date()
   // @example(2024-07-17)
   // @format(date)
-  // @required
-  declare endDate: DateTime
+  declare endDate: DateTime | null
 
   @column.dateTime({ columnName: 'start_hour' })
   // @example(2024-07-15T18:00:00.000Z)
   // @format(date-time)
-  // @required
-  declare startHour: DateTime
+  declare startHour: DateTime | null
 
   @column.dateTime({ columnName: 'open_hour', serializeAs: null })
   // @no-swagger
