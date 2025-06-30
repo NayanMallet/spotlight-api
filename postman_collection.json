@@ -1,8 +1,8 @@
 {
 	"info": {
 		"_postman_id": "9ec2cc3e-6a79-4d07-a179-2c7fe7cdaa6f",
-		"name": "Spotlight API - Users",
-		"description": "Complete collection for testing all user features in Spotlight API",
+		"name": "Spotlight API - Complete Collection",
+		"description": "Complete collection for testing all features in Spotlight API including Users, Events, Artists, and Messages",
 		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
 		"_exporter_id": "18509415"
 	},
@@ -478,6 +478,355 @@
 			"description": "Artist management endpoints for creating, updating, and deleting artists"
 		},
 		{
+			"name": "Events Management",
+			"item": [
+				{
+					"name": "Create Event",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    const response = pm.response.json();",
+									"    pm.collectionVariables.set('event_id', response.data.id);",
+									"    pm.test('Event created successfully', () => {",
+									"        pm.expect(response.data).to.have.property('id');",
+									"        pm.expect(response.data).to.have.property('title');",
+									"        pm.expect(response.data).to.have.property('bannerUrl');",
+									"        pm.expect(response.data).to.have.property('type');",
+									"        pm.expect(response.data).to.have.property('subtype');",
+									"    });",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "Summer Music Festival 2024",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "An amazing outdoor music festival featuring top artists from around the world",
+									"type": "text"
+								},
+								{
+									"key": "startDate",
+									"value": "2024-07-15",
+									"type": "text"
+								},
+								{
+									"key": "endDate",
+									"value": "2024-07-17",
+									"type": "text"
+								},
+								{
+									"key": "startHour",
+									"value": "2024-07-15T18:00:00.000Z",
+									"type": "text"
+								},
+								{
+									"key": "latitude",
+									"value": "40.7128",
+									"type": "text"
+								},
+								{
+									"key": "longitude",
+									"value": "-74.0060",
+									"type": "text"
+								},
+								{
+									"key": "placeName",
+									"value": "Central Park",
+									"type": "text"
+								},
+								{
+									"key": "address",
+									"value": "1234 Main Street, Central Park",
+									"type": "text"
+								},
+								{
+									"key": "city",
+									"value": "New York",
+									"type": "text"
+								},
+								{
+									"key": "type",
+									"value": "festival",
+									"type": "text"
+								},
+								{
+									"key": "subtype",
+									"value": "rock",
+									"type": "text"
+								},
+								{
+									"key": "banner",
+									"type": "file",
+									"src": []
+								}
+							]
+						},
+						"url": "{{base_url}}/events",
+						"description": "Create a new event with all required information and banner image. All fields are required except description and openHour."
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Events",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/events?page=1&limit=10&type=festival&city=New York",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"events"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1",
+									"description": "Page number for pagination"
+								},
+								{
+									"key": "limit",
+									"value": "10",
+									"description": "Number of events per page (max 100)"
+								},
+								{
+									"key": "type",
+									"value": "festival",
+									"description": "Filter by event type (concert, festival, exhibition, conference)",
+									"disabled": true
+								},
+								{
+									"key": "subtype",
+									"value": "rock",
+									"description": "Filter by event subtype (rock, hiphop, jazz, techno, classical)",
+									"disabled": true
+								},
+								{
+									"key": "city",
+									"value": "New York",
+									"description": "Filter by city name",
+									"disabled": true
+								},
+								{
+									"key": "startDate",
+									"value": "2024-01-01",
+									"description": "Filter events starting from this date (YYYY-MM-DD)",
+									"disabled": true
+								},
+								{
+									"key": "endDate",
+									"value": "2024-12-31",
+									"description": "Filter events ending before this date (YYYY-MM-DD)",
+									"disabled": true
+								}
+							]
+						},
+						"description": "Retrieve a paginated list of events with optional filtering by type, subtype, city, and date range."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Single Event",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "{{base_url}}/events/{{event_id}}",
+						"description": "Retrieve detailed information about a specific event by its ID."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Event",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "Summer Music Festival 2024 (Updated)",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "An updated description for the amazing outdoor music festival",
+									"type": "text"
+								},
+								{
+									"key": "startDate",
+									"value": "2024-07-16",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "endDate",
+									"value": "2024-07-18",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "startHour",
+									"value": "2024-07-16T19:00:00.000Z",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "latitude",
+									"value": "40.7589",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "longitude",
+									"value": "-73.9851",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "placeName",
+									"value": "Times Square",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "address",
+									"value": "1 Times Square, Manhattan",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "city",
+									"value": "New York",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "type",
+									"value": "concert",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "subtype",
+									"value": "jazz",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "banner",
+									"type": "file",
+									"src": [],
+									"disabled": true
+								}
+							]
+						},
+						"url": "{{base_url}}/events/{{event_id}}",
+						"description": "Update an existing event. All fields are optional. You can enable/disable fields as needed. Banner upload is optional."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Event (JSON)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"Summer Music Festival 2024 (JSON Update)\",\n  \"description\": \"Updated via JSON without file upload\",\n  \"type\": \"concert\",\n  \"subtype\": \"jazz\"\n}"
+						},
+						"url": "{{base_url}}/events/{{event_id}}",
+						"description": "Update event information (JSON format, without file upload). All fields are optional."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Event",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    pm.collectionVariables.set('event_id', '');",
+									"    pm.test('Event deleted successfully', () => {",
+									"        pm.expect(pm.response.json().message).to.include('deleted');",
+									"    });",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": "{{base_url}}/events/{{event_id}}",
+						"description": "Delete an event by its ID. This will also delete the associated banner image."
+					},
+					"response": []
+				}
+			],
+			"description": "Event management endpoints for creating, reading, updating, and deleting events"
+		},
+		{
 			"name": "Testing Scenarios",
 			"item": [
 				{
@@ -607,6 +956,352 @@
 						}
 					],
 					"description": "Complete workflow testing all user features in sequence"
+				},
+				{
+					"name": "Complete Event Creation Workflow",
+					"item": [
+						{
+							"name": "1. Register User for Event Creation",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"if (pm.response.code === 201) {",
+											"    const response = pm.response.json();",
+											"    pm.collectionVariables.set('auth_token', response.token.value.release());",
+											"    pm.collectionVariables.set('user_id', response.user.id);",
+											"    pm.test('User registered successfully for event creation', () => {",
+											"        pm.expect(response.user).to.have.property('id');",
+											"        pm.expect(response.user).to.have.property('email');",
+											"        pm.expect(response.token).to.have.property('value');",
+											"    });",
+											"}"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"full_name\": \"Event Creator User\",\n  \"email\": \"event.creator@example.com\",\n  \"password\": \"eventpassword123\"\n}"
+								},
+								"url": "{{base_url}}/register",
+								"description": "Step 1: Register a new user account for event creation"
+							},
+							"response": []
+						},
+						{
+							"name": "2. Create Artist for Event",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"if (pm.response.code === 201) {",
+											"    const response = pm.response.json();",
+											"    pm.collectionVariables.set('artist_id', response.data.id);",
+											"    pm.test('Artist created successfully', () => {",
+											"        pm.expect(response.data).to.have.property('id');",
+											"        pm.expect(response.data).to.have.property('name');",
+											"        pm.expect(response.data).to.have.property('image');",
+											"    });",
+											"}"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "{{auth_token}}"
+									}
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "name",
+											"value": "The Rock Stars",
+											"type": "text"
+										},
+										{
+											"key": "image",
+											"type": "file",
+											"src": []
+										}
+									]
+								},
+								"url": "{{base_url}}/artists",
+								"description": "Step 2: Create an artist that will perform at the event"
+							},
+							"response": []
+						},
+						{
+							"name": "3. Create Event with All Details",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"if (pm.response.code === 201) {",
+											"    const response = pm.response.json();",
+											"    pm.collectionVariables.set('event_id', response.data.id);",
+											"    pm.test('Event created successfully', () => {",
+											"        pm.expect(response.data).to.have.property('id');",
+											"        pm.expect(response.data).to.have.property('title');",
+											"        pm.expect(response.data).to.have.property('bannerUrl');",
+											"        pm.expect(response.data).to.have.property('type');",
+											"        pm.expect(response.data).to.have.property('subtype');",
+											"        pm.expect(response.data.title).to.equal('Rock Concert 2024');",
+											"    });",
+											"}"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "{{auth_token}}"
+									}
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "title",
+											"value": "Rock Concert 2024",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "An electrifying rock concert featuring The Rock Stars band with amazing music and great atmosphere",
+											"type": "text"
+										},
+										{
+											"key": "startDate",
+											"value": "2024-08-15",
+											"type": "text"
+										},
+										{
+											"key": "endDate",
+											"value": "2024-08-15",
+											"type": "text"
+										},
+										{
+											"key": "startHour",
+											"value": "2024-08-15T20:00:00.000Z",
+											"type": "text"
+										},
+										{
+											"key": "latitude",
+											"value": "40.7589",
+											"type": "text"
+										},
+										{
+											"key": "longitude",
+											"value": "-73.9851",
+											"type": "text"
+										},
+										{
+											"key": "placeName",
+											"value": "Madison Square Garden",
+											"type": "text"
+										},
+										{
+											"key": "address",
+											"value": "4 Pennsylvania Plaza, New York",
+											"type": "text"
+										},
+										{
+											"key": "city",
+											"value": "New York",
+											"type": "text"
+										},
+										{
+											"key": "type",
+											"value": "concert",
+											"type": "text"
+										},
+										{
+											"key": "subtype",
+											"value": "rock",
+											"type": "text"
+										},
+										{
+											"key": "banner",
+											"type": "file",
+											"src": []
+										}
+									]
+								},
+								"url": "{{base_url}}/events",
+								"description": "Step 3: Create the main event with all required details and banner image"
+							},
+							"response": []
+						},
+						{
+							"name": "4. Verify Event Creation",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"if (pm.response.code === 200) {",
+											"    const response = pm.response.json();",
+											"    pm.test('Event retrieved successfully', () => {",
+											"        pm.expect(response.data).to.have.property('id');",
+											"        pm.expect(response.data).to.have.property('title');",
+											"        pm.expect(response.data).to.have.property('bannerUrl');",
+											"        pm.expect(response.data.title).to.equal('Rock Concert 2024');",
+											"        pm.expect(response.data.type).to.equal('concert');",
+											"        pm.expect(response.data.subtype).to.equal('rock');",
+											"    });",
+											"}"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "{{auth_token}}"
+									}
+								},
+								"method": "GET",
+								"header": [],
+								"url": "{{base_url}}/events/{{event_id}}",
+								"description": "Step 4: Verify that the event was created successfully by retrieving it"
+							},
+							"response": []
+						},
+						{
+							"name": "5. Browse All Events",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"if (pm.response.code === 200) {",
+											"    const response = pm.response.json();",
+											"    pm.test('Events list retrieved successfully', () => {",
+											"        pm.expect(response.data).to.be.an('array');",
+											"        pm.expect(response.meta).to.have.property('total');",
+											"        pm.expect(response.meta).to.have.property('currentPage');",
+											"    });",
+											"    ",
+											"    // Check if our created event is in the list",
+											"    const createdEventId = pm.collectionVariables.get('event_id');",
+											"    const eventExists = response.data.some(event => event.id == createdEventId);",
+											"    pm.test('Created event appears in events list', () => {",
+											"        pm.expect(eventExists).to.be.true;",
+											"    });",
+											"}"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "{{auth_token}}"
+									}
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/events?page=1&limit=20&type=concert",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"events"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "limit",
+											"value": "20"
+										},
+										{
+											"key": "type",
+											"value": "concert"
+										}
+									]
+								},
+								"description": "Step 5: Browse all events to see the created event in the list"
+							},
+							"response": []
+						},
+						{
+							"name": "6. Update Event Details",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"if (pm.response.code === 200) {",
+											"    const response = pm.response.json();",
+											"    pm.test('Event updated successfully', () => {",
+											"        pm.expect(response.data).to.have.property('id');",
+											"        pm.expect(response.data).to.have.property('title');",
+											"        pm.expect(response.data.title).to.include('Updated');",
+											"    });",
+											"}"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "{{auth_token}}"
+									}
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"title\": \"Rock Concert 2024 - Updated\",\n  \"description\": \"An electrifying rock concert featuring The Rock Stars band with amazing music, great atmosphere, and special guest appearances!\"\n}"
+								},
+								"url": "{{base_url}}/events/{{event_id}}",
+								"description": "Step 6: Update event details to improve the description and title"
+							},
+							"response": []
+						}
+					],
+					"description": "Complete workflow demonstrating how a basic user would create an event from start to finish, including user registration, artist creation, event creation, verification, and updates"
 				}
 			],
 			"description": "Pre-configured testing scenarios"
@@ -636,6 +1331,11 @@
 		},
 		{
 			"key": "artist_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "event_id",
 			"value": "",
 			"type": "string"
 		}
