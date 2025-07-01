@@ -39,13 +39,8 @@ export default class User extends compose(BaseModel, AuthFinder) {
   declare password: string
 
   @column()
-  // @example(google)
-  // @enum(google, facebook, apple)
-  declare oauthProvider: string | null
-
-  @column()
   // @example(123456789)
-  declare oauthId: string | null
+  declare googleId: string | null
 
   @column.dateTime({ autoCreate: true })
   // @example(2024-01-01T00:00:00.000Z)

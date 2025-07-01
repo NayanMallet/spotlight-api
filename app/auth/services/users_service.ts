@@ -149,6 +149,73 @@ export class UsersService {
   }
 
   /**
+   * Links a Google account to the user.
+   * @param {User} user - The user to link the account to.
+   * @param {string} googleId - The unique ID from Google.
+   * @returns {Promise<User>} - The updated user.
+   */
+  async linkGoogleAccount(user: User, googleId: string): Promise<User> {
+    user.googleId = googleId
+    await user.save()
+    return user
+  }
+
+  /**
+   * Handles Google OAuth login or registration.
+   * @param {string} googleId - The unique ID from Google.
+   * @param {string} email - The user's email address.
+   * @param {string} fullName - The user's full name.
+   * @returns {Promise<User>} - The authenticated or registered user.
+   */
+  async handleGoogleLoginOrRegister({
+    googleId,
+    email,
+    fullName,
+  }: {
+    googleId: string
+    email: string
+    fullName: string
+  }): Promise<User> {
+    // First check if user exists with this Google ID
+    let user = await User.query().where('googleId', googleId).first()
+
+    if (user) return user
+
+    // Check if user exists with this email
+    user = await User.query().where('email', email).first()
+
+    if (!user) {
+      // Create new user with Google ID
+      user = await User.create({
+        full_name: fullName,
+        email,
+        password: Math.random().toString(36).slice(-12),
+        googleId,
+      })
+    } else {
+      // Link Google ID to existing user
+      await this.linkGoogleAccount(user, googleId)
+    }
+
+    return user
+  }
+
+  /**
+   * Unlinks the Google account from a user.
+   * @param {User} user - The user to unlink the account from.
+   * @returns {Promise<boolean>} - True if unlinked successfully, false if not found.
+   */
+  async unlinkGoogleAccount(user: User): Promise<boolean> {
+    if (!user.googleId) {
+      return false
+    }
+
+    user.googleId = null
+    await user.save()
+    return true
+  }
+
+  /**
    * Finds a user by ID or throws an error if not found
    * @private
    */

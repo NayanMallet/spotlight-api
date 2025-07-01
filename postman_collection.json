@@ -87,9 +87,87 @@
 						"description": "Login with existing user credentials"
 					},
 					"response": []
+				},
+				{
+					"name": "OAuth Google Redirect",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{base_url}}/oauth/google",
+						"description": "Redirect to Google OAuth authorization page"
+					},
+					"response": []
+				},
+				{
+					"name": "OAuth Google Callback",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    pm.collectionVariables.set('auth_token', response.token.value.release());",
+									"    pm.collectionVariables.set('user_id', response.user.id);",
+									"    pm.test('OAuth login successful', () => {",
+									"        pm.expect(response.user).to.have.property('id');",
+									"        pm.expect(response.user).to.have.property('email');",
+									"        pm.expect(response.token).to.have.property('value');",
+									"    });",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/oauth/google/callback?code={{oauth_code}}&state={{oauth_state}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"oauth",
+								"google",
+								"callback"
+							],
+							"query": [
+								{
+									"key": "code",
+									"value": "{{oauth_code}}",
+									"description": "Authorization code from Google"
+								},
+								{
+									"key": "state",
+									"value": "{{oauth_state}}",
+									"description": "State parameter for security"
+								}
+							]
+						},
+						"description": "Handle Google OAuth callback with authorization code"
+					},
+					"response": []
+				},
+				{
+					"name": "OAuth Google Unlink",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": "{{base_url}}/oauth/google/unlink",
+						"description": "Unlink Google OAuth account from current user"
+					},
+					"response": []
 				}
 			],
-			"description": "Authentication endpoints for user registration and login"
+			"description": "Authentication endpoints for user registration, login, and OAuth"
 		},
 		{
 			"name": "User Management",

@@ -18,12 +18,15 @@ router.get('/docs', async () => {
 const LoginController = () => import('#auth/controllers/login_controller')
 const RegisterController = () => import('#auth/controllers/register_controller')
 const ResetPasswordController = () => import('#auth/controllers/reset_password_controller')
+const OauthController = () => import('#auth/controllers/oauth_controller')
 // endregion
 
 router.group(() => {
   router.post('login', [LoginController]).as('users.login')
   router.post('register', [RegisterController]).as('users.register')
   router.post('reset-password', [ResetPasswordController]).as('users.reset-password')
+  router.get('oauth/google', [OauthController, 'redirect']).as('oauth.google.redirect')
+  router.get('oauth/google/callback', [OauthController, 'callback']).as('oauth.google.callback')
 })
 
 // CLIENT region Controller's Imports
@@ -88,5 +91,8 @@ router
     router.delete('/users/me', [DeleteUserController]).as('users.delete-me')
     router.delete('/users/:id', [DeleteUserController]).as('users.delete')
     router.post('/users/:id/banner', [UploadUserBannerController]).as('users.upload-banner')
+
+    // OAuth management routes
+    router.delete('/oauth/google/unlink', [OauthController, 'unlink']).as('oauth.google.unlink')
   })
   .middleware([middleware.auth()])
