@@ -8,6 +8,43 @@ export default class ResetPasswordController {
   constructor(protected usersService: UsersService) {}
 
   /**
+   * @show
+   * @summary Show reset password form
+   * @description Display reset password form or validate token
+   * @tag Authentication
+   * @paramPath token - Reset password token - @type(string) @required
+   * @responseBody 200 - {"message": "Token is valid", "token": "string"} - Token validation successful
+   * @responseBody 400 - {"message": "Invalid or expired token"} - Token validation failed
+   * @responseBody 500 - {"message": "An error occurred", "error": "string"} - Internal server error
+   */
+  async show({ params, response }: HttpContext) {
+    try {
+      const { token } = params
+
+      if (!token) {
+        return response.badRequest({
+          message: 'Token is required',
+        })
+      }
+
+      // For now, just return the token to indicate the endpoint exists
+      // In a real application, you might want to:
+      // 1. Validate the token
+      // 2. Return a form view
+      // 3. Redirect to a frontend application with the token
+      return response.ok({
+        message: 'Reset password form',
+        token: decodeURIComponent(token),
+      })
+    } catch (error) {
+      return response.internalServerError({
+        message: 'An error occurred',
+        error: error.message,
+      })
+    }
+  }
+
+  /**
    * @resetPassword
    * @summary Reset user password
    * @description Reset a user's password using email verification

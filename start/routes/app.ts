@@ -25,6 +25,7 @@ const OauthController = () => import('#auth/controllers/oauth_controller')
 router.group(() => {
   router.post('login', [LoginController]).as('users.login')
   router.post('register', [RegisterController]).as('users.register')
+  router.get('reset-password/:token', [ResetPasswordController, 'show']).as('users.reset-password-form')
   router.post('reset-password', [ResetPasswordController]).as('users.reset-password')
   router.post('forgot-password', [ForgotPasswordController]).as('users.forgot-password')
   router.get('oauth/google', [OauthController, 'redirect']).as('oauth.google.redirect')
