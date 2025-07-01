@@ -3,6 +3,7 @@ import { MultipartFile } from '@adonisjs/core/bodyparser'
 import { inject } from '@adonisjs/core'
 import hash from '@adonisjs/core/services/hash'
 import { DriveService } from '#core/services/drive_service'
+import { EmailsService } from '#auth/services/emails_service'
 
 export interface UpdateUserData {
   full_name?: string
@@ -22,7 +23,7 @@ export class UsersService {
   private readonly DEFAULT_BANNER_URL_TEMPLATE =
     'https://unavatar.io/{email}?fallback=https://avatar.vercel.sh/{fullName}?size=128'
 
-  constructor(private driveService: DriveService) {}
+  constructor(private driveService: DriveService, private emailsService: EmailsService) {}
 
   /**
    * Attempts to authenticate a user with the given email and password.
@@ -120,6 +121,21 @@ export class UsersService {
     user.password = await hash.use('scrypt').make(data.newPassword)
     await user.save()
 
+    return user
+  }
+
+  /**
+   * Sends a password reset email to the user.
+   * @param email - The user's email address.
+   * @return A promise that resolves to the User instance if found, null otherwise.
+   */
+  async sendPasswordReset(email: string): Promise<User | null> {
+    const user = await User.findBy('email', email)
+    if (!user) {
+      return null
+    }
+
+    await this.emailsService.sendPasswordReset(user)
     return user
   }
 

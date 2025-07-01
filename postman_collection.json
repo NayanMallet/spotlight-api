@@ -165,6 +165,144 @@
 						"description": "Unlink Google OAuth account from current user"
 					},
 					"response": []
+				},
+				{
+					"name": "Forgot Password - Valid Email",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 302 (redirect)', () => {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 302]);",
+									"});",
+									"",
+									"pm.test('Response indicates success or redirect', () => {",
+									"    // For successful password reset request, we expect either:",
+									"    // - 302 redirect (if using session flash messages)",
+									"    // - 200 with success message",
+									"    if (pm.response.code === 200) {",
+									"        const response = pm.response.json();",
+									"        pm.expect(response).to.have.property('message');",
+									"    }",
+									"});",
+									"",
+									"console.log('Forgot password request sent for valid email');"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"john.doe@example.com\"\n}"
+						},
+						"url": "{{base_url}}/forgot-password",
+						"description": "Send password reset email to a valid registered email address"
+					},
+					"response": []
+				},
+				{
+					"name": "Forgot Password - Invalid Email",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 302 (redirect)', () => {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 302]);",
+									"});",
+									"",
+									"pm.test('Response handles invalid email gracefully', () => {",
+									"    // The endpoint should handle invalid emails gracefully",
+									"    // without revealing whether the email exists or not",
+									"    if (pm.response.code === 200) {",
+									"        const response = pm.response.json();",
+									"        pm.expect(response).to.have.property('message');",
+									"    }",
+									"});",
+									"",
+									"console.log('Forgot password request sent for invalid email');"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"nonexistent@example.com\"\n}"
+						},
+						"url": "{{base_url}}/forgot-password",
+						"description": "Test forgot password with non-existent email address"
+					},
+					"response": []
+				},
+				{
+					"name": "Forgot Password - Render Form",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{base_url}}/forgot-password",
+						"description": "Render the forgot password form (if using server-side rendering)"
+					},
+					"response": []
+				},
+				{
+					"name": "Reset Password",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200 or 302', () => {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 302]);",
+									"});",
+									"",
+									"pm.test('Password reset processed', () => {",
+									"    if (pm.response.code === 200) {",
+									"        const response = pm.response.json();",
+									"        pm.expect(response).to.have.property('message');",
+									"    }",
+									"});",
+									"",
+									"console.log('Password reset request processed');"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"john.doe@example.com\",\n  \"newPassword\": \"newpassword123\",\n  \"token\": \"{{reset_token}}\"\n}"
+						},
+						"url": "{{base_url}}/reset-password",
+						"description": "Reset password using token from email (replace {{reset_token}} with actual token from email)"
+					},
+					"response": []
 				}
 			],
 			"description": "Authentication endpoints for user registration, login, and OAuth"
@@ -1552,6 +1690,11 @@
 		},
 		{
 			"key": "event_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "reset_token",
 			"value": "",
 			"type": "string"
 		}

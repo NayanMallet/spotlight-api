@@ -21,7 +21,20 @@ services:
       - spotlight_net
 
   ########################
-  # 2) Service Adonis #
+  # 2) Service MailHog #
+  ########################
+  mailhog:
+    container_name: mailhog
+    image: mailhog/mailhog:latest
+    restart: unless-stopped
+    ports:
+      - "1025:1025"  # SMTP port
+      - "8025:8025"  # Web UI port
+    networks:
+      - spotlight_net
+
+  ########################
+  # 3) Service Adonis #
   ########################
   spotlight_api:
     container_name: spotlight_api
@@ -42,6 +55,7 @@ services:
 
     depends_on:
       - mysql_db
+      - mailhog
 
     environment:
       NODE_ENV: development
@@ -52,6 +66,9 @@ services:
       DB_PORT: ${DB_PORT}
       DB_PASSWORD: ${DB_PASSWORD}
       DB_DATABASE: ${DB_DATABASE}
+      SMTP_HOST: mailhog
+      SMTP_PORT: 1025
+      MAIL_FROM: ${MAIL_FROM}
 
     networks:
       - spotlight_net

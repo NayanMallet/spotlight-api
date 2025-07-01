@@ -18,6 +18,7 @@ router.get('/docs', async () => {
 const LoginController = () => import('#auth/controllers/login_controller')
 const RegisterController = () => import('#auth/controllers/register_controller')
 const ResetPasswordController = () => import('#auth/controllers/reset_password_controller')
+const ForgotPasswordController = () => import('#auth/controllers/forgot_password_controller')
 const OauthController = () => import('#auth/controllers/oauth_controller')
 // endregion
 
@@ -25,6 +26,7 @@ router.group(() => {
   router.post('login', [LoginController]).as('users.login')
   router.post('register', [RegisterController]).as('users.register')
   router.post('reset-password', [ResetPasswordController]).as('users.reset-password')
+  router.post('forgot-password', [ForgotPasswordController]).as('users.forgot-password')
   router.get('oauth/google', [OauthController, 'redirect']).as('oauth.google.redirect')
   router.get('oauth/google/callback', [OauthController, 'callback']).as('oauth.google.callback')
 })
