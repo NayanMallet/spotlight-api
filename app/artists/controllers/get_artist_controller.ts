@@ -1,6 +1,7 @@
 import { HttpContext } from '@adonisjs/core/http'
 import { inject } from '@adonisjs/core'
 import { ArtistsService } from '#artists/services/artists_service'
+import { artistIdValidator } from '#artists/validators/artists'
 
 @inject()
 export default class GetArtistController {
@@ -17,17 +18,11 @@ export default class GetArtistController {
    * @responseBody 404 - {"message": "Artist not found", "error": "ARTIST_NOT_FOUND"} - Artist not found
    * @responseBody 500 - {"message": "An error occurred while retrieving the artist", "error": "string"} - Internal server error
    */
-  async handle({ response, params }: HttpContext) {
+  async handle({ request, response, params }: HttpContext) {
     try {
-      const artistId = Number(params.id)
-
-      // Validate artist ID
-      if (!artistId || artistId < 1) {
-        return response.badRequest({
-          message: 'Invalid artist ID',
-          error: 'INVALID_ARTIST_ID',
-        })
-      }
+      const { id: artistId } = await request.validateUsing(artistIdValidator, {
+        data: params,
+      })
 
       const artist = await this.artistsService.getById(artistId)
 

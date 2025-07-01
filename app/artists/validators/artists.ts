@@ -21,3 +21,13 @@ export const updateArtistValidator = vine.compile(
       .optional(),
   })
 )
+
+export const artistIdValidator = vine.compile(
+  vine.object({
+    id: vine
+      .string()
+      .trim()
+      .minLength(1)
+      .transform((value) => Number.parseInt(value, 10)),
+  })
+)

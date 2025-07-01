@@ -1,5 +1,5 @@
 import { HttpContext } from '@adonisjs/core/http'
-import { updateArtistValidator } from '#artists/validators/artists'
+import { artistIdValidator, updateArtistValidator } from '#artists/validators/artists'
 import { ArtistsService } from '#artists/services/artists_service'
 import { inject } from '@adonisjs/core'
 
@@ -24,15 +24,9 @@ export default class UpdateArtistController {
    */
   async handle({ request, response, params }: HttpContext) {
     try {
-      const artistId = Number(params.id)
-
-      // Validate artist ID
-      if (!artistId || artistId < 1) {
-        return response.badRequest({
-          message: 'Invalid artist ID',
-          error: 'INVALID_ARTIST_ID',
-        })
-      }
+      const { id: artistId } = await request.validateUsing(artistIdValidator, {
+        data: params,
+      })
 
       const payload = await request.validateUsing(updateArtistValidator)
       const image = request.file('image')
