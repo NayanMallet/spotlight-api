@@ -1,11 +1,8 @@
 import User from '#auth/models/user'
 import { MultipartFile } from '@adonisjs/core/bodyparser'
-import app from '@adonisjs/core/services/app'
 import { inject } from '@adonisjs/core'
-import { cuid } from '@adonisjs/core/helpers'
 import hash from '@adonisjs/core/services/hash'
-import { unlink } from 'node:fs/promises'
-import { join } from 'node:path'
+import { DriveService } from '#core/services/drive_service'
 
 export interface UpdateUserData {
   full_name?: string
@@ -20,6 +17,13 @@ export interface ResetPasswordData {
 
 @inject()
 export class UsersService {
+  private readonly UPLOADS_PATH = 'uploads/users'
+  private readonly ALLOWED_BANNER_EXTENSIONS = ['jpg', 'jpeg', 'png', 'webp']
+  private readonly DEFAULT_BANNER_URL_TEMPLATE =
+    'https://unavatar.io/{email}?fallback=https://avatar.vercel.sh/{fullName}?size=128'
+
+  constructor(private driveService: DriveService) {}
+
   /**
    * Attempts to authenticate a user with the given email and password.
    * @param {string} email - The user's email address.
@@ -36,15 +40,15 @@ export class UsersService {
    * @returns {Promise<User>} - The registered user.
    */
   async register(data: Partial<User>): Promise<User> {
-    // Generate default banner URL using unavatar.io with fallback to avatar.vercel.sh
-    const bannerUrl = `https://unavatar.io/${data.email}?fallback=https://avatar.vercel.sh/${data.full_name}?size=128`
+    const bannerUrl = this.DEFAULT_BANNER_URL_TEMPLATE.replace('{email}', data.email || '').replace(
+      '{fullName}',
+      data.full_name || ''
+    )
 
-    const user = await User.create({
+    return await User.create({
       ...data,
       bannerUrl,
     })
-
-    return user
   }
 
   /**
@@ -56,10 +60,7 @@ export class UsersService {
    * @throws Error if user is not found or update fails
    */
   async update(id: number, data: UpdateUserData, banner?: MultipartFile): Promise<User> {
-    const user = await User.find(id)
-    if (!user) {
-      throw new Error('User not found')
-    }
+    const user = await this.findUserOrFail(id)
 
     // Update user fields
     if (data.full_name !== undefined) user.full_name = data.full_name
@@ -68,38 +69,13 @@ export class UsersService {
 
     // Handle banner update if provided
     if (banner) {
-      // Validate file type
-      const allowedExtensions = ['jpg', 'jpeg', 'png', 'webp']
-      if (!allowedExtensions.includes(banner.extname || '')) {
-        throw new Error(`Invalid file type. Allowed types: ${allowedExtensions.join(', ')}`)
+      const uploadConfig = {
+        uploadsPath: this.UPLOADS_PATH,
+        allowedExtensions: this.ALLOWED_BANNER_EXTENSIONS,
+        entityType: 'user',
+        entityId: user.id,
       }
-
-      // Delete old banner image if it's a local file
-      if (user.bannerUrl && user.bannerUrl.startsWith('/uploads/users/')) {
-        try {
-          const oldFileName = user.bannerUrl.replace('/uploads/users/', '')
-          const oldFilePath = join(app.publicPath('uploads/users'), oldFileName)
-          await unlink(oldFilePath)
-        } catch (error) {
-          // Log the error but continue with upload
-          console.warn(`Failed to delete old banner image for user ${user.id}:`, error.message)
-        }
-      }
-
-      try {
-        // Upload new banner file
-        const fileName = `user_${user.id}_${cuid()}.${banner.extname}`
-
-        await banner.move(app.publicPath('uploads/users'), {
-          name: fileName,
-          overwrite: true,
-        })
-
-        // Update user with new banner URL
-        user.bannerUrl = `/uploads/users/${fileName}`
-      } catch (error) {
-        throw new Error(`Failed to upload banner image: ${error.message}`)
-      }
+      user.bannerUrl = await this.driveService.replaceFile(banner, uploadConfig, user.bannerUrl)
     }
 
     await user.save()
@@ -117,19 +93,15 @@ export class UsersService {
       return false
     }
 
-    // Delete the user banner image file if it's a local file
-    if (user.bannerUrl && user.bannerUrl.startsWith('/uploads/users/')) {
-      try {
-        const fileName = user.bannerUrl.replace('/uploads/users/', '')
-        const filePath = join(app.publicPath('uploads/users'), fileName)
-        await unlink(filePath)
-      } catch (error) {
-        // Log the error but don't fail the deletion if file doesn't exist
-        console.warn(`Failed to delete banner image for user ${id}:`, error.message)
-      }
+    const uploadConfig = {
+      uploadsPath: this.UPLOADS_PATH,
+      allowedExtensions: this.ALLOWED_BANNER_EXTENSIONS,
+      entityType: 'user',
+      entityId: id,
     }
-
+    await this.driveService.deleteFile(user.bannerUrl, uploadConfig, id)
     await user.delete()
+
     return true
   }
 
@@ -159,49 +131,33 @@ export class UsersService {
    * @throws Error if user is not found or file upload fails
    */
   async uploadBanner(userId: number, banner: MultipartFile): Promise<User> {
-    const user = await User.find(userId)
-    if (!user) {
-      throw new Error('User not found')
-    }
-
     if (!banner) {
       throw new Error('Banner image is required')
     }
 
-    // Validate file type
-    const allowedExtensions = ['jpg', 'jpeg', 'png', 'webp']
-    if (!allowedExtensions.includes(banner.extname || '')) {
-      throw new Error(`Invalid file type. Allowed types: ${allowedExtensions.join(', ')}`)
+    const user = await this.findUserOrFail(userId)
+    const uploadConfig = {
+      uploadsPath: this.UPLOADS_PATH,
+      allowedExtensions: this.ALLOWED_BANNER_EXTENSIONS,
+      entityType: 'user',
+      entityId: user.id,
     }
+    user.bannerUrl = await this.driveService.replaceFile(banner, uploadConfig, user.bannerUrl)
+    await user.save()
 
-    // Delete old banner image if it's a local file
-    if (user.bannerUrl && user.bannerUrl.startsWith('/uploads/users/')) {
-      try {
-        const oldFileName = user.bannerUrl.replace('/uploads/users/', '')
-        const oldFilePath = join(app.publicPath('uploads/users'), oldFileName)
-        await unlink(oldFilePath)
-      } catch (error) {
-        // Log the error but continue with upload
-        console.warn(`Failed to delete old banner image for user ${user.id}:`, error.message)
-      }
-    }
-
-    try {
-      // Upload banner file
-      const fileName = `user_${user.id}_${cuid()}.${banner.extname}`
-
-      await banner.move(app.publicPath('uploads/users'), {
-        name: fileName,
-        overwrite: true,
-      })
-
-      // Update user with banner URL
-      user.bannerUrl = `/uploads/users/${fileName}`
-      await user.save()
-
-      return user
-    } catch (error) {
-      throw new Error(`Failed to upload banner image: ${error.message}`)
-    }
+    return user
   }
+
+  /**
+   * Finds a user by ID or throws an error if not found
+   * @private
+   */
+  private async findUserOrFail(id: number): Promise<User> {
+    const user = await User.find(id)
+    if (!user) {
+      throw new Error('User not found')
+    }
+    return user
+  }
+
 }

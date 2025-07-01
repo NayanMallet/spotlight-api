@@ -1,10 +1,7 @@
 import Artist from '#artists/models/artist'
 import { MultipartFile } from '@adonisjs/core/bodyparser'
-import app from '@adonisjs/core/services/app'
 import { inject } from '@adonisjs/core'
-import { cuid } from '@adonisjs/core/helpers'
-import { unlink } from 'node:fs/promises'
-import { join } from 'node:path'
+import { DriveService } from '#core/services/drive_service'
 
 export interface CreateArtistData {
   name: string
@@ -26,6 +23,8 @@ export class ArtistsService {
   private readonly UPLOADS_PATH = 'uploads/artists'
   private readonly UPLOADS_URL_PREFIX = '/uploads/artists/'
 
+  constructor(private driveService: DriveService) {}
+
   /**
    * Stores a new artist in the database.
    * @param data - The artist data excluding the image.
@@ -38,8 +37,6 @@ export class ArtistsService {
       throw new Error('Artist image is required')
     }
 
-    this.validateImageType(image)
-
     // Create artist record
     const artist = await Artist.create({
       name: data.name,
@@ -48,7 +45,14 @@ export class ArtistsService {
 
     try {
       // Upload image and update artist
-      artist.image = await this.uploadArtistImage(artist.id, image)
+      const uploadConfig = {
+        uploadsPath: this.UPLOADS_PATH,
+        allowedExtensions: this.ALLOWED_IMAGE_EXTENSIONS,
+        urlPrefix: this.UPLOADS_URL_PREFIX,
+        entityType: 'artist',
+        entityId: artist.id,
+      }
+      artist.image = await this.driveService.uploadFile(image, uploadConfig)
       await artist.save()
       return artist
     } catch (error) {
@@ -107,14 +111,16 @@ export class ArtistsService {
 
     // Handle image update if provided
     if (image) {
-      this.validateImageType(image)
-
-      // Delete old artist image
-      await this.deleteArtistImage(artist.id, artist.image)
-
       try {
-        // Upload new image file and update artist
-        artist.image = await this.uploadArtistImage(artist.id, image)
+        const uploadConfig = {
+          uploadsPath: this.UPLOADS_PATH,
+          allowedExtensions: this.ALLOWED_IMAGE_EXTENSIONS,
+          urlPrefix: this.UPLOADS_URL_PREFIX,
+          entityType: 'artist',
+          entityId: artist.id,
+        }
+        // Replace old image with new one
+        artist.image = await this.driveService.replaceFile(image, uploadConfig, artist.image)
       } catch (error) {
         throw new Error(`Failed to upload artist image: ${error.message}`)
       }
@@ -136,58 +142,17 @@ export class ArtistsService {
     }
 
     // Delete the artist image file if it exists
-    await this.deleteArtistImage(id, artist.image)
+    const uploadConfig = {
+      uploadsPath: this.UPLOADS_PATH,
+      allowedExtensions: this.ALLOWED_IMAGE_EXTENSIONS,
+      urlPrefix: this.UPLOADS_URL_PREFIX,
+      entityType: 'artist',
+      entityId: id,
+    }
+    await this.driveService.deleteFile(artist.image, uploadConfig, id)
 
     await artist.delete()
     return true
   }
 
-  /**
-   * Validates that the uploaded file is an allowed image type
-   * @param image - The image file to validate
-   * @throws Error if file type is not allowed
-   */
-  private validateImageType(image: MultipartFile): void {
-    if (!this.ALLOWED_IMAGE_EXTENSIONS.includes(image.extname || '')) {
-      throw new Error(
-        `Invalid file type. Allowed types: ${this.ALLOWED_IMAGE_EXTENSIONS.join(', ')}`
-      )
-    }
-  }
-
-  /**
-   * Uploads an artist image and returns the URL path
-   * @param artistId - The artist ID
-   * @param image - The image file to upload
-   * @returns The URL path to the uploaded image
-   */
-  private async uploadArtistImage(artistId: number, image: MultipartFile): Promise<string> {
-    const fileName = `artist_${artistId}_${cuid()}.${image.extname}`
-    const uploadsPath = app.publicPath(this.UPLOADS_PATH)
-
-    await image.move(uploadsPath, {
-      name: fileName,
-      overwrite: true,
-    })
-
-    return `${this.UPLOADS_URL_PREFIX}${fileName}`
-  }
-
-  /**
-   * Deletes an artist's image file if it exists
-   * @param artistId - The artist ID
-   * @param imagePath - The image path to delete
-   */
-  private async deleteArtistImage(artistId: number, imagePath?: string): Promise<void> {
-    if (imagePath && imagePath.startsWith(this.UPLOADS_URL_PREFIX)) {
-      try {
-        const fileName = imagePath.replace(this.UPLOADS_URL_PREFIX, '')
-        const filePath = join(app.publicPath(this.UPLOADS_PATH), fileName)
-        await unlink(filePath)
-      } catch (error) {
-        // Log the error but don't fail the operation if file doesn't exist
-        console.warn(`Failed to delete image for artist ${artistId}:`, error.message)
-      }
-    }
-  }
 }

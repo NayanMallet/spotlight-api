@@ -2,13 +2,10 @@ import Event from '#events/models/event'
 import EventArtist from '#events/models/event_artist'
 import Artist from '#artists/models/artist'
 import { MultipartFile } from '@adonisjs/core/bodyparser'
-import app from '@adonisjs/core/services/app'
 import { inject } from '@adonisjs/core'
 import { DateTime } from 'luxon'
 import { EventType, EventSubtype } from '#events/enums/events'
-import { cuid } from '@adonisjs/core/helpers'
-import { unlink } from 'node:fs/promises'
-import { join } from 'node:path'
+import { DriveService } from '#core/services/drive_service'
 
 export interface CreateEventData {
   title: string
@@ -56,6 +53,28 @@ export interface GetEventsOptions {
 
 @inject()
 export class EventsService {
+  private readonly ALLOWED_BANNER_EXTENSIONS = ['jpg', 'jpeg', 'png', 'webp']
+  private readonly UPLOADS_PATH = 'uploads/events'
+  private readonly UPLOADS_URL_PREFIX = '/uploads/events/'
+
+  constructor(private driveService: DriveService) {}
+
+  /**
+   * Validates that all provided artist IDs exist in the database
+   * @param artistIds - Array of artist IDs to validate
+   * @throws Error if any artist IDs are not found
+   */
+  private async validateArtistsExist(artistIds: number[]): Promise<void> {
+    if (artistIds.length === 0) return
+
+    const existingArtists = await Artist.query().whereIn('id', artistIds)
+    if (existingArtists.length !== artistIds.length) {
+      const existingIds = existingArtists.map((artist) => artist.id)
+      const missingIds = artistIds.filter((artistId) => !existingIds.includes(artistId))
+      throw new Error(`Artists not found: ${missingIds.join(', ')}`)
+    }
+  }
+
   /**
    * Stores a new event in the database.
    * @param data - The event data excluding the banner.
@@ -68,20 +87,9 @@ export class EventsService {
       throw new Error('Banner image is required')
     }
 
-    // Validate file type
-    const allowedExtensions = ['jpg', 'jpeg', 'png', 'webp']
-    if (!allowedExtensions.includes(banner.extname || '')) {
-      throw new Error(`Invalid file type. Allowed types: ${allowedExtensions.join(', ')}`)
-    }
-
     // Validate artists exist if provided
     if (data.artistIds && data.artistIds.length > 0) {
-      const existingArtists = await Artist.query().whereIn('id', data.artistIds)
-      if (existingArtists.length !== data.artistIds.length) {
-        const existingIds = existingArtists.map((artist) => artist.id)
-        const missingIds = data.artistIds.filter((id) => !existingIds.includes(id))
-        throw new Error(`Artists not found: ${missingIds.join(', ')}`)
-      }
+      await this.validateArtistsExist(data.artistIds)
     }
 
     // Create event record
@@ -103,15 +111,14 @@ export class EventsService {
 
     try {
       // Upload banner file
-      const fileName = `event_${event.id}_${cuid()}.${banner.extname}`
-
-      await banner.move(app.publicPath('uploads/events'), {
-        name: fileName,
-        overwrite: true,
-      })
-
-      // Update event with banner URL
-      event.bannerUrl = `/uploads/events/${fileName}`
+      const uploadConfig = {
+        uploadsPath: this.UPLOADS_PATH,
+        allowedExtensions: this.ALLOWED_BANNER_EXTENSIONS,
+        urlPrefix: this.UPLOADS_URL_PREFIX,
+        entityType: 'event',
+        entityId: event.id,
+      }
+      event.bannerUrl = await this.driveService.uploadFile(banner, uploadConfig)
       await event.save()
 
       // Create event-artist relationships if artists are provided
@@ -193,15 +200,8 @@ export class EventsService {
     }
 
     // Validate artists exist if provided
-    if (data.artistIds !== undefined) {
-      if (data.artistIds.length > 0) {
-        const existingArtists = await Artist.query().whereIn('id', data.artistIds)
-        if (existingArtists.length !== data.artistIds.length) {
-          const existingIds = existingArtists.map((artist) => artist.id)
-          const missingIds = data.artistIds.filter((id) => !existingIds.includes(id))
-          throw new Error(`Artists not found: ${missingIds.join(', ')}`)
-        }
-      }
+    if (data.artistIds !== undefined && data.artistIds.length > 0) {
+      await this.validateArtistsExist(data.artistIds)
     }
 
     // Update event fields
@@ -223,35 +223,16 @@ export class EventsService {
 
     // Handle banner update if provided
     if (banner) {
-      // Validate file type
-      const allowedExtensions = ['jpg', 'jpeg', 'png', 'webp']
-      if (!allowedExtensions.includes(banner.extname || '')) {
-        throw new Error(`Invalid file type. Allowed types: ${allowedExtensions.join(', ')}`)
-      }
-
-      // Delete old banner image if it exists
-      if (event.bannerUrl && event.bannerUrl.startsWith('/uploads/events/')) {
-        try {
-          const oldFileName = event.bannerUrl.replace('/uploads/events/', '')
-          const oldFilePath = join(app.publicPath('uploads/events'), oldFileName)
-          await unlink(oldFilePath)
-        } catch (error) {
-          // Log the error but continue with upload
-          console.warn(`Failed to delete old banner image for event ${event.id}:`, error.message)
-        }
-      }
-
       try {
-        // Upload new banner file
-        const fileName = `event_${event.id}_${cuid()}.${banner.extname}`
-
-        await banner.move(app.publicPath('uploads/events'), {
-          name: fileName,
-          overwrite: true,
-        })
-
-        // Update event with new banner URL
-        event.bannerUrl = `/uploads/events/${fileName}`
+        const uploadConfig = {
+          uploadsPath: this.UPLOADS_PATH,
+          allowedExtensions: this.ALLOWED_BANNER_EXTENSIONS,
+          urlPrefix: this.UPLOADS_URL_PREFIX,
+          entityType: 'event',
+          entityId: event.id,
+        }
+        // Replace old banner with new one
+        event.bannerUrl = await this.driveService.replaceFile(banner, uploadConfig, event.bannerUrl)
       } catch (error) {
         throw new Error(`Failed to upload banner image: ${error.message}`)
       }
@@ -288,16 +269,14 @@ export class EventsService {
     }
 
     // Delete the banner image file if it exists
-    if (event.bannerUrl && event.bannerUrl.startsWith('/uploads/events/')) {
-      try {
-        const fileName = event.bannerUrl.replace('/uploads/events/', '')
-        const filePath = join(app.publicPath('uploads/events'), fileName)
-        await unlink(filePath)
-      } catch (error) {
-        // Log the error but don't fail the deletion if file doesn't exist
-        console.warn(`Failed to delete banner image for event ${id}:`, error.message)
-      }
+    const uploadConfig = {
+      uploadsPath: this.UPLOADS_PATH,
+      allowedExtensions: this.ALLOWED_BANNER_EXTENSIONS,
+      urlPrefix: this.UPLOADS_URL_PREFIX,
+      entityType: 'event',
+      entityId: id,
     }
+    await this.driveService.deleteFile(event.bannerUrl, uploadConfig, id)
 
     await event.delete()
     return true
