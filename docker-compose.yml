@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  ########################
+  # 1) Service MySQL #
+  ########################
+  mysql_db:
+    container_name: mysql_db
+    image: mysql:8.0
+    restart: unless-stopped
+    expose:
+      - "3306"
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+      - MYSQL_DATABASE=${DB_DATABASE}
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - spotlight_net
+
+  ########################
+  # 2) Service Adonis #
+  ########################
+  spotlight_api:
+    container_name: spotlight_api
+    restart: always
+
+    build:
+      context: .
+      target: dependencies
+
+    ports:
+      - "${PORT}:${PORT}"
+
+    env_file:
+      - .env
+
+    volumes:
+      - .:/home/node/app 
+      - /home/node/app/node_modules
+
+    depends_on:
+      - mysql_db
+
+    environment:
+      NODE_ENV: development
+      HOST: ${HOST}
+      PORT: ${PORT}
+      DB_CONNECTION: mysql
+      DB_HOST: mysql_db
+      DB_PORT: ${DB_PORT}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_DATABASE: ${DB_DATABASE}
+
+    networks:
+      - spotlight_net
+
+    command: >
+      sh -c "node ace migration:run && dumb-init node ace serve --hmr"
+
+volumes:
+  mysql_data:
+
+networks:
+  spotlight_net:
