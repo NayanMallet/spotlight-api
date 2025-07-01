@@ -1,7 +1,6 @@
 import { HttpContext } from '@adonisjs/core/http'
 import { inject } from '@adonisjs/core'
 import { EventsService } from '#events/services/events_service'
-import { eventIdValidator } from '#events/validators/events'
 
 @inject()
 export default class GetEventArtistsController {
@@ -18,11 +17,17 @@ export default class GetEventArtistsController {
    * @responseBody 404 - {"message": "Event not found", "error": "EVENT_NOT_FOUND"} - Event not found
    * @responseBody 500 - {"message": "An error occurred while retrieving event artists", "error": "string"} - Internal server error
    */
-  async handle({ request, response, params }: HttpContext) {
+  async handle({ response, params }: HttpContext) {
     try {
       // Validate event ID
-      const { id: eventId } = await request.validateUsing(eventIdValidator, { params })
+      const eventId = Number.parseInt(params.id, 10)
 
+      if (Number.isNaN(eventId) || eventId < 1) {
+        return response.badRequest({
+          message: 'Invalid event ID',
+          error: 'INVALID_EVENT_ID',
+        })
+      }
       // Get current event
       const event = await this.eventsService.getById(eventId)
       if (!event) {
@@ -38,7 +43,7 @@ export default class GetEventArtistsController {
       })
 
       // Extract artist details from the pivot relationships
-      const artists = event.artists.map(eventArtist => eventArtist.artist)
+      const artists = event.artists.map((eventArtist) => eventArtist.artist)
 
       return response.ok({
         message: 'Event artists retrieved successfully',

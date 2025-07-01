@@ -1,7 +1,6 @@
 import { HttpContext } from '@adonisjs/core/http'
 import { inject } from '@adonisjs/core'
 import { EventsService } from '#events/services/events_service'
-import { eventIdValidator } from '#events/validators/events'
 import vine from '@vinejs/vine'
 
 const removeEventArtistsValidator = vine.compile(
@@ -30,7 +29,14 @@ export default class RemoveEventArtistsController {
   async handle({ request, response, params }: HttpContext) {
     try {
       // Validate event ID
-      const { id: eventId } = await request.validateUsing(eventIdValidator, { params })
+      const eventId = Number.parseInt(params.id, 10)
+
+      if (Number.isNaN(eventId) || eventId < 1) {
+        return response.badRequest({
+          message: 'Invalid event ID',
+          error: 'INVALID_EVENT_ID',
+        })
+      }
 
       // Validate request body
       const { artistIds } = await request.validateUsing(removeEventArtistsValidator)
@@ -46,10 +52,10 @@ export default class RemoveEventArtistsController {
 
       // Load current artists
       await event.load('artists')
-      const currentArtistIds = event.artists.map(ea => ea.artistId)
+      const currentArtistIds = event.artists.map((ea) => ea.artistId)
 
       // Filter out artists that are not associated with the event
-      const artistsToRemove = artistIds.filter(id => currentArtistIds.includes(id))
+      const artistsToRemove = artistIds.filter((id) => currentArtistIds.includes(id))
 
       if (artistsToRemove.length === 0) {
         return response.badRequest({
@@ -59,10 +65,12 @@ export default class RemoveEventArtistsController {
       }
 
       // Remove specified artists from current ones
-      const remainingArtistIds = currentArtistIds.filter(id => !artistIds.includes(id))
+      const remainingArtistIds = currentArtistIds.filter((id) => !artistIds.includes(id))
 
       // Update event with remaining artist associations
-      const updatedEvent = await this.eventsService.update(eventId, { artistIds: remainingArtistIds })
+      const updatedEvent = await this.eventsService.update(eventId, {
+        artistIds: remainingArtistIds,
+      })
 
       return response.ok({
         message: 'Artists removed from event successfully',

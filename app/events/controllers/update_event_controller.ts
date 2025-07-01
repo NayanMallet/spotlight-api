@@ -24,10 +24,10 @@ export default class UpdateEventController {
    */
   async handle({ request, response, params }: HttpContext) {
     try {
-      const eventId = Number(params.id)
-
       // Validate event ID
-      if (!eventId || eventId < 1) {
+      const eventId = Number.parseInt(params.id, 10)
+
+      if (Number.isNaN(eventId) || eventId < 1) {
         return response.badRequest({
           message: 'Invalid event ID',
           error: 'INVALID_EVENT_ID',
