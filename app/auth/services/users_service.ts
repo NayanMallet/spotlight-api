@@ -65,7 +65,7 @@ export class UsersService {
     // Update user fields
     if (data.full_name !== undefined) user.full_name = data.full_name
     if (data.email !== undefined) user.email = data.email
-    if (data.password !== undefined) user.password = await hash.make(data.password)
+    if (data.password !== undefined) user.password = await hash.use('scrypt').make(data.password)
 
     // Handle banner update if provided
     if (banner) {
@@ -117,7 +117,7 @@ export class UsersService {
       throw new Error('User not found')
     }
 
-    user.password = await hash.make(data.newPassword)
+    user.password = await hash.use('scrypt').make(data.newPassword)
     await user.save()
 
     return user
@@ -159,5 +159,4 @@ export class UsersService {
     }
     return user
   }
-
 }

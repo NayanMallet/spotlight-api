@@ -23,9 +23,7 @@ export class DriveService {
    */
   validateFileType(file: MultipartFile, allowedExtensions: string[]): void {
     if (!allowedExtensions.includes(file.extname || '')) {
-      throw new Error(
-        `Invalid file type. Allowed types: ${allowedExtensions.join(', ')}`
-      )
+      throw new Error(`Invalid file type. Allowed types: ${allowedExtensions.join(', ')}`)
     }
   }
 
@@ -60,7 +58,11 @@ export class DriveService {
    * @param config - Upload configuration for path resolution
    * @param entityId - Entity ID for logging purposes
    */
-  async deleteFile(filePath: string | null | undefined, config: UploadConfig, entityId: number): Promise<void> {
+  async deleteFile(
+    filePath: string | null | undefined,
+    config: UploadConfig,
+    entityId: number
+  ): Promise<void> {
     if (!filePath) return
 
     const pathPrefix = config.urlPrefix || `/${config.uploadsPath}/`
@@ -72,7 +74,10 @@ export class DriveService {
         await unlink(fullPath)
       } catch (error) {
         // Log the error but don't fail the operation if file doesn't exist
-        console.warn(`Failed to delete ${config.entityType} file for ${config.entityType} ${entityId}:`, error.message)
+        console.warn(
+          `Failed to delete ${config.entityType} file for ${config.entityType} ${entityId}:`,
+          error.message
+        )
       }
     }
   }
@@ -84,7 +89,11 @@ export class DriveService {
    * @param oldFilePath - Path to the old file to delete (optional)
    * @returns The URL path to the uploaded file
    */
-  async replaceFile(file: MultipartFile, config: UploadConfig, oldFilePath?: string | null): Promise<string> {
+  async replaceFile(
+    file: MultipartFile,
+    config: UploadConfig,
+    oldFilePath?: string | null
+  ): Promise<string> {
     // Delete old file first
     if (oldFilePath) {
       await this.deleteFile(oldFilePath, config, config.entityId)
