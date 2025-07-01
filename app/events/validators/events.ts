@@ -96,3 +96,15 @@ export const getEventsValidator = vine.compile(
       .optional(),
   })
 )
+
+export const eventIdValidator = vine.compile(
+  vine.object({
+    id: vine.number().min(1),
+  })
+)
+
+export const addEventArtistsValidator = vine.compile(
+  vine.object({
+    artistIds: vine.array(vine.number().min(1)).minLength(1),
+  })
+)

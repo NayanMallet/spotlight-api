@@ -1,5 +1,5 @@
 import { HttpContext } from '@adonisjs/core/http'
-import { updateEventValidator } from '#events/validators/events'
+import { eventIdValidator, updateEventValidator } from '#events/validators/events'
 import { EventsService } from '#events/services/events_service'
 import { inject } from '@adonisjs/core'
 
@@ -24,15 +24,9 @@ export default class UpdateEventController {
    */
   async handle({ request, response, params }: HttpContext) {
     try {
-      // Validate event ID
-      const eventId = Number.parseInt(params.id, 10)
-
-      if (Number.isNaN(eventId) || eventId < 1) {
-        return response.badRequest({
-          message: 'Invalid event ID',
-          error: 'INVALID_EVENT_ID',
-        })
-      }
+      const { id: eventId } = await request.validateUsing(eventIdValidator, {
+        data: params,
+      })
 
       const payload = await request.validateUsing(updateEventValidator)
       const banner = request.file('banner')

@@ -2,23 +2,27 @@ import Message from '#messages/models/message'
 import { inject } from '@adonisjs/core'
 import { cuid } from '@adonisjs/core/helpers'
 
-export class CreateMessageData {
+export class MessageDto {
+  declare content: string
+}
+
+export class CreateMessageDto extends MessageDto {
   declare eventId: string
-  declare content: string
 }
 
-export class UpdateMessageData {
-  declare content: string
-}
+export class UpdateMessageDto extends MessageDto {}
 
-export class GetMessagesByEventOptions {
+export class MessagePaginationOptions {
   declare page?: number
   declare limit?: number
 }
 
 @inject()
 export class MessagesService {
-  async create(data: CreateMessageData, userId: string): Promise<Message> {
+  /**
+   * Crée un nouveau message
+   */
+  async create(data: CreateMessageDto, userId: string): Promise<Message> {
     const message = new Message()
     message.id = cuid()
     message.userId = userId
@@ -26,15 +30,14 @@ export class MessagesService {
     message.content = data.content
 
     await message.save()
-    await message.load('user')
-    await message.load('event')
-
-    return message
+    return this.loadRelations(message)
   }
 
-  async getByEventId(eventId: string, options: GetMessagesByEventOptions = {}) {
-    const page = options.page || 1
-    const limit = options.limit || 20
+  /**
+   * Récupère les messages d'un événement avec pagination
+   */
+  async getByEventId(eventId: string, options: Partial<MessagePaginationOptions> = {}) {
+    const { page = 1, limit = 20 } = options
 
     const messages = await Message.query()
       .where('eventId', eventId)
@@ -46,36 +49,35 @@ export class MessagesService {
     return messages
   }
 
+  /**
+   * Récupère un message par son identifiant
+   */
   async getById(id: string): Promise<Message | null> {
-    const message = await Message.query()
-      .where('id', id)
-      .preload('user')
-      .preload('event')
-      .first()
-
-    return message
+    return Message.query().where('id', id).preload('user').preload('event').first()
   }
 
-  async update(id: string, data: UpdateMessageData, userId: string): Promise<Message | null> {
+  /**
+   * Met à jour un message si l'utilisateur en est le propriétaire
+   */
+  async update(id: string, data: UpdateMessageDto, userId: string): Promise<Message | null> {
     const message = await Message.find(id)
 
     if (!message) {
       return null
     }
 
-    // Check if the user owns this message
-    if (message.userId !== userId) {
-      throw new Error('Unauthorized: You can only update your own messages')
-    }
+    this.verifyMessageOwnership(message, userId)
 
     message.content = data.content
     await message.save()
-    await message.load('user')
-    await message.load('event')
 
-    return message
+    return this.loadRelations(message)
   }
 
+  /**
+   * Supprime un message si l'utilisateur en est le propriétaire
+   * @returns true si le message a été supprimé, false s'il n'existe pas
+   */
   async delete(id: string, userId: string): Promise<boolean> {
     const message = await Message.find(id)
 
@@ -83,12 +85,29 @@ export class MessagesService {
       return false
     }
 
-    // Check if the user owns this message
-    if (message.userId !== userId) {
-      throw new Error('Unauthorized: You can only delete your own messages')
-    }
-
+    this.verifyMessageOwnership(message, userId)
     await message.delete()
+
     return true
+  }
+
+  /**
+   * Charge les relations utilisateur et événement pour un message
+   * @private
+   */
+  private async loadRelations(message: Message): Promise<Message> {
+    await message.load('user')
+    await message.load('event')
+    return message
+  }
+
+  /**
+   * Vérifie si l'utilisateur est autorisé à modifier ou supprimer un message
+   * @private
+   */
+  private verifyMessageOwnership(message: Message, userId: string): void {
+    if (message.userId !== userId) {
+      throw new Error('Unauthorized: You can only manage your own messages')
+    }
   }
 }

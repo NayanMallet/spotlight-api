@@ -1,5 +1,6 @@
 import { HttpContext } from '@adonisjs/core/http'
 import { EventsService } from '#events/services/events_service'
+import { eventIdValidator } from '#events/validators/events'
 import { inject } from '@adonisjs/core'
 
 @inject()
@@ -17,17 +18,11 @@ export default class GetEventController {
    * @responseBody 404 - {"message": "Event not found", "error": "EVENT_NOT_FOUND"} - Event not found
    * @responseBody 500 - {"message": "An error occurred while retrieving the event", "error": "string"} - Internal server error
    */
-  async handle({ response, params }: HttpContext) {
+  async handle({ request, response, params }: HttpContext) {
     try {
-      // Validate event ID
-      const eventId = Number.parseInt(params.id, 10)
-
-      if (Number.isNaN(eventId) || eventId < 1) {
-        return response.badRequest({
-          message: 'Invalid event ID',
-          error: 'INVALID_EVENT_ID',
-        })
-      }
+      const { id: eventId } = await request.validateUsing(eventIdValidator, {
+        data: params,
+      })
 
       const event = await this.eventsService.getById(eventId)
 

@@ -78,8 +78,8 @@ export class EventsService {
     if (data.artistIds && data.artistIds.length > 0) {
       const existingArtists = await Artist.query().whereIn('id', data.artistIds)
       if (existingArtists.length !== data.artistIds.length) {
-        const existingIds = existingArtists.map(artist => artist.id)
-        const missingIds = data.artistIds.filter(id => !existingIds.includes(id))
+        const existingIds = existingArtists.map((artist) => artist.id)
+        const missingIds = data.artistIds.filter((id) => !existingIds.includes(id))
         throw new Error(`Artists not found: ${missingIds.join(', ')}`)
       }
     }
@@ -116,7 +116,7 @@ export class EventsService {
 
       // Create event-artist relationships if artists are provided
       if (data.artistIds && data.artistIds.length > 0) {
-        const eventArtistData = data.artistIds.map(artistId => ({
+        const eventArtistData = data.artistIds.map((artistId) => ({
           eventId: event.id,
           artistId: artistId,
         }))
@@ -197,8 +197,8 @@ export class EventsService {
       if (data.artistIds.length > 0) {
         const existingArtists = await Artist.query().whereIn('id', data.artistIds)
         if (existingArtists.length !== data.artistIds.length) {
-          const existingIds = existingArtists.map(artist => artist.id)
-          const missingIds = data.artistIds.filter(id => !existingIds.includes(id))
+          const existingIds = existingArtists.map((artist) => artist.id)
+          const missingIds = data.artistIds.filter((id) => !existingIds.includes(id))
           throw new Error(`Artists not found: ${missingIds.join(', ')}`)
         }
       }
@@ -264,7 +264,7 @@ export class EventsService {
 
       // Create new artist associations if any
       if (data.artistIds.length > 0) {
-        const eventArtistData = data.artistIds.map(artistId => ({
+        const eventArtistData = data.artistIds.map((artistId) => ({
           eventId: event.id,
           artistId: artistId,
         }))

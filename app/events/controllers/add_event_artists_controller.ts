@@ -1,13 +1,7 @@
 import { HttpContext } from '@adonisjs/core/http'
 import { inject } from '@adonisjs/core'
 import { EventsService } from '#events/services/events_service'
-import vine from '@vinejs/vine'
-
-const addEventArtistsValidator = vine.compile(
-  vine.object({
-    artistIds: vine.array(vine.number().min(1)).minLength(1),
-  })
-)
+import { addEventArtistsValidator, eventIdValidator } from '#events/validators/events'
 
 @inject()
 export default class AddEventArtistsController {
@@ -28,15 +22,9 @@ export default class AddEventArtistsController {
    */
   async handle({ request, response, params }: HttpContext) {
     try {
-      // Validate event ID
-      const eventId = Number.parseInt(params.id, 10)
-
-      if (Number.isNaN(eventId) || eventId < 1) {
-        return response.badRequest({
-          message: 'Invalid event ID',
-          error: 'INVALID_EVENT_ID',
-        })
-      }
+      const { id: eventId } = await request.validateUsing(eventIdValidator, {
+        data: params,
+      })
 
       // Validate request body
       const { artistIds } = await request.validateUsing(addEventArtistsValidator)

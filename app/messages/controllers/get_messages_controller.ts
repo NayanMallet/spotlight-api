@@ -1,5 +1,6 @@
 import { HttpContext } from '@adonisjs/core/http'
-import { getMessagesByEventValidator, eventIdValidator } from '#messages/validators/messages'
+import { getMessagesByEventValidator } from '#messages/validators/messages'
+import { eventIdValidator } from '#events/validators/events'
 import { MessagesService } from '#messages/services/messages_service'
 import { inject } from '@adonisjs/core'
 
@@ -24,13 +25,13 @@ export default class GetMessagesController {
     try {
       await auth.authenticate()
 
-      const { eventId } = await request.validateUsing(eventIdValidator, {
+      const { id: eventId } = await request.validateUsing(eventIdValidator, {
         data: params,
       })
 
       const queryParams = await request.validateUsing(getMessagesByEventValidator)
 
-      const messages = await this.messagesService.getByEventId(eventId, queryParams)
+      const messages = await this.messagesService.getByEventId(eventId.toString(), queryParams)
 
       return response.ok({
         message: 'Messages retrieved successfully',

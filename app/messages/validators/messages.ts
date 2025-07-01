@@ -25,9 +25,3 @@ export const messageIdValidator = vine.compile(
     id: vine.string().trim().minLength(1),
   })
 )
-
-export const eventIdValidator = vine.compile(
-  vine.object({
-    eventId: vine.string().trim().minLength(1),
-  })
-)

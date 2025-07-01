@@ -23,11 +23,11 @@ export default class GetMessageController {
     try {
       await auth.authenticate()
 
-      const { id } = await request.validateUsing(messageIdValidator, {
+      const { id: messageId } = await request.validateUsing(messageIdValidator, {
         data: params,
       })
 
-      const message = await this.messagesService.getById(id)
+      const message = await this.messagesService.getById(messageId)
 
       if (!message) {
         return response.notFound({

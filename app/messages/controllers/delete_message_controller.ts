@@ -24,11 +24,11 @@ export default class DeleteMessageController {
     try {
       const user = await auth.authenticate()
 
-      const { id } = await request.validateUsing(messageIdValidator, {
+      const { id: messageId } = await request.validateUsing(messageIdValidator, {
         data: params,
       })
 
-      const deleted = await this.messagesService.delete(id, user.id.toString())
+      const deleted = await this.messagesService.delete(messageId, user.id.toString())
 
       if (!deleted) {
         return response.notFound({
