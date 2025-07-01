@@ -24,10 +24,6 @@ export const updateArtistValidator = vine.compile(
 
 export const artistIdValidator = vine.compile(
   vine.object({
-    id: vine
-      .string()
-      .trim()
-      .minLength(1)
-      .transform((value) => Number.parseInt(value, 10)),
+    id: vine.number().min(1),
   })
 )

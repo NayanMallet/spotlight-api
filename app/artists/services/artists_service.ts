@@ -22,6 +22,10 @@ export interface GetArtistsOptions {
 
 @inject()
 export class ArtistsService {
+  private readonly ALLOWED_IMAGE_EXTENSIONS = ['jpg', 'jpeg', 'png', 'webp']
+  private readonly UPLOADS_PATH = 'uploads/artists'
+  private readonly UPLOADS_URL_PREFIX = '/uploads/artists/'
+
   /**
    * Stores a new artist in the database.
    * @param data - The artist data excluding the image.
@@ -34,11 +38,7 @@ export class ArtistsService {
       throw new Error('Artist image is required')
     }
 
-    // Validate file type
-    const allowedExtensions = ['jpg', 'jpeg', 'png', 'webp']
-    if (!allowedExtensions.includes(image.extname || '')) {
-      throw new Error(`Invalid file type. Allowed types: ${allowedExtensions.join(', ')}`)
-    }
+    this.validateImageType(image)
 
     // Create artist record
     const artist = await Artist.create({
@@ -47,18 +47,9 @@ export class ArtistsService {
     })
 
     try {
-      // Upload image file
-      const fileName = `artist_${artist.id}_${cuid()}.${image.extname}`
-
-      await image.move(app.publicPath('uploads/artists'), {
-        name: fileName,
-        overwrite: true,
-      })
-
-      // Update artist with image URL
-      artist.image = `/uploads/artists/${fileName}`
+      // Upload image and update artist
+      artist.image = await this.uploadArtistImage(artist.id, image)
       await artist.save()
-
       return artist
     } catch (error) {
       // If file upload fails, delete the created artist to maintain consistency
@@ -74,7 +65,6 @@ export class ArtistsService {
    */
   async getAll(options: GetArtistsOptions = {}) {
     const { page = 1, limit = 20, name } = options
-
     const query = Artist.query()
 
     // Apply filters
@@ -117,35 +107,14 @@ export class ArtistsService {
 
     // Handle image update if provided
     if (image) {
-      // Validate file type
-      const allowedExtensions = ['jpg', 'jpeg', 'png', 'webp']
-      if (!allowedExtensions.includes(image.extname || '')) {
-        throw new Error(`Invalid file type. Allowed types: ${allowedExtensions.join(', ')}`)
-      }
+      this.validateImageType(image)
 
-      // Delete old artist image if it exists
-      if (artist.image && artist.image.startsWith('/uploads/artists/')) {
-        try {
-          const oldFileName = artist.image.replace('/uploads/artists/', '')
-          const oldFilePath = join(app.publicPath('uploads/artists'), oldFileName)
-          await unlink(oldFilePath)
-        } catch (error) {
-          // Log the error but continue with upload
-          console.warn(`Failed to delete old image for artist ${artist.id}:`, error.message)
-        }
-      }
+      // Delete old artist image
+      await this.deleteArtistImage(artist.id, artist.image)
 
       try {
-        // Upload new image file
-        const fileName = `artist_${artist.id}_${cuid()}.${image.extname}`
-
-        await image.move(app.publicPath('uploads/artists'), {
-          name: fileName,
-          overwrite: true,
-        })
-
-        // Update artist with new image URL
-        artist.image = `/uploads/artists/${fileName}`
+        // Upload new image file and update artist
+        artist.image = await this.uploadArtistImage(artist.id, image)
       } catch (error) {
         throw new Error(`Failed to upload artist image: ${error.message}`)
       }
@@ -167,18 +136,58 @@ export class ArtistsService {
     }
 
     // Delete the artist image file if it exists
-    if (artist.image && artist.image.startsWith('/uploads/artists/')) {
-      try {
-        const fileName = artist.image.replace('/uploads/artists/', '')
-        const filePath = join(app.publicPath('uploads/artists'), fileName)
-        await unlink(filePath)
-      } catch (error) {
-        // Log the error but don't fail the deletion if file doesn't exist
-        console.warn(`Failed to delete image for artist ${id}:`, error.message)
-      }
-    }
+    await this.deleteArtistImage(id, artist.image)
 
     await artist.delete()
     return true
+  }
+
+  /**
+   * Validates that the uploaded file is an allowed image type
+   * @param image - The image file to validate
+   * @throws Error if file type is not allowed
+   */
+  private validateImageType(image: MultipartFile): void {
+    if (!this.ALLOWED_IMAGE_EXTENSIONS.includes(image.extname || '')) {
+      throw new Error(
+        `Invalid file type. Allowed types: ${this.ALLOWED_IMAGE_EXTENSIONS.join(', ')}`
+      )
+    }
+  }
+
+  /**
+   * Uploads an artist image and returns the URL path
+   * @param artistId - The artist ID
+   * @param image - The image file to upload
+   * @returns The URL path to the uploaded image
+   */
+  private async uploadArtistImage(artistId: number, image: MultipartFile): Promise<string> {
+    const fileName = `artist_${artistId}_${cuid()}.${image.extname}`
+    const uploadsPath = app.publicPath(this.UPLOADS_PATH)
+
+    await image.move(uploadsPath, {
+      name: fileName,
+      overwrite: true,
+    })
+
+    return `${this.UPLOADS_URL_PREFIX}${fileName}`
+  }
+
+  /**
+   * Deletes an artist's image file if it exists
+   * @param artistId - The artist ID
+   * @param imagePath - The image path to delete
+   */
+  private async deleteArtistImage(artistId: number, imagePath?: string): Promise<void> {
+    if (imagePath && imagePath.startsWith(this.UPLOADS_URL_PREFIX)) {
+      try {
+        const fileName = imagePath.replace(this.UPLOADS_URL_PREFIX, '')
+        const filePath = join(app.publicPath(this.UPLOADS_PATH), fileName)
+        await unlink(filePath)
+      } catch (error) {
+        // Log the error but don't fail the operation if file doesn't exist
+        console.warn(`Failed to delete image for artist ${artistId}:`, error.message)
+      }
+    }
   }
 }
