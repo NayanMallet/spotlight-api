@@ -509,6 +509,67 @@
 					"response": []
 				},
 				{
+					"name": "Get Current User Profile",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    pm.test('User profile retrieved successfully', () => {",
+									"        pm.expect(response.data).to.have.property('id');",
+									"        pm.expect(response.data).to.have.property('email');",
+									"        pm.expect(response.data).to.have.property('full_name');",
+									"        pm.expect(response.message).to.equal('User retrieved successfully');",
+									"    });",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "{{base_url}}/users/me",
+						"description": "Get the authenticated user's profile information"
+					},
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{auth_token}}",
+										"type": "text"
+									}
+								],
+								"url": "{{base_url}}/users/me"
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"message\": \"User retrieved successfully\",\n  \"data\": {\n    \"id\": 1,\n    \"full_name\": \"John Doe\",\n    \"email\": \"john.doe@example.com\",\n    \"bannerUrl\": \"https://unavatar.io/john.doe@example.com?fallback=https://avatar.vercel.sh/John Doe?size=128\",\n    \"role\": \"user\",\n    \"createdAt\": \"2024-01-01T00:00:00.000Z\",\n    \"updatedAt\": \"2024-01-01T00:00:00.000Z\"\n  }\n}"
+						}
+					]
+				},
+				{
 					"name": "Update User Profile (Current User)",
 					"request": {
 						"auth": {

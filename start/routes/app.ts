@@ -41,6 +41,7 @@ const GetEventController = () => import('#events/controllers/get_event_controlle
 const UpdateEventController = () => import('#events/controllers/update_event_controller')
 const DeleteEventController = () => import('#events/controllers/delete_event_controller')
 const ScrapeEventsController = () => import('#events/controllers/scrape_events_controller')
+const GetUserController = () => import('#auth/controllers/get_user_controller')
 const UpdateUserController = () => import('#auth/controllers/update_user_controller')
 const DeleteUserController = () => import('#auth/controllers/delete_user_controller')
 const UploadUserBannerController = () => import('#auth/controllers/upload_user_banner_controller')
@@ -96,6 +97,7 @@ router
     router.delete('/events/:id/artists', [RemoveEventArtistsController]).as('events.artists.remove')
 
     // Users management routes
+    router.get('/users/me', [GetUserController]).as('users.me')
     router.put('/users/me', [UpdateUserController]).as('users.update-me')
     router.put('/users/:id', [UpdateUserController]).as('users.update')
     router.delete('/users/me', [DeleteUserController]).as('users.delete-me')

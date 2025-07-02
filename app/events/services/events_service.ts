@@ -243,12 +243,17 @@ export class EventsService {
   }
 
   /**
-   * Retrieves a single event by ID.
+   * Retrieves a single event by ID with all artists preloaded.
    * @param id - The event ID.
    * @return A promise that resolves to the Event instance or null if not found.
    */
   async getById(id: number): Promise<Event | null> {
-    return await Event.find(id)
+    return await Event.query()
+      .where('id', id)
+      .preload('artists', (artistsQuery) => {
+        artistsQuery.preload('artist')
+      })
+      .first()
   }
 
   /**

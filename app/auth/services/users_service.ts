@@ -255,6 +255,16 @@ export class UsersService {
   }
 
   /**
+   * Gets a user by ID.
+   * @param id - The user ID.
+   * @return A promise that resolves to the User instance.
+   * @throws Error if user is not found
+   */
+  async getById(id: number): Promise<User> {
+    return await this.findUserOrFail(id)
+  }
+
+  /**
    * Finds a user by ID or throws an error if not found
    * @private
    */
