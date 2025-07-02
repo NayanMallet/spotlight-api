@@ -3,7 +3,7 @@
 This repository contains a RESTful API built with AdonisJS and Docker. The application uses MySQL as its database.
 
 ## Database schema
-![Untitled-3](https://github.com/user-attachments/assets/6c1453b4-1d6a-4bce-9ce8-8cd0c31989f7)
+![Untitled-4](https://github.com/user-attachments/assets/8fe78871-7e78-43cc-bbde-0753b629aa0b)
 
 ## Prerequisites
 
