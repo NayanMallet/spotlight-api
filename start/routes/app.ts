@@ -55,7 +55,8 @@ const GetArtistController = () => import('#artists/controllers/get_artist_contro
 const UpdateArtistController = () => import('#artists/controllers/update_artist_controller')
 const DeleteArtistController = () => import('#artists/controllers/delete_artist_controller')
 const AddEventArtistsController = () => import('#events/controllers/add_event_artists_controller')
-const RemoveEventArtistsController = () => import('#events/controllers/remove_event_artists_controller')
+const RemoveEventArtistsController = () =>
+  import('#events/controllers/remove_event_artists_controller')
 const GetEventArtistsController = () => import('#events/controllers/get_event_artists_controller')
 // endregion
 

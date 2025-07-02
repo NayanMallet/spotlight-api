@@ -179,5 +179,4 @@ export class ArtistsService {
     await artist.delete()
     return true
   }
-
 }

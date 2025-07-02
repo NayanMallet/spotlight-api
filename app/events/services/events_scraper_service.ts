@@ -233,8 +233,9 @@ export class EventsScraperService {
           }
 
           // Place name (Poney Club, etc.)
-          const placeNameAnchor = Array.from(document.querySelectorAll('div.flex.items-center.gap-4 a.text-foreground'))
-            .find(a => a.textContent?.trim()?.length && a.textContent?.trim()?.length < 100)
+          const placeNameAnchor = Array.from(
+            document.querySelectorAll('div.flex.items-center.gap-4 a.text-foreground')
+          ).find((a) => a.textContent?.trim()?.length && a.textContent?.trim()?.length < 100)
           if (placeNameAnchor) {
             result.placeName = placeNameAnchor.textContent?.trim() || ''
           }
