@@ -44,6 +44,7 @@ export class EventsScraperService {
   private async createEventFromScrapedData(eventData: {
     title: string
     startDate: string
+    endDate: string
     address: string
     city: string
     placeName: string
@@ -58,13 +59,14 @@ export class EventsScraperService {
 
     // Parse date and create proper DateTime objects
     const startDateTime = DateTime.fromISO(eventData.startDate)
+    const endDateTime = DateTime.fromISO(eventData.endDate)
 
     // Create event using EventsService
     const event = await this.eventsService.createFromUrl({
       title: eventData.title,
       description: eventData.description || null,
       startDate: startDateTime.toJSDate(),
-      endDate: startDateTime.toJSDate(), // Using same date for now, could be enhanced
+      endDate: endDateTime.toJSDate(),
       startHour: startDateTime.toJSDate(),
       openHour: null,
       latitude: eventData.latitude || 0,
@@ -112,6 +114,7 @@ export class EventsScraperService {
 
   async fetchShotgunEvents(): Promise<Event[]> {
     const browser = await puppeteer.launch({
+      executablePath: '/usr/bin/chromium',
       headless: true,
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
     })
@@ -185,11 +188,12 @@ export class EventsScraperService {
       try {
         await page.goto(event.url, { waitUntil: 'domcontentloaded', timeout: 30000 })
 
-        const { description, lineup, location } = await page.evaluate(() => {
+        const { description, lineup, location, placeName } = await page.evaluate(() => {
           const result = {
             description: '',
             lineup: [] as { name: string; image: string }[],
             location: '',
+            placeName: '',
           }
 
           // Description
@@ -228,6 +232,13 @@ export class EventsScraperService {
             result.location = locationAnchor.textContent?.trim() || ''
           }
 
+          // Place name (Poney Club, etc.)
+          const placeNameAnchor = Array.from(document.querySelectorAll('div.flex.items-center.gap-4 a.text-foreground'))
+            .find(a => a.textContent?.trim()?.length && a.textContent?.trim()?.length < 100)
+          if (placeNameAnchor) {
+            result.placeName = placeNameAnchor.textContent?.trim() || ''
+          }
+
           return result
         })
 
@@ -238,9 +249,10 @@ export class EventsScraperService {
         const createdEvent = await this.createEventFromScrapedData({
           title: event.title,
           startDate: event.date,
+          endDate: event.date,
           address: location || '',
           city: 'Toulouse', // You may extract city from location if possible
-          placeName: location || '',
+          placeName: placeName || '',
           latitude: coords?.lat || null,
           longitude: coords?.lng || null,
           bannerUrl: event.image ?? '',
