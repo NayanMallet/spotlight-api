@@ -30,8 +30,8 @@ router.group(() => {
     .as('users.reset-password-form')
   router.post('reset-password', [ResetPasswordController]).as('users.reset-password')
   router.post('forgot-password', [ForgotPasswordController]).as('users.forgot-password')
-  router.get('oauth/google', [OauthController, 'redirect']).as('oauth.google.redirect')
-  router.get('oauth/google/callback', [OauthController, 'callback']).as('oauth.google.callback')
+  router.get('oauth/:provider', [OauthController, 'redirect']).as('oauth.redirect')
+  router.get('oauth/:provider/callback', [OauthController, 'callback']).as('oauth.callback')
 })
 
 // CLIENT region Controller's Imports
@@ -103,6 +103,6 @@ router
     router.post('/users/:id/banner', [UploadUserBannerController]).as('users.upload-banner')
 
     // OAuth management routes
-    router.delete('/oauth/google/unlink', [OauthController, 'unlink']).as('oauth.google.unlink')
+    router.delete('/oauth/:provider/unlink', [OauthController, 'unlink']).as('oauth.unlink')
   })
   .middleware([middleware.auth()])

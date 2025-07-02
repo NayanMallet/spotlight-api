@@ -11,7 +11,6 @@ export default class extends BaseSchema {
       table.string('email').notNullable().unique()
       table.string('banner_url').nullable()
       table.string('password').notNullable()
-      table.string('google_id').nullable().unique()
       table.enu('role', Object.values(UserRoles)).notNullable().defaultTo(UserRoles.USER)
       table.timestamp('created_at').notNullable()
       table.timestamp('updated_at').nullable()

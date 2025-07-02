@@ -1,6 +1,7 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import { UsersService } from '#auth/services/users_service'
 import User from '#auth/models/user'
+import { OAuthProviders } from '#auth/enums/oauth_providers'
 import { inject } from '@adonisjs/core'
 
 @inject()
@@ -8,19 +9,45 @@ export default class OauthController {
   constructor(protected usersService: UsersService) {}
 
   /**
-   * @oauthRedirect
-   * @summary Redirect to Google OAuth
-   * @description Redirects user to Google OAuth authorization page
-   * @tag Authentication
-   * @responseBody 302 - Redirect to Google OAuth
+   * Maps provider string to OAuthProviders enum
+   * @param provider - The provider string from the route parameter
+   * @returns The corresponding OAuthProviders enum value
+   * @throws Error if provider is not supported
    */
-  async redirect({ ally, response }: HttpContext) {
+  private getProviderEnum(provider: string): OAuthProviders {
+    const providerMap: Record<string, OAuthProviders> = {
+      google: OAuthProviders.GOOGLE,
+      facebook: OAuthProviders.FACEBOOK,
+      twitter: OAuthProviders.TWITTER,
+      github: OAuthProviders.GITHUB,
+    }
+
+    const providerEnum = providerMap[provider.toLowerCase()]
+    if (!providerEnum) {
+      throw new Error(`Unsupported OAuth provider: ${provider}`)
+    }
+
+    return providerEnum
+  }
+
+  /**
+   * @oauthRedirect
+   * @summary Redirect to OAuth provider
+   * @description Redirects user to OAuth provider authorization page
+   * @tag Authentication
+   * @paramPath provider - The OAuth provider (google, facebook, twitter, github) - @type(string)
+   * @responseBody 302 - Redirect to OAuth provider
+   */
+  async redirect({ ally, response, params }: HttpContext) {
     try {
-      const google = ally.use('google')
-      return google.redirect()
+      const provider = params.provider
+      this.getProviderEnum(provider) // Validate provider
+
+      const oauthProvider = ally.use(provider)
+      return oauthProvider.redirect()
     } catch (error) {
       return response.internalServerError({
-        message: 'Failed to redirect to Google OAuth',
+        message: `Failed to redirect to ${params.provider} OAuth`,
         error: error.message,
       })
     }
@@ -28,40 +55,45 @@ export default class OauthController {
 
   /**
    * @oauthCallback
-   * @summary Handle Google OAuth callback
-   * @description Handles the callback from Google OAuth and logs in or registers the user
+   * @summary Handle OAuth provider callback
+   * @description Handles the callback from OAuth provider and logs in or registers the user
    * @tag Authentication
+   * @paramPath provider - The OAuth provider (google, facebook, twitter, github) - @type(string)
    * @responseBody 200 - {"user": {"id": 1, "full_name": "John Doe", "email": "user@example.com"}, "token": {"type": "bearer", "value": "oat_1.abc123..."}} - OAuth login successful
    * @responseBody 400 - {"message": "OAuth authentication failed"} - OAuth failed
    */
-  async callback({ ally, response }: HttpContext) {
+  async callback({ ally, response, params }: HttpContext) {
     try {
-      const google = ally.use('google')
+      const provider = params.provider
+      const providerEnum = this.getProviderEnum(provider)
 
-      if (google.accessDenied()) {
+      const oauthProvider = ally.use(provider)
+
+      if (oauthProvider.accessDenied()) {
         return response.badRequest({
           message: 'Access was denied',
         })
       }
 
-      if (google.stateMisMatch()) {
+      if (oauthProvider.stateMisMatch()) {
         return response.badRequest({
           message: 'Request expired. Retry again',
         })
       }
 
-      if (google.hasError()) {
+      if (oauthProvider.hasError()) {
         return response.badRequest({
-          message: google.getError(),
+          message: oauthProvider.getError(),
         })
       }
 
-      const googleUser = await google.user()
+      const oauthUser = await oauthProvider.user()
 
-      const user = await this.usersService.handleGoogleLoginOrRegister({
-        googleId: googleUser.id,
-        email: googleUser.email,
-        fullName: googleUser.name,
+      const user = await this.usersService.handleOAuthLoginOrRegister({
+        providerName: providerEnum,
+        providerId: oauthUser.id,
+        email: oauthUser.email,
+        fullName: oauthUser.name,
       })
 
       const token = await User.accessTokens.create(user)
@@ -84,14 +116,15 @@ export default class OauthController {
 
   /**
    * @oauthUnlink
-   * @summary Unlink Google OAuth account
-   * @description Unlinks the Google OAuth account from the current user
+   * @summary Unlink OAuth provider account
+   * @description Unlinks the OAuth provider account from the current user
    * @tag Authentication
-   * @responseBody 200 - {"message": "Google account unlinked successfully"} - Unlink successful
-   * @responseBody 400 - {"message": "No Google account linked to this user"} - No account to unlink
+   * @paramPath provider - The OAuth provider (google, facebook, twitter, github) - @type(string)
+   * @responseBody 200 - {"message": "Provider account unlinked successfully"} - Unlink successful
+   * @responseBody 400 - {"message": "No provider account linked to this user"} - No account to unlink
    * @responseBody 401 - {"message": "Authentication required"} - Not authenticated
    */
-  async unlink({ response, auth }: HttpContext) {
+  async unlink({ response, auth, params }: HttpContext) {
     try {
       if (!auth.user) {
         return response.unauthorized({
@@ -99,20 +132,24 @@ export default class OauthController {
         })
       }
 
-      const success = await this.usersService.unlinkGoogleAccount(auth.user)
+      const provider = params.provider
+      const providerEnum = this.getProviderEnum(provider)
+      const providerName = provider.charAt(0).toUpperCase() + provider.slice(1)
+
+      const success = await this.usersService.unlinkOAuthAccount(auth.user, providerEnum)
 
       if (!success) {
         return response.badRequest({
-          message: 'No Google account linked to this user',
+          message: `No ${providerName} account linked to this user`,
         })
       }
 
       return response.ok({
-        message: 'Google account unlinked successfully',
+        message: `${providerName} account unlinked successfully`,
       })
     } catch (error) {
       return response.internalServerError({
-        message: 'Failed to unlink Google account',
+        message: `Failed to unlink ${params.provider} account`,
         error: error.message,
       })
     }

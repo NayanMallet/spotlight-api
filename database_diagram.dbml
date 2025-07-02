@@ -1,0 +1,105 @@
+// Spotlight API Database Schema
+// Copy this code to dbdiagram.io to visualize the complete database structure
+
+Table users {
+  id integer [primary key, increment]
+  full_name varchar [not null]
+  email varchar [not null, unique]
+  banner_url varchar [null]
+  password varchar [not null]
+  role varchar [not null, default: 'user', note: 'user, admin']
+  created_at timestamp [not null]
+  updated_at timestamp [null]
+}
+
+Table oauth_providers {
+  id integer [primary key, increment]
+  user_id integer [not null, ref: > users.id]
+  provider_name varchar [not null, note: 'google, facebook, twitter, github']
+  provider_id varchar [not null]
+  created_at timestamp [not null]
+  updated_at timestamp [null]
+
+  indexes {
+    (user_id, provider_name) [unique]
+    (provider_name, provider_id) [unique]
+  }
+}
+
+Table auth_access_tokens {
+  id integer [primary key, increment]
+  tokenable_id integer [not null, ref: > users.id]
+  type varchar [not null]
+  name varchar [null]
+  hash varchar [not null]
+  abilities text [not null]
+  created_at timestamp [null]
+  updated_at timestamp [null]
+  last_used_at timestamp [null]
+  expires_at timestamp [null]
+}
+
+Table artists {
+  id integer [primary key, increment]
+  name varchar [not null]
+  image varchar [null]
+  created_at timestamp [not null]
+  updated_at timestamp [null]
+}
+
+Table events {
+  id integer [primary key, increment]
+  title varchar [not null]
+  description text [null]
+  banner_url varchar [null]
+  start_date date [not null]
+  end_date date [null]
+  start_hour datetime [not null]
+  open_hour datetime [null]
+  latitude float [not null]
+  longitude float [not null]
+  place_name varchar [not null]
+  address varchar [not null]
+  city varchar [not null]
+  type varchar [not null, note: 'concert, festival, exhibition, conference']
+  subtype varchar [not null, note: 'rock, hiphop, jazz, techno, classical']
+  created_at timestamp [not null]
+  updated_at timestamp [null]
+}
+
+Table event_artists {
+  id integer [primary key, increment]
+  event_id integer [not null, ref: > events.id]
+  artist_id integer [not null, ref: > artists.id]
+  created_at timestamp [not null]
+  updated_at timestamp [null]
+}
+
+Table event_users {
+  id integer [primary key, increment]
+  user_id integer [not null, ref: > users.id]
+  event_id integer [not null, ref: > events.id]
+  is_favorite boolean [not null, default: false]
+  has_joined boolean [not null, default: false]
+  created_at timestamp [not null]
+  updated_at timestamp [null]
+}
+
+Table messages {
+  id integer [primary key, increment]
+  user_id integer [not null, ref: > users.id]
+  event_id integer [not null, ref: > events.id]
+  content text [not null]
+  created_at timestamp [not null]
+  updated_at timestamp [null]
+}
+
+// Relationships Summary:
+// - Users can have multiple OAuth providers (1:N)
+// - Users can have multiple access tokens (1:N)
+// - Users can join/favorite multiple events (M:N through event_users)
+// - Users can write multiple messages (1:N)
+// - Events can have multiple artists (M:N through event_artists)
+// - Events can have multiple participants (M:N through event_users)
+// - Events can have multiple messages (1:N)
+// - Artists can perform at multiple events (M:N through event_artists)

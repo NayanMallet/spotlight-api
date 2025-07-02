@@ -11,11 +11,7 @@ export class EmailsService {
    * @param subject - Le sujet de l'email.
    * @param htmlContent - Le contenu HTML de l'email.
    */
-  async sendEmail(
-    to: string,
-    subject: string,
-    htmlContent: string
-  ): Promise<void> {
+  async sendEmail(to: string, subject: string, htmlContent: string): Promise<void> {
     await Mail.send((message) => {
       message.to(to)
       message.from(env.get('MAIL_FROM') as string, 'Support')

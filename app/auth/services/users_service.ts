@@ -1,4 +1,6 @@
 import User from '#auth/models/user'
+import OAuthProvider from '#auth/models/oauth_provider'
+import { OAuthProviders } from '#auth/enums/oauth_providers'
 import { MultipartFile } from '@adonisjs/core/bodyparser'
 import { inject } from '@adonisjs/core'
 import hash from '@adonisjs/core/services/hash'
@@ -165,69 +167,83 @@ export class UsersService {
   }
 
   /**
-   * Links a Google account to the user.
+   * Links an OAuth provider account to the user.
    * @param {User} user - The user to link the account to.
-   * @param {string} googleId - The unique ID from Google.
-   * @returns {Promise<User>} - The updated user.
+   * @param {OAuthProviders} providerName - The OAuth provider name.
+   * @param {string} providerId - The unique ID from the OAuth provider.
+   * @returns {Promise<OAuthProvider>} - The created OAuth provider record.
    */
-  async linkGoogleAccount(user: User, googleId: string): Promise<User> {
-    user.googleId = googleId
-    await user.save()
-    return user
+  async linkOAuthAccount(user: User, providerName: OAuthProviders, providerId: string): Promise<OAuthProvider> {
+    return await OAuthProvider.create({
+      userId: user.id,
+      providerName,
+      providerId,
+    })
   }
 
   /**
-   * Handles Google OAuth login or registration.
-   * @param {string} googleId - The unique ID from Google.
+   * Handles OAuth login or registration.
+   * @param {OAuthProviders} providerName - The OAuth provider name.
+   * @param {string} providerId - The unique ID from the OAuth provider.
    * @param {string} email - The user's email address.
    * @param {string} fullName - The user's full name.
    * @returns {Promise<User>} - The authenticated or registered user.
    */
-  async handleGoogleLoginOrRegister({
-    googleId,
+  async handleOAuthLoginOrRegister({
+    providerName,
+    providerId,
     email,
     fullName,
   }: {
-    googleId: string
+    providerName: OAuthProviders
+    providerId: string
     email: string
     fullName: string
   }): Promise<User> {
-    // First check if user exists with this Google ID
-    let user = await User.query().where('googleId', googleId).first()
+    // First check if user exists with this OAuth provider ID
+    const existingProvider = await OAuthProvider.query()
+      .where('providerName', providerName)
+      .where('providerId', providerId)
+      .preload('user')
+      .first()
 
-    if (user) return user
+    if (existingProvider) return existingProvider.user
 
     // Check if user exists with this email
-    user = await User.query().where('email', email).first()
+    let user = await User.query().where('email', email).first()
 
     if (!user) {
-      // Create new user with Google ID
+      // Create new user
       user = await User.create({
         full_name: fullName,
         email,
         password: Math.random().toString(36).slice(-12),
-        googleId,
       })
-    } else {
-      // Link Google ID to existing user
-      await this.linkGoogleAccount(user, googleId)
     }
+
+    // Link OAuth provider to user (existing or new)
+    await this.linkOAuthAccount(user, providerName, providerId)
 
     return user
   }
 
   /**
-   * Unlinks the Google account from a user.
+   * Unlinks an OAuth provider account from a user.
    * @param {User} user - The user to unlink the account from.
+   * @param {OAuthProviders} providerName - The OAuth provider name to unlink.
    * @returns {Promise<boolean>} - True if unlinked successfully, false if not found.
    */
-  async unlinkGoogleAccount(user: User): Promise<boolean> {
-    if (!user.googleId) {
+  async unlinkOAuthAccount(user: User, providerName: OAuthProviders): Promise<boolean> {
+    const oauthProvider = await OAuthProvider.query()
+      .where('userId', user.id)
+      .where('providerName', providerName)
+      .first()
+
+    if (!oauthProvider) {
       return false
     }
 
-    user.googleId = null
-    await user.save()
+    await oauthProvider.delete()
     return true
   }
 

@@ -7,6 +7,7 @@ import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
 import { DbAccessTokensProvider } from '@adonisjs/auth/access_tokens'
 import EventUser from '#events/models/event_user'
 import Message from '#messages/models/message'
+import OAuthProvider from '#auth/models/oauth_provider'
 import { UserRoles } from '#auth/enums/users'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
@@ -40,10 +41,6 @@ export default class User extends compose(BaseModel, AuthFinder) {
   declare password: string
 
   @column()
-  // @example(123456789)
-  declare googleId: string | null
-
-  @column()
   // @example(user)
   declare role: UserRoles
 
@@ -66,4 +63,8 @@ export default class User extends compose(BaseModel, AuthFinder) {
   @hasMany(() => Message)
   // @no-swagger
   declare messages: HasMany<typeof Message>
+
+  @hasMany(() => OAuthProvider)
+  // @no-swagger
+  declare oauthProviders: HasMany<typeof OAuthProvider>
 }

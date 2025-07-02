@@ -2,7 +2,7 @@
 	"info": {
 		"_postman_id": "9ec2cc3e-6a79-4d07-a179-2c7fe7cdaa6f",
 		"name": "Spotlight API - Complete Collection",
-		"description": "Complete collection for testing all features in Spotlight API including Users, Events, Artists, and Messages",
+		"description": "Complete collection for testing all features in Spotlight API including Authentication (with OAuth support for Google, Facebook, GitHub, Twitter), User Management, Events, Artists, Messages, and comprehensive testing scenarios",
 		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
 		"_exporter_id": "18509415"
 	},
@@ -99,6 +99,36 @@
 					"response": []
 				},
 				{
+					"name": "OAuth Facebook Redirect",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{base_url}}/oauth/facebook",
+						"description": "Redirect to Facebook OAuth authorization page"
+					},
+					"response": []
+				},
+				{
+					"name": "OAuth GitHub Redirect",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{base_url}}/oauth/github",
+						"description": "Redirect to GitHub OAuth authorization page"
+					},
+					"response": []
+				},
+				{
+					"name": "OAuth Twitter Redirect",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{base_url}}/oauth/twitter",
+						"description": "Redirect to Twitter OAuth authorization page"
+					},
+					"response": []
+				},
+				{
 					"name": "OAuth Google Callback",
 					"event": [
 						{
@@ -151,6 +181,58 @@
 					"response": []
 				},
 				{
+					"name": "OAuth Facebook Callback",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    pm.collectionVariables.set('auth_token', response.token.value.release());",
+									"    pm.collectionVariables.set('user_id', response.user.id);",
+									"    pm.test('OAuth login successful', () => {",
+									"        pm.expect(response.user).to.have.property('id');",
+									"        pm.expect(response.user).to.have.property('email');",
+									"        pm.expect(response.token).to.have.property('value');",
+									"    });",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/oauth/facebook/callback?code={{oauth_code}}&state={{oauth_state}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"oauth",
+								"facebook",
+								"callback"
+							],
+							"query": [
+								{
+									"key": "code",
+									"value": "{{oauth_code}}",
+									"description": "Authorization code from Facebook"
+								},
+								{
+									"key": "state",
+									"value": "{{oauth_state}}",
+									"description": "State parameter for security"
+								}
+							]
+						},
+						"description": "Handle Facebook OAuth callback with authorization code"
+					},
+					"response": []
+				},
+				{
 					"name": "OAuth Google Unlink",
 					"request": {
 						"auth": {
@@ -163,6 +245,54 @@
 						"header": [],
 						"url": "{{base_url}}/oauth/google/unlink",
 						"description": "Unlink Google OAuth account from current user"
+					},
+					"response": []
+				},
+				{
+					"name": "OAuth Facebook Unlink",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": "{{base_url}}/oauth/facebook/unlink",
+						"description": "Unlink Facebook OAuth account from current user"
+					},
+					"response": []
+				},
+				{
+					"name": "OAuth GitHub Unlink",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": "{{base_url}}/oauth/github/unlink",
+						"description": "Unlink GitHub OAuth account from current user"
+					},
+					"response": []
+				},
+				{
+					"name": "OAuth Twitter Unlink",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": "{{base_url}}/oauth/twitter/unlink",
+						"description": "Unlink Twitter OAuth account from current user"
 					},
 					"response": []
 				},
@@ -811,7 +941,7 @@
 								},
 								{
 									"key": "startHour",
-									"value": "2024-07-15T18:00:00.000Z",
+									"value": "2024-07-15 18:00:00",
 									"type": "text"
 								},
 								{
@@ -988,7 +1118,7 @@
 								},
 								{
 									"key": "startHour",
-									"value": "2024-07-16T19:00:00.000Z",
+									"value": "2024-07-16 19:00:00",
 									"type": "text",
 									"disabled": true
 								},
@@ -1179,6 +1309,193 @@
 				}
 			],
 			"description": "Event management endpoints for creating, reading, updating, and deleting events, including artist associations"
+		},
+		{
+			"name": "Messages Management",
+			"item": [
+				{
+					"name": "Create Message",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    const response = pm.response.json();",
+									"    pm.collectionVariables.set('message_id', response.data.id);",
+									"    pm.test('Message created successfully', () => {",
+									"        pm.expect(response.data).to.have.property('id');",
+									"        pm.expect(response.data).to.have.property('content');",
+									"        pm.expect(response.data).to.have.property('eventId');",
+									"    });",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"content\": \"This is a test message for the event\",\n  \"eventId\": {{event_id}}\n}"
+						},
+						"url": "{{base_url}}/messages",
+						"description": "Create a new message for an event"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Event Messages",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    pm.test('Messages retrieved successfully', () => {",
+									"        pm.expect(response).to.have.property('data');",
+									"        pm.expect(response.data).to.be.an('array');",
+									"    });",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/events/{{event_id}}/messages?page=1&limit=10",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"events",
+								"{{event_id}}",
+								"messages"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1",
+									"description": "Page number for pagination"
+								},
+								{
+									"key": "limit",
+									"value": "10",
+									"description": "Number of messages per page"
+								}
+							]
+						},
+						"description": "Get all messages for a specific event with pagination"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Single Message",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "{{base_url}}/messages/{{message_id}}",
+						"description": "Get details of a specific message"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Message",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"content\": \"This is an updated message content\"\n}"
+						},
+						"url": "{{base_url}}/messages/{{message_id}}",
+						"description": "Update an existing message (only the author can update)"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Message (PATCH)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"content\": \"Partially updated message content\"\n}"
+						},
+						"url": "{{base_url}}/messages/{{message_id}}",
+						"description": "Partially update an existing message (only the author can update)"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Message",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": "{{base_url}}/messages/{{message_id}}",
+						"description": "Delete a message (only the author can delete)"
+					},
+					"response": []
+				}
+			],
+			"description": "Message management endpoints for creating, reading, updating, and deleting messages within events"
 		},
 		{
 			"name": "Testing Scenarios",
@@ -1461,7 +1778,7 @@
 										},
 										{
 											"key": "startHour",
-											"value": "2024-08-15T20:00:00.000Z",
+											"value": "2024-08-15 20:00:00",
 											"type": "text"
 										},
 										{
@@ -1695,6 +2012,21 @@
 		},
 		{
 			"key": "reset_token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "message_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "oauth_code",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "oauth_state",
 			"value": "",
 			"type": "string"
 		}
