@@ -79,7 +79,7 @@ Chaque domaine contient :
 - **Architecture modulaire** : Séparation claire des responsabilités par domaine métier
 - **Inversion de dépendances** : Services injectés pour faciliter les tests
 
-![dbdiagram.png](assets/dbdiagram.png)
+![assets/adonis_model.png](assets/adonis_model.png)
 
 ![assets/folder_structure.png](assets/folder_structure.png)*
 
@@ -188,7 +188,7 @@ CREATE TABLE events (
 - Contraintes d'intégrité référentielle
 - Normalisation 3NF respectée
 
-*[CAPTURE D'ÉCRAN : Diagramme de base de données généré depuis dbdiagram.io]*
+![assets/dbdiagram.png](assets/dbdiagram.png)
 
 ![assets/mysql_tables.png](assets/mysql_tables.png)
 
@@ -264,10 +264,10 @@ Ces compétences ont été validées par :
 - Environnements de test configurés
 - Workflows complets (inscription → création événement → participation)
 
-![img.png](img.png)
-![img_1.png](img_1.png)
+![assets/swagger_ui.png](assets/swagger_ui.png)
+![assets/swagger_ui2.png](assets/swagger_ui2.png)
 
-![img_2.png](img_2.png)
+![assets/postman_view.png](assets/postman_view.png)
 
 ### Lien avec CDA :
 **Bloc 3 : Préparer et exécuter les plans de tests d'une application**
