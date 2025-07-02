@@ -99,32 +99,12 @@
 					"response": []
 				},
 				{
-					"name": "OAuth Facebook Redirect",
+					"name": "OAuth Facebook Redirect - Invalid Provider",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": "{{base_url}}/oauth/facebook",
 						"description": "Redirect to Facebook OAuth authorization page"
-					},
-					"response": []
-				},
-				{
-					"name": "OAuth GitHub Redirect",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": "{{base_url}}/oauth/github",
-						"description": "Redirect to GitHub OAuth authorization page"
-					},
-					"response": []
-				},
-				{
-					"name": "OAuth Twitter Redirect",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": "{{base_url}}/oauth/twitter",
-						"description": "Redirect to Twitter OAuth authorization page"
 					},
 					"response": []
 				},
@@ -181,7 +161,7 @@
 					"response": []
 				},
 				{
-					"name": "OAuth Facebook Callback",
+					"name": "OAuth Facebook Callback - Invalid Provider",
 					"event": [
 						{
 							"listen": "test",
@@ -249,7 +229,7 @@
 					"response": []
 				},
 				{
-					"name": "OAuth Facebook Unlink",
+					"name": "OAuth Facebook Unlink - Invalid Provider",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -261,38 +241,6 @@
 						"header": [],
 						"url": "{{base_url}}/oauth/facebook/unlink",
 						"description": "Unlink Facebook OAuth account from current user"
-					},
-					"response": []
-				},
-				{
-					"name": "OAuth GitHub Unlink",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": {
-								"token": "{{auth_token}}"
-							}
-						},
-						"method": "DELETE",
-						"header": [],
-						"url": "{{base_url}}/oauth/github/unlink",
-						"description": "Unlink GitHub OAuth account from current user"
-					},
-					"response": []
-				},
-				{
-					"name": "OAuth Twitter Unlink",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": {
-								"token": "{{auth_token}}"
-							}
-						},
-						"method": "DELETE",
-						"header": [],
-						"url": "{{base_url}}/oauth/twitter/unlink",
-						"description": "Unlink Twitter OAuth account from current user"
 					},
 					"response": []
 				},
