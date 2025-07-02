@@ -24,6 +24,24 @@ export interface CreateEventData {
   artistIds?: number[]
 }
 
+export interface CreateEventFromUrlData {
+  title: string
+  description?: string | null
+  startDate: Date
+  endDate: Date
+  startHour: Date
+  openHour?: Date | null
+  latitude: number
+  longitude: number
+  placeName: string
+  address: string
+  city: string
+  type: EventType
+  subtype: EventSubtype
+  bannerUrl: string
+  artistIds?: number[]
+}
+
 export interface UpdateEventData {
   title?: string
   description?: string | null
@@ -135,6 +153,54 @@ export class EventsService {
       // If file upload or artist association fails, delete the created event to maintain consistency
       await event.delete()
       throw new Error(`Failed to upload banner image or associate artists: ${error.message}`)
+    }
+  }
+
+  /**
+   * Creates an event with URL-based banner (for scraper use case)
+   * @param data - The event data with banner URL
+   * @return A promise that resolves to the created Event instance
+   * @throws Error if artist validation fails
+   */
+  async createFromUrl(data: CreateEventFromUrlData): Promise<Event> {
+    // Validate artists exist if provided
+    if (data.artistIds && data.artistIds.length > 0) {
+      await this.validateArtistsExist(data.artistIds)
+    }
+
+    // Create event record with URL-based banner
+    const event = await Event.create({
+      title: data.title,
+      description: data.description ?? null,
+      startDate: DateTime.fromJSDate(data.startDate),
+      endDate: DateTime.fromJSDate(data.endDate),
+      startHour: DateTime.fromJSDate(data.startHour),
+      openHour: data.openHour ? DateTime.fromJSDate(data.openHour) : null,
+      latitude: data.latitude,
+      longitude: data.longitude,
+      placeName: data.placeName,
+      address: data.address,
+      city: data.city,
+      type: data.type,
+      subtype: data.subtype,
+      bannerUrl: data.bannerUrl,
+    })
+
+    try {
+      // Create event-artist relationships if artists are provided
+      if (data.artistIds && data.artistIds.length > 0) {
+        const eventArtistData = data.artistIds.map((artistId) => ({
+          eventId: event.id,
+          artistId: artistId,
+        }))
+        await EventArtist.createMany(eventArtistData)
+      }
+
+      return event
+    } catch (error) {
+      // If artist association fails, delete the created event to maintain consistency
+      await event.delete()
+      throw new Error(`Failed to associate artists: ${error.message}`)
     }
   }
 

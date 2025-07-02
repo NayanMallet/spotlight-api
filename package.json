@@ -67,6 +67,7 @@
     "adonis-autoswagger": "^3.65.0",
     "luxon": "^3.6.1",
     "mysql2": "^3.14.1",
+    "puppeteer": "^24.11.2",
     "reflect-metadata": "^0.2.2"
   },
   "hotHook": {

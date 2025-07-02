@@ -7,6 +7,11 @@ export interface CreateArtistData {
   name: string
 }
 
+export interface CreateArtistFromUrlData {
+  name: string
+  imageUrl: string
+}
+
 export interface UpdateArtistData {
   name?: string
 }
@@ -60,6 +65,26 @@ export class ArtistsService {
       await artist.delete()
       throw new Error(`Failed to upload artist image: ${error.message}`)
     }
+  }
+
+  /**
+   * Creates or finds an existing artist with URL-based image (for scraper use case)
+   * @param data - The artist data with image URL
+   * @return A promise that resolves to the Artist instance
+   */
+  async createOrFindFromUrl(data: CreateArtistFromUrlData): Promise<Artist> {
+    // Check if artist already exists
+    let artist = await Artist.query().where('name', data.name).first()
+
+    if (!artist) {
+      // Create new artist with URL-based image
+      artist = await Artist.create({
+        name: data.name,
+        image: data.imageUrl,
+      })
+    }
+
+    return artist
   }
 
   /**
