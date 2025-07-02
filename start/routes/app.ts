@@ -25,7 +25,9 @@ const OauthController = () => import('#auth/controllers/oauth_controller')
 router.group(() => {
   router.post('login', [LoginController]).as('users.login')
   router.post('register', [RegisterController]).as('users.register')
-  router.get('reset-password/:token', [ResetPasswordController, 'show']).as('users.reset-password-form')
+  router
+    .get('reset-password/:token', [ResetPasswordController, 'show'])
+    .as('users.reset-password-form')
   router.post('reset-password', [ResetPasswordController]).as('users.reset-password')
   router.post('forgot-password', [ForgotPasswordController]).as('users.forgot-password')
   router.get('oauth/google', [OauthController, 'redirect']).as('oauth.google.redirect')
@@ -38,6 +40,7 @@ const GetEventsController = () => import('#events/controllers/get_events_control
 const GetEventController = () => import('#events/controllers/get_event_controller')
 const UpdateEventController = () => import('#events/controllers/update_event_controller')
 const DeleteEventController = () => import('#events/controllers/delete_event_controller')
+const ScrapeEventsController = () => import('#events/controllers/scrape_events_controller')
 const UpdateUserController = () => import('#auth/controllers/update_user_controller')
 const DeleteUserController = () => import('#auth/controllers/delete_user_controller')
 const UploadUserBannerController = () => import('#auth/controllers/upload_user_banner_controller')
@@ -55,6 +58,9 @@ const AddEventArtistsController = () => import('#events/controllers/add_event_ar
 const RemoveEventArtistsController = () => import('#events/controllers/remove_event_artists_controller')
 const GetEventArtistsController = () => import('#events/controllers/get_event_artists_controller')
 // endregion
+
+// Scraper route for testing
+router.get('/scrap/events/toulouse', [ScrapeEventsController]).as('events.scrape')
 
 // Pages CLIENT
 router
