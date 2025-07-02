@@ -11,7 +11,7 @@ export default class extends BaseSchema {
       table.text('description').nullable()
       table.string('banner_url').nullable()
       table.date('start_date').notNullable()
-      table.date('end_date').notNullable()
+      table.date('end_date').nullable()
       table.dateTime('start_hour').notNullable()
       table.dateTime('open_hour').nullable()
       table.float('latitude').notNullable()
