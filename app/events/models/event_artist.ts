@@ -1,3 +1,4 @@
+import { DateTime } from 'luxon'
 import { BaseModel, column, belongsTo } from '@adonisjs/lucid/orm'
 import Event from '#events/models/event'
 import Artist from '#artists/models/artist'
@@ -17,6 +18,16 @@ export default class EventArtist extends BaseModel {
   // @example(1)
   // @required
   declare artistId: number
+
+  @column.dateTime({ autoCreate: true })
+  // @example(2024-01-01T00:00:00.000Z)
+  // @format(date-time)
+  declare createdAt: DateTime
+
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  // @example(2024-01-01T00:00:00.000Z)
+  // @format(date-time)
+  declare updatedAt: DateTime
 
   @belongsTo(() => Event)
   // @no-swagger
