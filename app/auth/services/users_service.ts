@@ -173,7 +173,11 @@ export class UsersService {
    * @param {string} providerId - The unique ID from the OAuth provider.
    * @returns {Promise<OAuthProvider>} - The created OAuth provider record.
    */
-  async linkOAuthAccount(user: User, providerName: OAuthProviders, providerId: string): Promise<OAuthProvider> {
+  async linkOAuthAccount(
+    user: User,
+    providerName: OAuthProviders,
+    providerId: string
+  ): Promise<OAuthProvider> {
     return await OAuthProvider.create({
       userId: user.id,
       providerName,

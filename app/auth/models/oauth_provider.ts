@@ -5,6 +5,8 @@ import User from '#auth/models/user'
 import { OAuthProviders } from '#auth/enums/oauth_providers'
 
 export default class OAuthProvider extends BaseModel {
+  static table = 'oauth_providers'
+
   @column({ isPrimary: true })
   // @example(1)
   declare id: number
