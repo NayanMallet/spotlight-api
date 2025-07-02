@@ -25,7 +25,10 @@ export class UsersService {
   private readonly DEFAULT_BANNER_URL_TEMPLATE =
     'https://unavatar.io/{email}?fallback=https://avatar.vercel.sh/{fullName}?size=128'
 
-  constructor(private driveService: DriveService, private emailsService: EmailsService) {}
+  constructor(
+    private driveService: DriveService,
+    private emailsService: EmailsService
+  ) {}
 
   /**
    * Attempts to authenticate a user with the given email and password.
