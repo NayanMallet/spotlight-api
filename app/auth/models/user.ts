@@ -7,6 +7,7 @@ import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
 import { DbAccessTokensProvider } from '@adonisjs/auth/access_tokens'
 import EventUser from '#events/models/event_user'
 import Message from '#messages/models/message'
+import { UserRoles } from '#auth/enums/users'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
   uids: ['email'],
@@ -41,6 +42,10 @@ export default class User extends compose(BaseModel, AuthFinder) {
   @column()
   // @example(123456789)
   declare googleId: string | null
+
+  @column()
+  // @example(user)
+  declare role: UserRoles
 
   @column.dateTime({ autoCreate: true })
   // @example(2024-01-01T00:00:00.000Z)

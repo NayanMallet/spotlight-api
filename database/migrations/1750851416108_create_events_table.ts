@@ -20,7 +20,6 @@ export default class extends BaseSchema {
       table.string('address').notNullable()
       table.string('city').notNullable()
 
-      // Remplacement des relations par des enums
       table.enu('type', Object.values(EventType)).notNullable()
       table.enu('subtype', Object.values(EventSubtype)).notNullable()
 

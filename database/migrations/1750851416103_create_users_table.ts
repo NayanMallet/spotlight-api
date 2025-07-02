@@ -1,4 +1,5 @@
 import { BaseSchema } from '@adonisjs/lucid/schema'
+import { UserRoles } from '#auth/enums/users'
 
 export default class extends BaseSchema {
   protected tableName = 'users'
@@ -11,6 +12,7 @@ export default class extends BaseSchema {
       table.string('banner_url').nullable()
       table.string('password').notNullable()
       table.string('google_id').nullable().unique()
+      table.enu('role', Object.values(UserRoles)).notNullable().defaultTo(UserRoles.USER)
       table.timestamp('created_at').notNullable()
       table.timestamp('updated_at').nullable()
     })
