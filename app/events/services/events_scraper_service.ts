@@ -245,9 +245,9 @@ export class EventsScraperService {
               }
             }
 
-            const locationAnchor = Array.from(document.querySelectorAll('a.text-foreground')).find(
-              (a) => a.href.includes('google.com/maps/search')
-            )
+            const locationAnchor = Array.from(document.querySelectorAll('a.text-foreground'))
+              .find((a): a is HTMLAnchorElement => a instanceof HTMLAnchorElement && a.href.includes('google.com/maps/search'))
+
             if (locationAnchor) {
               result.location = locationAnchor.textContent?.trim() || ''
             }
