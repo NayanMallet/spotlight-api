@@ -59,6 +59,7 @@ const AddEventArtistsController = () => import('#events/controllers/add_event_ar
 const RemoveEventArtistsController = () =>
   import('#events/controllers/remove_event_artists_controller')
 const GetEventArtistsController = () => import('#events/controllers/get_event_artists_controller')
+const BookmarksController = () => import('#events/controllers/bookmarks_controller')
 // endregion
 
 // Scraper route for testing - Admin only
@@ -85,6 +86,13 @@ router
 
     // Event-Artist relationship management routes - GET accessible to all authenticated users
     router.get('/events/:id/artists', [GetEventArtistsController]).as('events.artists.index')
+
+    // Bookmarks routes - accessible to all authenticated users
+    router.post('/bookmarks', [BookmarksController, 'store']).as('bookmarks.store')
+    router.get('/bookmarks', [BookmarksController, 'index']).as('bookmarks.index')
+    router.get('/bookmarks/stats', [BookmarksController, 'stats']).as('bookmarks.stats')
+    router.get('/bookmarks/check/:eventId', [BookmarksController, 'check']).as('bookmarks.check')
+    router.delete('/bookmarks/:eventId', [BookmarksController, 'destroy']).as('bookmarks.destroy')
 
     // Users self-management routes - accessible to all authenticated users
     router.get('/users/me', [GetUserController]).as('users.me')

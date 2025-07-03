@@ -67,6 +67,7 @@ export interface GetEventsOptions {
   city?: string
   startDate?: Date
   endDate?: Date
+  userId?: number
 }
 
 @inject()
@@ -210,7 +211,7 @@ export class EventsService {
    * @return A promise that resolves to paginated events.
    */
   async getAll(options: GetEventsOptions = {}) {
-    const { page = 1, limit = 20, type, subtype, city, startDate, endDate } = options
+    const { page = 1, limit = 20, type, subtype, city, startDate, endDate, userId } = options
 
     const query = Event.query()
 
@@ -235,6 +236,13 @@ export class EventsService {
       query.where('endDate', '<=', DateTime.fromJSDate(endDate).toSQLDate()!)
     }
 
+    // Preload event_user relation if userId is provided
+    if (userId) {
+      query.preload('participants', (participantsQuery) => {
+        participantsQuery.where('userId', userId)
+      })
+    }
+
     // Order by start date
     query.orderBy('startDate', 'asc')
 
@@ -245,15 +253,24 @@ export class EventsService {
   /**
    * Retrieves a single event by ID with all artists preloaded.
    * @param id - The event ID.
+   * @param userId - Optional user ID to preload user-specific event data.
    * @return A promise that resolves to the Event instance or null if not found.
    */
-  async getById(id: number): Promise<Event | null> {
-    return await Event.query()
+  async getById(id: number, userId?: number): Promise<Event | null> {
+    const query = Event.query()
       .where('id', id)
       .preload('artists', (artistsQuery) => {
         artistsQuery.preload('artist')
       })
-      .first()
+
+    // Preload event_user relation if userId is provided
+    if (userId) {
+      query.preload('participants', (participantsQuery) => {
+        participantsQuery.where('userId', userId)
+      })
+    }
+
+    return await query.first()
   }
 
   /**

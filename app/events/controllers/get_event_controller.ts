@@ -18,13 +18,16 @@ export default class GetEventController {
    * @responseBody 404 - {"message": "Event not found", "error": "EVENT_NOT_FOUND"} - Event not found
    * @responseBody 500 - {"message": "An error occurred while retrieving the event", "error": "string"} - Internal server error
    */
-  async handle({ request, response, params }: HttpContext) {
+  async handle({ request, response, params, auth }: HttpContext) {
     try {
       const { id: eventId } = await request.validateUsing(eventIdValidator, {
         data: params,
       })
 
-      const event = await this.eventsService.getById(eventId)
+      // Get current user ID if authenticated
+      const userId = auth.user?.id
+
+      const event = await this.eventsService.getById(eventId, userId)
 
       if (!event) {
         return response.notFound({

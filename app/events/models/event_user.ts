@@ -1,5 +1,6 @@
 import { BaseModel, column, belongsTo } from '@adonisjs/lucid/orm'
 import { type BelongsTo } from '@adonisjs/lucid/types/relations'
+import { DateTime } from 'luxon'
 
 import Event from '#events/models/event'
 import User from '#auth/models/user'
@@ -28,6 +29,16 @@ export default class EventUser extends BaseModel {
   // @example(false)
   // @required
   declare hasJoined: boolean
+
+  @column.dateTime({ autoCreate: true })
+  // @example(2024-01-01T00:00:00.000Z)
+  // @format(date-time)
+  declare createdAt: DateTime
+
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  // @example(2024-01-01T00:00:00.000Z)
+  // @format(date-time)
+  declare updatedAt: DateTime
 
   @belongsTo(() => User)
   // @no-swagger

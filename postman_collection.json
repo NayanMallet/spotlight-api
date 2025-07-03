@@ -1336,6 +1336,212 @@
 			"description": "Event management endpoints for creating, reading, updating, and deleting events, including artist associations"
 		},
 		{
+			"name": "Bookmarks Management",
+			"item": [
+				{
+					"name": "Add Bookmark",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    const response = pm.response.json();",
+									"    pm.test('Bookmark added successfully', () => {",
+									"        pm.expect(response).to.have.property('message');",
+									"        pm.expect(response).to.have.property('data');",
+									"        pm.expect(response.data).to.have.property('isFavorite', true);",
+									"    });",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"eventId\": {{event_id}}\n}"
+						},
+						"url": "{{base_url}}/bookmarks",
+						"description": "Add an event to user's bookmarks"
+					},
+					"response": []
+				},
+				{
+					"name": "Get User Bookmarks",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    pm.test('Bookmarks retrieved successfully', () => {",
+									"        pm.expect(response).to.have.property('message');",
+									"        pm.expect(response).to.have.property('data');",
+									"        pm.expect(response.data).to.have.property('data');",
+									"        pm.expect(response.data.data).to.be.an('array');",
+									"    });",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/bookmarks?page=1&limit=20",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"bookmarks"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1",
+									"description": "Page number for pagination"
+								},
+								{
+									"key": "limit",
+									"value": "20",
+									"description": "Number of bookmarks per page"
+								}
+							]
+						},
+						"description": "Get all bookmarked events for the authenticated user"
+					},
+					"response": []
+				},
+				{
+					"name": "Check Bookmark Status",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    pm.test('Bookmark status retrieved successfully', () => {",
+									"        pm.expect(response).to.have.property('message');",
+									"        pm.expect(response).to.have.property('data');",
+									"        pm.expect(response.data).to.have.property('eventId');",
+									"        pm.expect(response.data).to.have.property('isBookmarked');",
+									"    });",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "{{base_url}}/bookmarks/check/{{event_id}}",
+						"description": "Check if an event is bookmarked by the user"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Bookmark Statistics",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    pm.test('Bookmark statistics retrieved successfully', () => {",
+									"        pm.expect(response).to.have.property('message');",
+									"        pm.expect(response).to.have.property('data');",
+									"        pm.expect(response.data).to.have.property('totalBookmarks');",
+									"    });",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "{{base_url}}/bookmarks/stats",
+						"description": "Get bookmark statistics for the authenticated user"
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Bookmark",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    pm.test('Bookmark removed successfully', () => {",
+									"        pm.expect(response).to.have.property('message');",
+									"        pm.expect(response.message).to.include('removed successfully');",
+									"    });",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": "{{base_url}}/bookmarks/{{event_id}}",
+						"description": "Remove an event from user's bookmarks"
+					},
+					"response": []
+				}
+			],
+			"description": "Bookmark management endpoints for adding, removing, and viewing user's bookmarked events"
+		},
+		{
 			"name": "Messages Management",
 			"item": [
 				{

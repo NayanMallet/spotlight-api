@@ -24,11 +24,15 @@ export default class GetEventsController {
    * @responseBody 401 - Unauthorized - Invalid or missing token
    * @responseBody 500 - {"message": "An error occurred while retrieving events", "error": "string"} - Internal server error
    */
-  async handle({ request, response }: HttpContext) {
+  async handle({ request, response, auth }: HttpContext) {
     try {
       const queryParams = await request.validateUsing(getEventsValidator)
 
-      const events = await this.eventsService.getAll(queryParams)
+      // Get current user ID if authenticated and add it to query params
+      const userId = auth.user?.id
+      const eventsOptions = { ...queryParams, userId }
+
+      const events = await this.eventsService.getAll(eventsOptions)
 
       return response.ok({
         message: 'Events retrieved successfully',
