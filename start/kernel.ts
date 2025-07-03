@@ -43,4 +43,5 @@ router.use([
  */
 export const middleware = router.named({
   auth: () => import('#auth/middleware/auth_middleware'),
+  admin: () => import('#auth/middleware/admin_middleware'),
 })

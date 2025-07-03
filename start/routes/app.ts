@@ -61,50 +61,65 @@ const RemoveEventArtistsController = () =>
 const GetEventArtistsController = () => import('#events/controllers/get_event_artists_controller')
 // endregion
 
-// Scraper route for testing
-router.get('/scrap/events/toulouse', [ScrapeEventsController]).as('events.scrape')
+// Scraper route for testing - Admin only
+router.get('/scrap/events/toulouse', [ScrapeEventsController]).as('events.scrape').middleware([middleware.auth(), middleware.admin()])
 
 // Pages CLIENT
 router
   .group(() => {
-    // Events CRUD routes
+    // Events CRUD routes - GET routes accessible to all authenticated users
     router.get('/events', [GetEventsController]).as('events.index')
-    router.post('/events', [CreateEventController]).as('events.store')
     router.get('/events/:id', [GetEventController]).as('events.show')
+
+    // Messages CRUD routes - GET and POST accessible to all authenticated users
+    router.post('/messages', [CreateMessageController]).as('messages.store')
+    router.get('/events/:eventId/messages', [GetMessagesController]).as('messages.index')
+    router.get('/messages/:id', [GetMessageController]).as('messages.show')
+
+    // Artists CRUD routes - GET routes accessible to all authenticated users
+    router.get('/artists', [GetArtistsController]).as('artists.index')
+    router.get('/artists/:id', [GetArtistController]).as('artists.show')
+
+    // Event-Artist relationship management routes - GET accessible to all authenticated users
+    router.get('/events/:id/artists', [GetEventArtistsController]).as('events.artists.index')
+
+    // Users self-management routes - accessible to all authenticated users
+    router.get('/users/me', [GetUserController]).as('users.me')
+    router.put('/users/me', [UpdateUserController]).as('users.update-me')
+    router.delete('/users/me', [DeleteUserController]).as('users.delete-me')
+    router.post('/users/:id/banner', [UploadUserBannerController]).as('users.upload-banner')
+
+    // OAuth management routes - accessible to all authenticated users
+    router.delete('/oauth/:provider/unlink', [OauthController, 'unlink']).as('oauth.unlink')
+  })
+  .middleware([middleware.auth()])
+
+// Admin-only routes
+router
+  .group(() => {
+    // Events CRUD routes - Admin only
+    router.post('/events', [CreateEventController]).as('events.store')
     router.put('/events/:id', [UpdateEventController]).as('events.update')
     router.patch('/events/:id', [UpdateEventController]).as('events.patch')
     router.delete('/events/:id', [DeleteEventController]).as('events.destroy')
 
-    // Messages CRUD routes
-    router.post('/messages', [CreateMessageController]).as('messages.store')
-    router.get('/events/:eventId/messages', [GetMessagesController]).as('messages.index')
-    router.get('/messages/:id', [GetMessageController]).as('messages.show')
+    // Messages UPDATE/DELETE routes - Admin only
     router.put('/messages/:id', [UpdateMessageController]).as('messages.update')
     router.patch('/messages/:id', [UpdateMessageController]).as('messages.patch')
     router.delete('/messages/:id', [DeleteMessageController]).as('messages.destroy')
 
-    // Artists CRUD routes
-    router.get('/artists', [GetArtistsController]).as('artists.index')
+    // Artists CRUD routes - Admin only
     router.post('/artists', [CreateArtistController]).as('artists.store')
-    router.get('/artists/:id', [GetArtistController]).as('artists.show')
     router.put('/artists/:id', [UpdateArtistController]).as('artists.update')
     router.patch('/artists/:id', [UpdateArtistController]).as('artists.patch')
     router.delete('/artists/:id', [DeleteArtistController]).as('artists.destroy')
 
-    // Event-Artist relationship management routes
-    router.get('/events/:id/artists', [GetEventArtistsController]).as('events.artists.index')
+    // Event-Artist relationship management routes - Admin only
     router.post('/events/:id/artists', [AddEventArtistsController]).as('events.artists.add')
     router.delete('/events/:id/artists', [RemoveEventArtistsController]).as('events.artists.remove')
 
-    // Users management routes
-    router.get('/users/me', [GetUserController]).as('users.me')
-    router.put('/users/me', [UpdateUserController]).as('users.update-me')
+    // Users management routes for other users - Admin only
     router.put('/users/:id', [UpdateUserController]).as('users.update')
-    router.delete('/users/me', [DeleteUserController]).as('users.delete-me')
     router.delete('/users/:id', [DeleteUserController]).as('users.delete')
-    router.post('/users/:id/banner', [UploadUserBannerController]).as('users.upload-banner')
-
-    // OAuth management routes
-    router.delete('/oauth/:provider/unlink', [OauthController, 'unlink']).as('oauth.unlink')
   })
-  .middleware([middleware.auth()])
+  .middleware([middleware.auth(), middleware.admin()])

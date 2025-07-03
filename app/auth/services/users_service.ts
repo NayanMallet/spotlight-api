@@ -1,6 +1,7 @@
 import User from '#auth/models/user'
 import OAuthProvider from '#auth/models/oauth_provider'
 import { OAuthProviders } from '#auth/enums/oauth_providers'
+import { UserRoles } from '#auth/enums/users'
 import { MultipartFile } from '@adonisjs/core/bodyparser'
 import { inject } from '@adonisjs/core'
 import hash from '@adonisjs/core/services/hash'
@@ -54,6 +55,7 @@ export class UsersService {
     return await User.create({
       ...data,
       bannerUrl,
+      role: data.role || UserRoles.USER, // Set default role to USER
     })
   }
 
@@ -225,6 +227,7 @@ export class UsersService {
         full_name: fullName,
         email,
         password: Math.random().toString(36).slice(-12),
+        role: UserRoles.USER, // Set default role to USER
       })
     }
 
