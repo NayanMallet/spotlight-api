@@ -4,7 +4,6 @@ import { OAuthProviders } from '#auth/enums/oauth_providers'
 import { UserRoles } from '#auth/enums/users'
 import { MultipartFile } from '@adonisjs/core/bodyparser'
 import { inject } from '@adonisjs/core'
-import hash from '@adonisjs/core/services/hash'
 import { DriveService } from '#core/services/drive_service'
 import { EmailsService } from '#auth/services/emails_service'
 
@@ -73,7 +72,7 @@ export class UsersService {
     // Update user fields
     if (data.full_name !== undefined) user.full_name = data.full_name
     if (data.email !== undefined) user.email = data.email
-    if (data.password !== undefined) user.password = await hash.use('scrypt').make(data.password)
+    if (data.password !== undefined) user.password = data.password
 
     // Handle banner update if provided
     if (banner) {
@@ -125,7 +124,7 @@ export class UsersService {
       throw new Error('User not found')
     }
 
-    user.password = await hash.use('scrypt').make(data.newPassword)
+    user.password = data.newPassword
     await user.save()
 
     return user
@@ -228,6 +227,10 @@ export class UsersService {
         email,
         password: Math.random().toString(36).slice(-12),
         role: UserRoles.USER, // Set default role to USER
+        bannerUrl: this.DEFAULT_BANNER_URL_TEMPLATE.replace('{email}', email).replace(
+          '{fullName}',
+          fullName
+        ),
       })
     }
 

@@ -135,6 +135,7 @@ export class EventsScraperService {
     await db.from('artists').delete()
 
     const browser = await puppeteer.launch({
+      executablePath: '/usr/bin/chromium',
       headless: true,
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
     })

@@ -1315,6 +1315,22 @@
 						"description": "Remove one or more artists from an existing event. Artists that are not associated will be ignored."
 					},
 					"response": []
+				},
+				{
+					"name": "Scrape Events Toulouse (Admin Only)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "{{base_url}}/scrap/events/toulouse",
+						"description": "Scrape events from Toulouse sources. This endpoint is restricted to admin users only and is used for testing the scraping functionality."
+					},
+					"response": []
 				}
 			],
 			"description": "Event management endpoints for creating, reading, updating, and deleting events, including artist associations"

@@ -62,7 +62,10 @@ const GetEventArtistsController = () => import('#events/controllers/get_event_ar
 // endregion
 
 // Scraper route for testing - Admin only
-router.get('/scrap/events/toulouse', [ScrapeEventsController]).as('events.scrape').middleware([middleware.auth(), middleware.admin()])
+router
+  .get('/scrap/events/toulouse', [ScrapeEventsController])
+  .as('events.scrape')
+  .middleware([middleware.auth(), middleware.admin()])
 
 // Pages CLIENT
 router
