@@ -3,6 +3,7 @@ import { UsersService } from '#auth/services/users_service'
 import User from '#auth/models/user'
 import { OAuthProviders } from '#auth/enums/oauth_providers'
 import { inject } from '@adonisjs/core'
+import env from '#start/env'
 
 @inject()
 export default class OauthController {
@@ -98,14 +99,17 @@ export default class OauthController {
 
       const token = await User.accessTokens.create(user)
 
-      return response.ok({
-        user: {
-          id: user.id,
-          full_name: user.full_name,
-          email: user.email,
-        },
-        token,
-      })
+      // Redirect to frontend with authentication data
+      const frontendUrl = env.get('FRONTEND_URL')
+      const redirectUrl = new URL('/auth/callback', frontendUrl)
+
+      // Add user and token data as query parameters
+      redirectUrl.searchParams.set('token', token.value!.release())
+      redirectUrl.searchParams.set('user_id', user.id.toString())
+      redirectUrl.searchParams.set('user_name', user.full_name)
+      redirectUrl.searchParams.set('user_email', user.email)
+
+      return response.redirect(redirectUrl.toString())
     } catch (error) {
       return response.internalServerError({
         message: 'OAuth authentication failed',

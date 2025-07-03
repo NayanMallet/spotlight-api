@@ -245,9 +245,9 @@ export class EventsScraperService {
               }
             }
 
-            const locationAnchor = Array.from(
-              document.querySelectorAll('a.text-foreground')
-            ).find((a) => a.href.includes('google.com/maps/search'))
+            const locationAnchor = Array.from(document.querySelectorAll('a.text-foreground')).find(
+              (a) => a.href.includes('google.com/maps/search')
+            )
             if (locationAnchor) {
               result.location = locationAnchor.textContent?.trim() || ''
             }
@@ -259,9 +259,9 @@ export class EventsScraperService {
               result.placeName = placeNameAnchor.textContent?.trim() || ''
             }
 
-            const dateSpan = Array.from(document.querySelectorAll('div.flex.items-center.gap-4 span')).map(
-              (span) => span.textContent?.trim() || ''
-            )
+            const dateSpan = Array.from(
+              document.querySelectorAll('div.flex.items-center.gap-4 span')
+            ).map((span) => span.textContent?.trim() || '')
 
             if (dateSpan.length >= 8) {
               const fullText = dateSpan.join(' ')
@@ -318,7 +318,7 @@ export class EventsScraperService {
         })
         createdEvents.push(createdEvent)
       } catch (error) {
-        console.warn('Erreur lors de la création d\'événement:', error)
+        console.warn("Erreur lors de la création d'événement:", error)
       }
     }
 
