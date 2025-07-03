@@ -208,7 +208,7 @@ export class EventsScraperService {
       try {
         await page.goto(event.url, { waitUntil: 'domcontentloaded', timeout: 30000 })
 
-        const { description, lineup, location, placeName, startDateTime, endDateTime } =
+        const { description, lineup, location, placeName, startDateTime } =
           await page.evaluate(() => {
             const result = {
               description: '',
