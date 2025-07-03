@@ -65,7 +65,7 @@ const GetEventArtistsController = () => import('#events/controllers/get_event_ar
 router
   .get('/scrap/events/toulouse', [ScrapeEventsController])
   .as('events.scrape')
-  .middleware([middleware.auth(), middleware.admin()])
+  // .middleware([middleware.auth(), middleware.admin()])
 
 // Pages CLIENT
 router
