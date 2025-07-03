@@ -36,4 +36,4 @@ COPY --chown=node:node package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile --production
 COPY --chown=node:node --from=build /home/node/app/build ./
 EXPOSE 3333
-CMD [ "dumb-init", "node", "server.js" ]
+CMD [ "dumb-init", "node", "build/server.js" ]
