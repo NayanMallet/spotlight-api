@@ -5,6 +5,7 @@ import { inject } from '@adonisjs/core'
 import { EventType, EventSubtype } from '#events/enums/events'
 import { EventsService } from '#events/services/events_service'
 import { ArtistsService } from '#artists/services/artists_service'
+import db from '@adonisjs/lucid/services/db'
 
 @inject()
 export class EventsScraperService {
@@ -13,11 +14,6 @@ export class EventsScraperService {
     private artistsService: ArtistsService
   ) {}
 
-  /**
-   * Creates or finds existing artists from lineup data
-   * @param lineup - Array of artist data with name and image URL
-   * @returns Promise<number[]> - Array of artist IDs
-   */
   private async createOrFindArtists(lineup: { name: string; image: string }[]): Promise<number[]> {
     const artistIds: number[] = []
 
@@ -36,11 +32,33 @@ export class EventsScraperService {
     return artistIds
   }
 
-  /**
-   * Creates an event using EventsService (for scraper use case with URLs)
-   * @param eventData - The scraped event data
-   * @returns Promise<Event> - The created event
-   */
+  private buildISODate(day: string, monthStr: string, hour: string): string {
+    const year = new Date().getFullYear()
+    const monthsMap: Record<string, number> = {
+      janv: 1,
+      févr: 2,
+      mars: 3,
+      avr: 4,
+      mai: 5,
+      juin: 6,
+      juil: 7,
+      août: 8,
+      sept: 9,
+      oct: 10,
+      nov: 11,
+      déc: 12,
+    }
+    const monthNum = monthsMap[monthStr.toLowerCase()]
+    if (!monthNum) throw new Error(`Mois inconnu: ${monthStr}`)
+
+    const dayPadded = day.padStart(2, '0')
+    const monthPadded = monthNum.toString().padStart(2, '0')
+    const isoDate = `${year}-${monthPadded}-${dayPadded}T${hour}:00`
+
+    console.log('buildISODate =>', isoDate)
+    return isoDate
+  }
+
   private async createEventFromScrapedData(eventData: {
     title: string
     startDate: string
@@ -54,14 +72,18 @@ export class EventsScraperService {
     description: string
     lineup: { name: string; image: string }[]
   }): Promise<Event> {
-    // Create or find artists
     const artistIds = await this.createOrFindArtists(eventData.lineup)
 
-    // Parse date and create proper DateTime objects
     const startDateTime = DateTime.fromISO(eventData.startDate)
     const endDateTime = DateTime.fromISO(eventData.endDate)
 
-    // Create event using EventsService
+    if (!startDateTime.isValid) {
+      throw new Error(`Date de début invalide : ${eventData.startDate}`)
+    }
+    if (!endDateTime.isValid) {
+      throw new Error(`Date de fin invalide : ${eventData.endDate}`)
+    }
+
     const event = await this.eventsService.createFromUrl({
       title: eventData.title,
       description: eventData.description || null,
@@ -74,8 +96,8 @@ export class EventsScraperService {
       placeName: eventData.placeName,
       address: eventData.address,
       city: eventData.city,
-      type: EventType.CONCERT, // Default to concert, could be enhanced with logic
-      subtype: EventSubtype.ROCK, // Default to rock, could be enhanced with logic
+      type: EventType.CONCERT,
+      subtype: EventSubtype.ROCK,
       bannerUrl: eventData.bannerUrl,
       artistIds: artistIds.length > 0 ? artistIds : undefined,
     })
@@ -83,18 +105,13 @@ export class EventsScraperService {
     return event
   }
 
-  /**
-   * Géocode address using OpenStreetMap Nominatim API
-   * @param address - The address to geocode
-   * @returns {Promise<{ lat: number; lng: number } | null>} - Returns latitude and longitude or null if not found
-   */
   private async geocodeAddress(address: string): Promise<{ lat: number; lng: number } | null> {
     try {
       const response = await fetch(
         `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`,
         {
           headers: {
-            'User-Agent': 'EventScraperBot/1.0 (your@email.com)',
+            'User-Agent': 'EventScraperBot/1.0 (you@example.com)',
           },
         }
       )
@@ -113,8 +130,11 @@ export class EventsScraperService {
   }
 
   async fetchShotgunEvents(): Promise<Event[]> {
+    // Clear existing events & artists
+    await db.from('events').delete()
+    await db.from('artists').delete()
+
     const browser = await puppeteer.launch({
-      executablePath: '/usr/bin/chromium',
       headless: true,
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
     })
@@ -155,7 +175,6 @@ export class EventsScraperService {
           const href = a.getAttribute('href') || ''
           const url = 'https://shotgun.live' + href
           const img = a.querySelector('img')?.getAttribute('src') || ''
-
           return { title, date: dateIso, location, url, image: img }
         })
         .filter((e) => e.title && e.date)
@@ -188,90 +207,122 @@ export class EventsScraperService {
       try {
         await page.goto(event.url, { waitUntil: 'domcontentloaded', timeout: 30000 })
 
-        const { description, lineup, location, placeName } = await page.evaluate(() => {
-          const result = {
-            description: '',
-            lineup: [] as { name: string; image: string }[],
-            location: '',
-            placeName: '',
-          }
-
-          // Description
-          const aboutHeader = Array.from(document.querySelectorAll('.text-2xl')).find(
-            (h) => h.textContent?.trim() === 'À propos'
-          )
-          if (aboutHeader) {
-            const parent = aboutHeader.closest('section') || aboutHeader.parentElement
-            const descDiv = parent?.querySelector('div.whitespace-pre-wrap')
-            if (descDiv) {
-              result.description = descDiv.textContent?.trim() || ''
+        const { description, lineup, location, placeName, startDateTime, endDateTime } =
+          await page.evaluate(() => {
+            const result = {
+              description: '',
+              lineup: [] as { name: string; image: string }[],
+              location: '',
+              placeName: '',
+              startDateTime: '',
+              endDateTime: '',
             }
-          }
 
-          // Lineup
-          const lineupContainer = document.querySelector('div.grid.grid-cols-3')
-          if (lineupContainer) {
-            const artistLinks = Array.from(
-              lineupContainer.querySelectorAll('a[data-slot="tracked-link"]')
+            const aboutHeader = Array.from(document.querySelectorAll('.text-2xl')).find(
+              (h) => h.textContent?.trim() === 'À propos'
             )
-            for (const a of artistLinks) {
-              const nameDiv = a.querySelector('div.text-muted-foreground')
-              const name = nameDiv?.textContent?.trim() || ''
-              const img = a.querySelector('img')?.getAttribute('src') || ''
-              if (name && img && !name.includes('abonné')) {
-                result.lineup.push({ name, image: img })
+            if (aboutHeader) {
+              const parent = aboutHeader.closest('section') || aboutHeader.parentElement
+              const descDiv = parent?.querySelector('div.whitespace-pre-wrap')
+              if (descDiv) {
+                result.description = descDiv.textContent?.trim() || ''
               }
             }
+
+            const lineupContainer = document.querySelector('div.grid.grid-cols-3')
+            if (lineupContainer) {
+              const artistLinks = Array.from(
+                lineupContainer.querySelectorAll('a[data-slot="tracked-link"]')
+              )
+              for (const a of artistLinks) {
+                const nameDiv = a.querySelector('div.text-muted-foreground')
+                const name = nameDiv?.textContent?.trim() || ''
+                const img = a.querySelector('img')?.getAttribute('src') || ''
+                if (name && img && !name.includes('abonné')) {
+                  result.lineup.push({ name, image: img })
+                }
+              }
+            }
+
+            const locationAnchor = Array.from(
+              document.querySelectorAll('a.text-foreground')
+            ).find((a) => a.href.includes('google.com/maps/search'))
+            if (locationAnchor) {
+              result.location = locationAnchor.textContent?.trim() || ''
+            }
+
+            const placeNameAnchor = Array.from(
+              document.querySelectorAll('div.flex.items-center.gap-4 a.text-foreground')
+            ).find((a) => a.textContent?.trim()?.length && a.textContent?.trim()?.length < 100)
+            if (placeNameAnchor) {
+              result.placeName = placeNameAnchor.textContent?.trim() || ''
+            }
+
+            const dateSpan = Array.from(document.querySelectorAll('div.flex.items-center.gap-4 span')).map(
+              (span) => span.textContent?.trim() || ''
+            )
+
+            if (dateSpan.length >= 8) {
+              const fullText = dateSpan.join(' ')
+              const regex =
+                /Du\s+\w+\s+(\d+)\s+(\w+)\.?\s+à\s+(\d{2}:\d{2})\s+Au\s+\w+\s+(\d+)\s+(\w+)\.?\s+à\s+(\d{2}:\d{2})/
+              const match = fullText.match(regex)
+              if (match) {
+                const [_, startDay, startMonth, startHour, endDay, endMonth, endHour] = match
+                result.startDateTime = `${new Date().getFullYear()}-${startMonth}-${startDay}T${startHour}:00`
+                result.endDateTime = `${new Date().getFullYear()}-${endMonth}-${endDay}T${endHour}:00`
+              }
+            }
+
+            return result
+          })
+
+        // Correction parsing des dates avec la fonction buildISODate
+        let startDate = ''
+        let endDate = ''
+        try {
+          if (startDateTime) {
+            // On parse startDateTime avec regex
+            const regex =
+              /Du\s+\w+\s+(\d+)\s+(\w+)\.?\s+à\s+(\d{2}:\d{2})\s+Au\s+\w+\s+(\d+)\s+(\w+)\.?\s+à\s+(\d{2}:\d{2})/
+            const match = startDateTime.match(regex)
+            if (match) {
+              const [, startDay, startMonth, startHour, endDay, endMonth, endHour] = match
+              startDate = this.buildISODate(startDay, startMonth, startHour)
+              endDate = this.buildISODate(endDay, endMonth, endHour)
+            }
           }
+        } catch (err) {
+          console.warn('Erreur parsing dates:', err)
+        }
 
-          // Adresse postale (location)
-          const locationAnchor = Array.from(document.querySelectorAll('a.text-foreground')).find(
-            (a) => a.href.includes('google.com/maps/search')
-          )
-          if (locationAnchor) {
-            result.location = locationAnchor.textContent?.trim() || ''
-          }
+        // fallback si pas de date valide
+        if (!startDate) startDate = event.date
+        if (!endDate) endDate = event.date
 
-          // Place name (Poney Club, etc.)
-          const placeNameAnchor = Array.from(
-            document.querySelectorAll('div.flex.items-center.gap-4 a.text-foreground')
-          ).find((a) => a.textContent?.trim()?.length && a.textContent?.trim()?.length < 100)
-          if (placeNameAnchor) {
-            result.placeName = placeNameAnchor.textContent?.trim() || ''
-          }
-
-          return result
-        })
-
-        // Géocodage de l'adresse postale
         const coords = location ? await this.geocodeAddress(location) : null
 
-        // Create event using the new helper method
         const createdEvent = await this.createEventFromScrapedData({
           title: event.title,
-          startDate: event.date,
-          endDate: event.date,
-          address: location || '',
-          city: 'Toulouse', // You may extract city from location if possible
+          startDate,
+          endDate,
+          address: location,
+          city: 'Toulouse',
           placeName: placeName || '',
           latitude: coords?.lat || null,
           longitude: coords?.lng || null,
-          bannerUrl: event.image ?? '',
+          bannerUrl: event.image,
           description,
           lineup,
         })
-
         createdEvents.push(createdEvent)
-        console.log(`Successfully created event: ${createdEvent.title}`)
-      } catch (err) {
-        console.error(`Failed to create event ${event.title}:`, err)
-        // Continue with next event instead of creating incomplete data
+      } catch (error) {
+        console.warn('Erreur lors de la création d\'événement:', error)
       }
     }
 
     await browser.close()
 
-    console.log(`Successfully scraped and created ${createdEvents.length} events`)
     return createdEvents
   }
 }
