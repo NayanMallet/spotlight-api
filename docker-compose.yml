@@ -75,7 +75,7 @@ services:
       - spotlight_net
 
     command: >
-      sh -c "node ace migration:run && dumb-init node ace serve --hmr"
+      sh -c "node ace migration:run && node ace db:seed && dumb-init node ace serve --hmr"
 
 volumes:
   mysql_data:

@@ -11,6 +11,86 @@
 			"name": "Authentication",
 			"item": [
 				{
+					"name": "Login as Admin (Seeded)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    pm.collectionVariables.set('admin_token', response.token.value.release());",
+									"    pm.collectionVariables.set('admin_user_id', response.user.id);",
+									"    pm.test('Admin login successful', () => {",
+									"        pm.expect(response.user).to.have.property('id');",
+									"        pm.expect(response.user).to.have.property('email');",
+									"        pm.expect(response.user.email).to.eql('admin@spotlight.com');",
+									"        pm.expect(response.token).to.have.property('value');",
+									"    });",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"admin@spotlight.com\",\n  \"password\": \"admin123\"\n}"
+						},
+						"url": "{{base_url}}/login",
+						"description": "Login with seeded admin account"
+					},
+					"response": []
+				},
+				{
+					"name": "Login as Regular User (Seeded)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    pm.collectionVariables.set('user_token', response.token.value.release());",
+									"    pm.collectionVariables.set('regular_user_id', response.user.id);",
+									"    pm.test('User login successful', () => {",
+									"        pm.expect(response.user).to.have.property('id');",
+									"        pm.expect(response.user).to.have.property('email');",
+									"        pm.expect(response.user.email).to.eql('user@spotlight.com');",
+									"        pm.expect(response.token).to.have.property('value');",
+									"    });",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"user@spotlight.com\",\n  \"password\": \"user123\"\n}"
+						},
+						"url": "{{base_url}}/login",
+						"description": "Login with seeded regular user account"
+					},
+					"response": []
+				},
+				{
 					"name": "Register User",
 					"event": [
 						{
@@ -527,18 +607,25 @@
 							}
 						},
 						"method": "PUT",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							}
-						],
+						"header": [],
 						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"full_name\": \"John Current User\"\n}"
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "full_name",
+									"value": "John Current User",
+									"type": "text"
+								},
+								{
+									"key": "banner",
+									"type": "file",
+									"src": [],
+									"disabled": true
+								}
+							]
 						},
 						"url": "{{base_url}}/users/me",
-						"description": "Update current authenticated user's profile"
+						"description": "Update current authenticated user's profile. All fields are optional. Banner upload is optional."
 					},
 					"response": []
 				},
@@ -1729,6 +1816,525 @@
 			"description": "Message management endpoints for creating, reading, updating, and deleting messages within events"
 		},
 		{
+			"name": "🔐 Admin Workflows",
+			"item": [
+				{
+					"name": "Admin Event Management",
+					"item": [
+						{
+							"name": "Create Event (Admin Only)",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "{{admin_token}}"
+									}
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "title",
+											"value": "Admin Created Event",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "Event created by admin user",
+											"type": "text"
+										},
+										{
+											"key": "startDate",
+											"value": "2024-08-15",
+											"type": "text"
+										},
+										{
+											"key": "endDate",
+											"value": "2024-08-15",
+											"type": "text"
+										},
+										{
+											"key": "startHour",
+											"value": "2024-08-15 20:00:00",
+											"type": "text"
+										},
+										{
+											"key": "latitude",
+											"value": "43.6047",
+											"type": "text"
+										},
+										{
+											"key": "longitude",
+											"value": "1.4442",
+											"type": "text"
+										},
+										{
+											"key": "placeName",
+											"value": "Toulouse Arena",
+											"type": "text"
+										},
+										{
+											"key": "address",
+											"value": "123 Admin Street",
+											"type": "text"
+										},
+										{
+											"key": "city",
+											"value": "Toulouse",
+											"type": "text"
+										},
+										{
+											"key": "type",
+											"value": "concert",
+											"type": "text"
+										},
+										{
+											"key": "subtype",
+											"value": "rock",
+											"type": "text"
+										},
+										{
+											"key": "banner",
+											"type": "file",
+											"src": []
+										}
+									]
+								},
+								"url": "{{base_url}}/events",
+								"description": "Create a new event (Admin only)"
+							},
+							"response": []
+						},
+						{
+							"name": "Update Event (Admin Only)",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "{{admin_token}}"
+									}
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "title",
+											"value": "Updated Admin Event",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "Event updated by admin",
+											"type": "text"
+										},
+										{
+											"key": "banner",
+											"type": "file",
+											"src": [],
+											"disabled": true
+										}
+									]
+								},
+								"url": "{{base_url}}/events/{{event_id}}",
+								"description": "Update an event (Admin only). All fields are optional. Banner upload is optional."
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Event (Admin Only)",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "{{admin_token}}"
+									}
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": "{{base_url}}/events/{{event_id}}",
+								"description": "Delete an event (Admin only)"
+							},
+							"response": []
+						}
+					],
+					"description": "Admin-only event management operations"
+				},
+				{
+					"name": "Admin Artist Management",
+					"item": [
+						{
+							"name": "Create Artist (Admin Only)",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "{{admin_token}}"
+									}
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"Admin Created Artist\",\n  \"description\": \"Artist created by admin\",\n  \"genre\": \"Rock\"\n}"
+								},
+								"url": "{{base_url}}/artists",
+								"description": "Create a new artist (Admin only)"
+							},
+							"response": []
+						},
+						{
+							"name": "Update Artist (Admin Only)",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "{{admin_token}}"
+									}
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"Updated Admin Artist\",\n  \"description\": \"Artist updated by admin\"\n}"
+								},
+								"url": "{{base_url}}/artists/{{artist_id}}",
+								"description": "Update an artist (Admin only)"
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Artist (Admin Only)",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "{{admin_token}}"
+									}
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": "{{base_url}}/artists/{{artist_id}}",
+								"description": "Delete an artist (Admin only)"
+							},
+							"response": []
+						}
+					],
+					"description": "Admin-only artist management operations"
+				},
+				{
+					"name": "Admin User Management",
+					"item": [
+						{
+							"name": "Update Any User (Admin Only)",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "{{admin_token}}"
+									}
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "full_name",
+											"value": "Updated by Admin",
+											"type": "text"
+										},
+										{
+											"key": "banner",
+											"type": "file",
+											"src": [],
+											"disabled": true
+										}
+									]
+								},
+								"url": "{{base_url}}/users/{{regular_user_id}}",
+								"description": "Update any user profile (Admin only). All fields are optional. Banner upload is optional."
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Any User (Admin Only)",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "{{admin_token}}"
+									}
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": "{{base_url}}/users/{{regular_user_id}}",
+								"description": "Delete any user account (Admin only)"
+							},
+							"response": []
+						}
+					],
+					"description": "Admin-only user management operations"
+				}
+			],
+			"description": "Admin-only operations including event, artist, and user management"
+		},
+		{
+			"name": "👤 User Workflows",
+			"item": [
+				{
+					"name": "User Event Operations",
+					"item": [
+						{
+							"name": "Get All Events",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "{{user_token}}"
+									}
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/events",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"events"
+									]
+								},
+								"description": "View all events (User can read only)"
+							},
+							"response": []
+						},
+						{
+							"name": "Get Event Details",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "{{user_token}}"
+									}
+								},
+								"method": "GET",
+								"header": [],
+								"url": "{{base_url}}/events/{{event_id}}",
+								"description": "View event details (User can read only)"
+							},
+							"response": []
+						}
+					],
+					"description": "User event operations (read-only)"
+				},
+				{
+					"name": "User Message Operations",
+					"item": [
+						{
+							"name": "Create Message",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "{{user_token}}"
+									}
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"content\": \"Great event! Looking forward to it.\",\n  \"eventId\": {{event_id}}\n}"
+								},
+								"url": "{{base_url}}/messages",
+								"description": "Create a message for an event (User can create)"
+							},
+							"response": []
+						},
+						{
+							"name": "Get Event Messages",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "{{user_token}}"
+									}
+								},
+								"method": "GET",
+								"header": [],
+								"url": "{{base_url}}/events/{{event_id}}/messages",
+								"description": "View messages for an event (User can read)"
+							},
+							"response": []
+						}
+					],
+					"description": "User message operations (create and read only)"
+				},
+				{
+					"name": "User Profile Management",
+					"item": [
+						{
+							"name": "Get My Profile",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "{{user_token}}"
+									}
+								},
+								"method": "GET",
+								"header": [],
+								"url": "{{base_url}}/users/me",
+								"description": "Get current user profile"
+							},
+							"response": []
+						},
+						{
+							"name": "Update My Profile",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "{{user_token}}"
+									}
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "full_name",
+											"value": "Updated User Name",
+											"type": "text"
+										},
+										{
+											"key": "banner",
+											"type": "file",
+											"src": [],
+											"disabled": true
+										}
+									]
+								},
+								"url": "{{base_url}}/users/me",
+								"description": "Update own profile. All fields are optional. Banner upload is optional."
+							},
+							"response": []
+						},
+						{
+							"name": "Upload Banner",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "{{user_token}}"
+									}
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "banner",
+											"type": "file",
+											"src": []
+										}
+									]
+								},
+								"url": "{{base_url}}/users/{{regular_user_id}}/banner",
+								"description": "Upload user banner image"
+							},
+							"response": []
+						}
+					],
+					"description": "User profile management operations"
+				},
+				{
+					"name": "User Bookmark Operations",
+					"item": [
+						{
+							"name": "Add Bookmark",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "{{user_token}}"
+									}
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"eventId\": {{event_id}}\n}"
+								},
+								"url": "{{base_url}}/bookmarks",
+								"description": "Bookmark an event"
+							},
+							"response": []
+						},
+						{
+							"name": "Get My Bookmarks",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "{{user_token}}"
+									}
+								},
+								"method": "GET",
+								"header": [],
+								"url": "{{base_url}}/bookmarks",
+								"description": "Get user's bookmarked events"
+							},
+							"response": []
+						},
+						{
+							"name": "Remove Bookmark",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "{{user_token}}"
+									}
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": "{{base_url}}/bookmarks/{{event_id}}",
+								"description": "Remove bookmark from an event"
+							},
+							"response": []
+						}
+					],
+					"description": "User bookmark operations"
+				}
+			],
+			"description": "Regular user operations with limited permissions"
+		},
+		{
 			"name": "Testing Scenarios",
 			"item": [
 				{
@@ -2258,6 +2864,26 @@
 		},
 		{
 			"key": "oauth_state",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "admin_token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "user_token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "admin_user_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "regular_user_id",
 			"value": "",
 			"type": "string"
 		}
