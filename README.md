@@ -143,8 +143,117 @@ pnpm run build
 
 ### Running Tests
 
+The project uses [Japa](https://japa.dev/) as the testing framework with AdonisJS integration. Tests are organized into two suites:
+
+- **Unit Tests**: Fast, isolated tests for individual components (2s timeout)
+- **Functional Tests**: Integration tests for API endpoints (30s timeout)
+
+#### Local Development
+
 ```bash
+# Run all tests
 pnpm test
+
+# Run specific test suite
+node ace test --suites=unit
+node ace test --suites=functional
+
+# Run tests with file watching (development)
+node ace test --watch
+
+# Run tests with coverage
+node ace test --coverage
+
+# Run specific test file
+node ace test tests/functional/auth/login_controller.spec.ts
+
+# Run tests matching a pattern
+node ace test --grep="login"
+```
+
+#### Docker Environment
+
+```bash
+# Run all tests in Docker container
+docker-compose exec spotlight_api pnpm test
+
+# Run specific test suite in Docker
+docker-compose exec spotlight_api node ace test --suites=unit
+docker-compose exec spotlight_api node ace test --suites=functional
+
+# Run tests with file watching in Docker
+docker-compose exec spotlight_api node ace test --watch
+
+# Run specific test file in Docker
+docker-compose exec spotlight_api node ace test tests/functional/auth/login_controller.spec.ts
+```
+
+#### Test Structure
+
+```
+tests/
+├── bootstrap.ts          # Japa configuration and plugins
+├── unit/                 # Unit tests (isolated, fast)
+│   └── auth/            # Authentication unit tests
+└── functional/          # Integration tests (API endpoints)
+    ├── auth/            # Authentication API tests
+    └── events/          # Events API tests
+```
+
+#### Writing Tests
+
+Tests use Japa with the following plugins:
+- `@japa/assert`: Assertions library
+- `@japa/api-client`: HTTP client for API testing
+- `@japa/plugin-adonisjs`: AdonisJS integration
+
+Example functional test:
+```typescript
+import { test } from '@japa/runner'
+import { ApiClient } from '@japa/api-client'
+
+test.group('Auth - Login Controller', () => {
+  test('should login user with valid credentials', async ({ client }: { client: ApiClient }) => {
+    const response = await client
+      .post('/login')
+      .json({
+        email: 'test@example.com',
+        password: 'password123'
+      })
+
+    response.assertStatus(200)
+    response.assertBodyContains({
+      user: {
+        email: 'test@example.com'
+      }
+    })
+  })
+})
+```
+
+#### Test Database
+
+Tests automatically use a separate test database configuration. The test environment:
+- Uses `NODE_ENV=test`
+- Runs database migrations automatically
+- Cleans up data between test runs
+- Uses in-memory database for faster execution (when configured)
+
+#### Continuous Integration
+
+For CI/CD pipelines, run tests with:
+```bash
+# Set test environment
+export NODE_ENV=test
+
+# Run database migrations
+node ace migration:run
+
+# Run all tests
+pnpm test
+
+# Generate coverage report
+node ace test --coverage --reporter=lcov
 ```
 
 ## API Endpoints
