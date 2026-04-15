@@ -89,12 +89,14 @@ export class BookmarksService {
    */
   async getUserBookmarks(userId: number, page: number = 1, limit: number = 20) {
     return await Event.query()
+      .select('events.*')
       .join('event_users', 'events.id', 'event_users.event_id')
       .where('event_users.user_id', userId)
       .where('event_users.is_favorite', true)
       .orderBy('event_users.created_at', 'desc')
       .paginate(page, limit)
-  }
+}
+
 
   /**
    * Checks if a user has bookmarked a specific event

@@ -66,6 +66,8 @@ const RemoveEventArtistsController = () =>
   import('#events/controllers/remove_event_artists_controller')
 const GetEventArtistsController = () => import('#events/controllers/get_event_artists_controller')
 const BookmarksController = () => import('#events/controllers/bookmarks_controller')
+const JoinEventController = () => import('#events/controllers/join_event_controller')
+const QuitEventController = () => import('#events/controllers/quit_event_controller')
 // endregion
 
 // Scraper route for testing - Admin only
@@ -80,7 +82,7 @@ router
     // Events GET routes - require authentication
     router.get('/events', [GetEventsController]).as('events.index')
     router.get('/events/:id', [GetEventController]).as('events.show')
-
+    
     // Messages CRUD routes - GET and POST accessible to all authenticated users
     router.post('/messages', [CreateMessageController]).as('messages.store')
     router.get('/events/:eventId/messages', [GetMessagesController]).as('messages.index')
@@ -92,6 +94,10 @@ router
 
     // Event-Artist relationship management routes - GET accessible to all authenticated users
     router.get('/events/:id/artists', [GetEventArtistsController]).as('events.artists.index')
+
+    // Join event route - accessible to all authenticated users
+    router.post('/events/join/:id', [JoinEventController]).as('events.join')
+    router.post('/events/quit/:id', [QuitEventController]).as('events.quit')
 
     // Bookmarks routes - accessible to all authenticated users
     router.post('/bookmarks', [BookmarksController, 'store']).as('bookmarks.store')

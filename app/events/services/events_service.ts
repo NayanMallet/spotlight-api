@@ -1,6 +1,8 @@
 import Event from '#events/models/event'
 import EventArtist from '#events/models/event_artist'
+import EventUser from '#events/models/event_user'
 import Artist from '#artists/models/artist'
+import User from '#auth/models/user'
 import { MultipartFile } from '@adonisjs/core/bodyparser'
 import { inject } from '@adonisjs/core'
 import { DateTime } from 'luxon'
@@ -381,5 +383,65 @@ export class EventsService {
 
     await event.delete()
     return true
+  }
+
+  async joinEvent(userId: number, eventId: number): Promise<EventUser> {
+      // Check if event exists
+      const event = await Event.find(eventId)
+      if (!event) {
+        throw new NotFoundException('Event not found')
+      }
+  
+      // Check if user exists
+      const user = await User.find(userId)
+      if (!user) {
+        throw new NotFoundException('User not found')
+      }
+  
+      // Check if EventUser record already exists
+      let eventUser = await EventUser.query()
+        .where('userId', userId)
+        .where('eventId', eventId)
+        .first()
+  
+      if (eventUser) {
+        // Update existing record to set favorite to true
+        eventUser.hasJoined = true
+        await eventUser.save()
+        return eventUser
+      } else {
+        // Create new EventUser record with favorite set to true
+        return await EventUser.create({
+          userId,
+          eventId,
+          isFavorite: false,
+          hasJoined: true,
+        })
+      }
+    }
+
+  async quitEvent(userId: number, eventId: number): Promise<EventUser> {
+    const event = await Event.find(eventId)
+    if (!event) {
+      throw new NotFoundException('Event not found')
+    }
+
+    const user = await User.find(userId)
+    if (!user) {
+      throw new NotFoundException('User not found')
+    }
+
+    const eventUser = await EventUser.query()
+      .where('userId', userId)
+      .where('eventId', eventId)
+      .first()
+
+    if (!eventUser || !eventUser.hasJoined) {
+      throw new NotFoundException('User has not joined this event')
+    }
+
+    eventUser.hasJoined = false
+    await eventUser.save()
+    return eventUser
   }
 }
