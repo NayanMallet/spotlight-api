@@ -68,6 +68,7 @@ const GetEventArtistsController = () => import('#events/controllers/get_event_ar
 const BookmarksController = () => import('#events/controllers/bookmarks_controller')
 const JoinEventController = () => import('#events/controllers/join_event_controller')
 const QuitEventController = () => import('#events/controllers/quit_event_controller')
+const GetJoinedEventsController = () => import('#events/controllers/get_joined_events_controller')
 // endregion
 
 // Scraper route for testing - Admin only
@@ -96,6 +97,8 @@ router
     router.get('/events/:id/artists', [GetEventArtistsController]).as('events.artists.index')
 
     // Join event route - accessible to all authenticated users
+    router.get('/events/joined', [GetJoinedEventsController]).as('events.joined')
+    router.get('/events/joined/:id', [GetJoinedEventsController, 'check']).as('events.joined.check')
     router.post('/events/join/:id', [JoinEventController]).as('events.join')
     router.post('/events/quit/:id', [QuitEventController]).as('events.quit')
 

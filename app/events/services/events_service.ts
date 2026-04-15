@@ -420,6 +420,26 @@ export class EventsService {
       }
     }
 
+  async getJoinedEvents(userId: number, page: number = 1, limit: number = 20) {
+    return await Event.query()
+      .select('events.*')
+      .join('event_users', 'events.id', 'event_users.event_id')
+      .where('event_users.user_id', userId)
+      .where('event_users.has_joined', true)
+      .orderBy('event_users.created_at', 'desc')
+      .paginate(page, limit)
+  }
+
+  async isJoined(userId: number, eventId: number): Promise<boolean> {
+    const eventUser = await EventUser.query()
+      .where('userId', userId)
+      .where('eventId', eventId)
+      .where('hasJoined', true)
+      .first()
+
+    return !!eventUser
+  }
+
   async quitEvent(userId: number, eventId: number): Promise<EventUser> {
     const event = await Event.find(eventId)
     if (!event) {
