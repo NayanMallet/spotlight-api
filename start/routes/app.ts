@@ -82,8 +82,13 @@ router
   .group(() => {
     // Events GET routes - require authentication
     router.get('/events', [GetEventsController]).as('events.index')
+
+    // Join event route - static routes before dynamic :id
+    router.get('/events/joined', [GetJoinedEventsController]).as('events.joined')
+    router.get('/events/joined/:id', [GetJoinedEventsController, 'check']).as('events.joined.check')
+
     router.get('/events/:id', [GetEventController]).as('events.show')
-    
+
     // Messages CRUD routes - GET and POST accessible to all authenticated users
     router.post('/messages', [CreateMessageController]).as('messages.store')
     router.get('/events/:eventId/messages', [GetMessagesController]).as('messages.index')
@@ -95,10 +100,6 @@ router
 
     // Event-Artist relationship management routes - GET accessible to all authenticated users
     router.get('/events/:id/artists', [GetEventArtistsController]).as('events.artists.index')
-
-    // Join event route - accessible to all authenticated users
-    router.get('/events/joined', [GetJoinedEventsController]).as('events.joined')
-    router.get('/events/joined/:id', [GetJoinedEventsController, 'check']).as('events.joined.check')
     router.post('/events/join/:id', [JoinEventController]).as('events.join')
     router.post('/events/quit/:id', [QuitEventController]).as('events.quit')
 
