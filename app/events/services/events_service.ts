@@ -225,6 +225,9 @@ export class EventsService {
 
     const query = Event.query()
 
+    // Exclude past events (endDate < today)
+    query.where('endDate', '>=', DateTime.now().toSQLDate()!)
+
     // Apply filters
     if (type) {
       query.where('type', type)
