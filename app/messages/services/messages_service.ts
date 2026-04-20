@@ -1,6 +1,5 @@
 import Message from '#messages/models/message'
 import { inject } from '@adonisjs/core'
-import { cuid } from '@adonisjs/core/helpers'
 import AuthorizationException from '#exceptions/authorization_exception'
 
 export class MessageDto {
@@ -8,7 +7,7 @@ export class MessageDto {
 }
 
 export class CreateMessageDto extends MessageDto {
-  declare eventId: string
+  declare eventId: number
 }
 
 export class UpdateMessageDto extends MessageDto {}
@@ -25,9 +24,8 @@ export class MessagesService {
    */
   async create(data: CreateMessageDto, userId: string): Promise<Message> {
     const message = new Message()
-    message.id = cuid()
     message.userId = userId
-    message.eventId = data.eventId
+    message.eventId = String(data.eventId)
     message.content = data.content
 
     await message.save()

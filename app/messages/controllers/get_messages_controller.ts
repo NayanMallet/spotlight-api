@@ -26,7 +26,7 @@ export default class GetMessagesController {
       await auth.authenticate()
 
       const { id: eventId } = await request.validateUsing(eventIdValidator, {
-        data: params,
+        data: { id: params.eventId },
       })
 
       const queryParams = await request.validateUsing(getMessagesByEventValidator)
