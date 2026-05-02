@@ -439,7 +439,7 @@ export class EventsService {
       .where('has_joined', 1)
       .count('* as total')
 
-      console.log('Member count result:', result) // Debug log to check the query result
+      console.log('Member count result:', result) 
 
     return Number(result[0].$extras.total)
   }

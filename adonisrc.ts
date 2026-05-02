@@ -55,6 +55,10 @@ export default defineConfig({
     () => import('@adonisjs/drive/drive_provider'),
     () => import('@adonisjs/mail/mail_provider'),
     () => import('@adonisjs/limiter/limiter_provider'),
+    {
+      file: () => import('#providers/socket_io_provider'),
+      environment: ['web'],
+    },
   ],
 
   /*

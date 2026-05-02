@@ -33,13 +33,14 @@
     "#listeners/*": "./app/listeners/**/*.js",
     "#middleware/*": "./app/middleware/*.js",
     "#validators/*": "./app/validators/**/*.js",
-    "#providers/*": "./providers/**/*.js",
+    "#providers/*": "./providers/*.js",
     "#policies/*": "./app/policies/**/*.js",
     "#abilities/*": "./app/abilities/**/*.js",
     "#database/*": "./database/**/*.js",
     "#start/*": "./start/*.js",
     "#tests/*": "./tests/**/*.js",
-    "#config/*": "./config/*.js"
+    "#config/*": "./config/*.js",
+    "#socket/*": "./app/socket/*.js"
   },
   "devDependencies": {
     "@adonisjs/assembler": "^7.8.2",
@@ -77,7 +78,8 @@
     "mysql2": "^3.14.1",
     "puppeteer": "^24.11.2",
     "reflect-metadata": "^0.2.2",
-    "sharp": "^0.34.5"
+    "sharp": "^0.34.5",
+    "socket.io": "^4.8.3"
   },
   "hotHook": {
     "boundaries": [

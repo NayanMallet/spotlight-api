@@ -1,6 +1,7 @@
 import Message from '#messages/models/message'
 import { inject } from '@adonisjs/core'
 import AuthorizationException from '#exceptions/authorization_exception'
+import socketService from '#socket/socket_service'
 
 export class MessageDto {
   declare content: string
@@ -29,7 +30,9 @@ export class MessagesService {
     message.content = data.content
 
     await message.save()
-    return this.loadRelations(message)
+    const created = await this.loadRelations(message)
+    socketService.emitToEvent(data.eventId, 'message:new', created)
+    return created
   }
 
   /**
@@ -68,7 +71,9 @@ export class MessagesService {
     message.content = data.content
     await message.save()
 
-    return this.loadRelations(message)
+    const updated = await this.loadRelations(message)
+    socketService.emitToEvent(message.eventId, 'message:updated', updated)
+    return updated
   }
 
   /**
@@ -83,8 +88,10 @@ export class MessagesService {
     }
 
     this.verifyMessageOwnership(message, userId)
+    const eventId = message.eventId
     await message.delete()
 
+    socketService.emitToEvent(eventId, 'message:deleted', { id })
     return true
   }
 
