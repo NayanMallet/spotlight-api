@@ -6,18 +6,12 @@ import Event from '#events/models/event'
 
 export default class Message extends BaseModel {
   @column({ isPrimary: true })
-  // @example(msg_123456789)
-  // @format(string)
-  declare id: string
+  declare id: number
 
   @column()
-  // @example(1)
-  // @required
   declare userId: string
 
   @column()
-  // @example(1)
-  // @required
   declare eventId: string
 
   @column()

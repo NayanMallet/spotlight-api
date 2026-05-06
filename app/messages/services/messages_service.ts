@@ -1,14 +1,14 @@
 import Message from '#messages/models/message'
 import { inject } from '@adonisjs/core'
-import { cuid } from '@adonisjs/core/helpers'
 import AuthorizationException from '#exceptions/authorization_exception'
+import socketService from '#socket/socket_service'
 
 export class MessageDto {
   declare content: string
 }
 
 export class CreateMessageDto extends MessageDto {
-  declare eventId: string
+  declare eventId: number
 }
 
 export class UpdateMessageDto extends MessageDto {}
@@ -25,13 +25,14 @@ export class MessagesService {
    */
   async create(data: CreateMessageDto, userId: string): Promise<Message> {
     const message = new Message()
-    message.id = cuid()
     message.userId = userId
-    message.eventId = data.eventId
+    message.eventId = String(data.eventId)
     message.content = data.content
 
     await message.save()
-    return this.loadRelations(message)
+    const created = await this.loadRelations(message)
+    socketService.emitToEvent(data.eventId, 'message:new', created)
+    return created
   }
 
   /**
@@ -70,7 +71,9 @@ export class MessagesService {
     message.content = data.content
     await message.save()
 
-    return this.loadRelations(message)
+    const updated = await this.loadRelations(message)
+    socketService.emitToEvent(message.eventId, 'message:updated', updated)
+    return updated
   }
 
   /**
@@ -85,8 +88,10 @@ export class MessagesService {
     }
 
     this.verifyMessageOwnership(message, userId)
+    const eventId = message.eventId
     await message.delete()
 
+    socketService.emitToEvent(eventId, 'message:deleted', { id })
     return true
   }
 

@@ -433,6 +433,17 @@ export class EventsService {
       .paginate(page, limit)
   }
 
+  async getMemberCount(eventId: number): Promise<number> {
+    const result = await EventUser.query()
+      .where('event_id', eventId)
+      .where('has_joined', 1)
+      .count('* as total')
+
+      console.log('Member count result:', result) 
+
+    return Number(result[0].$extras.total)
+  }
+
   async isJoined(userId: number, eventId: number): Promise<boolean> {
     const eventUser = await EventUser.query()
       .where('userId', userId)

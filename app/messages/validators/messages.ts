@@ -2,7 +2,7 @@ import vine from '@vinejs/vine'
 
 export const createMessageValidator = vine.compile(
   vine.object({
-    eventId: vine.string().trim().minLength(1),
+    eventId: vine.number().positive(),
     content: vine.string().trim().minLength(1).maxLength(1000),
   })
 )
