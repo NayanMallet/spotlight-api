@@ -45,14 +45,12 @@ new Ignitor(APP_ROOT, { importer: IMPORTER })
   .configure(async (app) => {
     const { runnerHooks, ...config } = await import('../tests/bootstrap.js')
 
-    processCLIArgs(process.argv.splice(2))
+    processCLIArgs(process.argv.slice(2))
     configure({
       ...app.rcFile.tests,
       ...config,
-      ...{
-        setup: runnerHooks.setup,
-        teardown: runnerHooks.teardown.concat([() => app.terminate()]),
-      },
+      setup: runnerHooks.setup,
+      teardown: runnerHooks.teardown.concat([() => app.terminate()]),
     })
   })
   .run(() => run())
