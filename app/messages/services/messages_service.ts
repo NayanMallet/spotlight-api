@@ -57,16 +57,23 @@ export class MessagesService {
   }
 
   /**
-   * Met à jour un message si l'utilisateur en est le propriétaire
+   * Met à jour un message si l'utilisateur en est le propriétaire ou s'il est admin
    */
-  async update(id: string, data: UpdateMessageDto, userId: string): Promise<Message | null> {
+  async update(
+    id: string,
+    data: UpdateMessageDto,
+    userId: string,
+    isAdmin: boolean = false
+  ): Promise<Message | null> {
     const message = await Message.find(id)
 
     if (!message) {
       return null
     }
 
-    this.verifyMessageOwnership(message, userId)
+    if (!isAdmin) {
+      this.verifyMessageOwnership(message, userId)
+    }
 
     message.content = data.content
     await message.save()
@@ -77,17 +84,19 @@ export class MessagesService {
   }
 
   /**
-   * Supprime un message si l'utilisateur en est le propriétaire
+   * Supprime un message si l'utilisateur en est le propriétaire ou s'il est admin
    * @returns true si le message a été supprimé, false s'il n'existe pas
    */
-  async delete(id: string, userId: string): Promise<boolean> {
+  async delete(id: string, userId: string, isAdmin: boolean = false): Promise<boolean> {
     const message = await Message.find(id)
 
     if (!message) {
       return false
     }
 
-    this.verifyMessageOwnership(message, userId)
+    if (!isAdmin) {
+      this.verifyMessageOwnership(message, userId)
+    }
     const eventId = message.eventId
     await message.delete()
 

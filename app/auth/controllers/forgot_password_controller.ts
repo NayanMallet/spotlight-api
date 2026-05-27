@@ -1,6 +1,7 @@
 import { inject } from '@adonisjs/core'
 import type { HttpContext } from '@adonisjs/core/http'
 import { UsersService } from '#auth/services/users_service'
+import { forgotPasswordValidator } from '#auth/validators/users'
 
 @inject()
 export default class ForgotPasswordController {
@@ -22,7 +23,8 @@ export default class ForgotPasswordController {
     logger.info({ event: 'password.reset.request.attempt', emailMasked })
 
     try {
-      const user = await this.usersService.sendPasswordReset(rawEmail)
+      const { email } = await request.validateUsing(forgotPasswordValidator)
+      const user = await this.usersService.sendPasswordReset(email)
 
       if (!user) {
         logger.warn({ event: 'password.reset.request.user_not_found', emailMasked })
@@ -40,6 +42,14 @@ export default class ForgotPasswordController {
         },
       })
     } catch (error: any) {
+      if (error?.messages) {
+        logger.warn({ event: 'password.reset.request.validation_failed', issues: error.messages })
+        return response.badRequest({
+          message: 'Validation failed',
+          errors: error.messages,
+        })
+      }
+
       logger.error({ event: 'password.reset.request.error', err: error?.message })
       return response.internalServerError({
         message: 'An error occurred while sending the password reset link',
