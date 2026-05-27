@@ -264,11 +264,11 @@ The project uses [Japa](https://japa.dev/) as the testing framework with AdonisJ
 
 We use **Functional Testing** to verify the API's behavior from the perspective of an end-user. Unlike unit tests with heavy mocking, these tests hit actual endpoints and interact with a real database.
 
-**Core Principles:**
+**Core Principles & Implementation:**
 - **Standard API Client**: We use Japa's `client` to perform HTTP requests (`client.get()`, `client.post()`).
-- **Database Transactions**: We use `testUtils.db().withGlobalTransaction()` to ensure every test runs inside a transaction that is rolled back automatically. This keeps the database clean and makes tests extremely fast.
-- **Service Fakes**: We use `Drive.fake()` and `Mail.fake()` to intercept file uploads and emails, preventing actual side effects during testing.
-- **No Mocking Logic**: We avoid mocking business logic or Lucid models. We seed the necessary data directly using Lucid models within the test group setup or individual tests.
+- **Database Transactions**: We use `testUtils.db().withGlobalTransaction()` to ensure every test runs inside a transaction that is rolled back automatically.
+- **Service Fakes & Fixtures**: We use `Drive.fake()` to intercept file uploads. To bypass VineJS file extension validation errors during tests, we use our custom `createJpegFixture` helper to generate and clean up real temporary physical files instead of using raw Buffers.
+- **Strict Validation & Payloads**: Tests assert actual API behavior, expecting `400 Bad Request` for validation errors (not 422), camelCase nested payloads (e.g., `artistIds`), and proper unwrapped paginated structures (`{ message, meta, data }`).
 
 **Commands:**
 
@@ -486,14 +486,6 @@ A comprehensive Postman collection (`postman_collection.json`) is included in th
    - Create, read, update, and delete events
    - Associate artists with events
    - Create, read, update, and delete messages
-
-### Automated Testing
-
-Run the test suite:
-
-```bash
-pnpm test
-```
 
 ### API Documentation
 
