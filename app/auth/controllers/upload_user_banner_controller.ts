@@ -1,6 +1,8 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import { UsersService } from '#auth/services/users_service'
 import { inject } from '@adonisjs/core'
+import { uploadUserBannerValidator } from '#auth/validators/users'
+import { UserRoles } from '#auth/enums/users'
 
 @inject()
 export default class UploadUserBannerController {
@@ -37,8 +39,8 @@ export default class UploadUserBannerController {
         targetUserId: userId,
       })
 
-      // Users can only upload banner for their own profile unless they're admin
-      if (userId !== auth.user.id) {
+      // Users can only upload banner for their own profile unless they are admin.
+      if (userId !== auth.user.id && auth.user.role !== UserRoles.ADMIN) {
         logger.warn({
           event: 'user.banner.upload.forbidden',
           actorUserId: auth.user.id,
@@ -57,6 +59,8 @@ export default class UploadUserBannerController {
           error: 'MISSING_BANNER_FILE',
         })
       }
+
+      await request.validateUsing(uploadUserBannerValidator)
 
       const user = await this.usersService.uploadBanner(userId, banner)
 
@@ -77,6 +81,20 @@ export default class UploadUserBannerController {
         return response.badRequest({
           message: 'Validation failed',
           errors: error.messages,
+        })
+      }
+
+      if (error?.message === 'User not found') {
+        logger.warn({ event: 'user.banner.upload.not_found' })
+        return response.notFound({
+          message: 'User not found',
+        })
+      }
+
+      if (error?.status === 400 || error?.code === 'E_BAD_REQUEST') {
+        logger.warn({ event: 'user.banner.upload.bad_request', err: error?.message })
+        return response.badRequest({
+          message: error.message,
         })
       }
 
