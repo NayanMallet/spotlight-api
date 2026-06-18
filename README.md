@@ -258,120 +258,38 @@ pnpm run build
 
 ### Running Tests
 
-The project uses [Japa](https://japa.dev/) as the testing framework with AdonisJS integration. Tests are organized into two suites:
+The project uses [Japa](https://japa.dev/) as the testing framework with AdonisJS integration.
 
-- **Unit Tests**: Fast, isolated tests for individual components (2s timeout)
-- **Functional Tests**: Integration tests for API endpoints (30s timeout)
+#### 🧪 Testing Strategy (Functional & Reliable)
 
-#### Local Development
+We use **Functional Testing** to verify the API's behavior from the perspective of an end-user. Unlike unit tests with heavy mocking, these tests hit actual endpoints and interact with a real database.
 
-```bash
-# Run all tests
-pnpm test
+**Core Principles & Implementation:**
+- **Standard API Client**: We use Japa's `client` to perform HTTP requests (`client.get()`, `client.post()`).
+- **Database Transactions**: We use `testUtils.db().withGlobalTransaction()` to ensure every test runs inside a transaction that is rolled back automatically.
+- **Service Fakes & Fixtures**: We use `Drive.fake()` to intercept file uploads. To bypass VineJS file extension validation errors during tests, we use our custom `createJpegFixture` helper to generate and clean up real temporary physical files instead of using raw Buffers.
+- **Strict Validation & Payloads**: Tests assert actual API behavior, expecting `400 Bad Request` for validation errors (not 422), camelCase nested payloads (e.g., `artistIds`), and proper unwrapped paginated structures (`{ message, meta, data }`).
 
-# Run specific test suite
-node ace test --suites=unit
-node ace test --suites=functional
-
-# Run tests with file watching (development)
-node ace test --watch
-
-# Run tests with coverage
-node ace test --coverage
-
-# Run specific test file
-node ace test tests/functional/auth/login_controller.spec.ts
-
-# Run tests matching a pattern
-node ace test --grep="login"
-```
-
-#### Docker Environment
+**Commands:**
 
 ```bash
-# Run all tests in Docker container
-docker-compose exec spotlight_api pnpm test
+# Run all functional tests
+node ace test functional
 
-# Run specific test suite in Docker
-docker-compose exec spotlight_api node ace test --suites=unit
-docker-compose exec spotlight_api node ace test --suites=functional
+# Run tests with file watching
+node ace test functional --watch
 
-# Run tests with file watching in Docker
-docker-compose exec spotlight_api node ace test --watch
-
-# Run specific test file in Docker
-docker-compose exec spotlight_api node ace test tests/functional/auth/login_controller.spec.ts
+# Run a specific test file
+node ace test tests/functional/auth/login.spec.ts
 ```
 
-#### Test Structure
+#### 🚀 CI/CD Integration
 
-```
-tests/
-├── bootstrap.ts          # Japa configuration and plugins
-├── unit/                 # Unit tests (isolated, fast)
-│   └── auth/            # Authentication unit tests
-└── functional/          # Integration tests (API endpoints)
-    ├── auth/            # Authentication API tests
-    └── events/          # Events API tests
-```
+To run tests in CI/CD without side effects:
 
-#### Writing Tests
-
-Tests use Japa with the following plugins:
-
-- `@japa/assert`: Assertions library
-- `@japa/api-client`: HTTP client for API testing
-- `@japa/plugin-adonisjs`: AdonisJS integration
-
-Example functional test:
-
-```typescript
-import { test } from '@japa/runner'
-import { ApiClient } from '@japa/api-client'
-
-test.group('Auth - Login Controller', () => {
-  test('should login user with valid credentials', async ({ client }: { client: ApiClient }) => {
-    const response = await client.post('/login').json({
-      email: 'test@example.com',
-      password: 'password123',
-    })
-
-    response.assertStatus(200)
-    response.assertBodyContains({
-      user: {
-        email: 'test@example.com',
-      },
-    })
-  })
-})
-```
-
-#### Test Database
-
-Tests automatically use a separate test database configuration. The test environment:
-
-- Uses `NODE_ENV=test`
-- Runs database migrations automatically
-- Cleans up data between test runs
-- Uses in-memory database for faster execution (when configured)
-
-#### Continuous Integration
-
-For CI/CD pipelines, run tests with:
-
-```bash
-# Set test environment
-export NODE_ENV=test
-
-# Run database migrations
-node ace migration:run
-
-# Run all tests
-pnpm test
-
-# Generate coverage report
-node ace test --coverage --reporter=lcov
-```
+1. **Set environment**: `export NODE_ENV=test`
+2. **Run migrations**: `node ace migration:run`
+3. **Execute tests**: `node ace test functional --reporter spec`
 
 ## 🏥 Health Check & Monitoring
 
@@ -568,14 +486,6 @@ A comprehensive Postman collection (`postman_collection.json`) is included in th
    - Create, read, update, and delete events
    - Associate artists with events
    - Create, read, update, and delete messages
-
-### Automated Testing
-
-Run the test suite:
-
-```bash
-pnpm test
-```
 
 ### API Documentation
 

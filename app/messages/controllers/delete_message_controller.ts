@@ -2,6 +2,7 @@ import { HttpContext } from '@adonisjs/core/http'
 import { messageIdValidator } from '#messages/validators/messages'
 import { MessagesService } from '#messages/services/messages_service'
 import { inject } from '@adonisjs/core'
+import { UserRoles } from '#auth/enums/users'
 
 @inject()
 export default class DeleteMessageController {
@@ -28,7 +29,11 @@ export default class DeleteMessageController {
         data: params,
       })
 
-      const deleted = await this.messagesService.delete(messageId, user.id.toString())
+      const deleted = await this.messagesService.delete(
+        messageId,
+        user.id.toString(),
+        user.role === UserRoles.ADMIN
+      )
 
       if (!deleted) {
         return response.notFound({

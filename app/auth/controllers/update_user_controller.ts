@@ -2,6 +2,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 import { updateUserValidator } from '#auth/validators/users'
 import { UsersService } from '#auth/services/users_service'
 import { inject } from '@adonisjs/core'
+import { UserRoles } from '#auth/enums/users'
 
 @inject()
 export default class UpdateUserController {
@@ -37,8 +38,8 @@ export default class UpdateUserController {
         targetUserId: userId,
       })
 
-      // Users can only update their own profile unless they're admin
-      if (userId !== auth.user.id) {
+      // Users can only update their own profile unless they are admin.
+      if (userId !== auth.user.id && auth.user.role !== UserRoles.ADMIN) {
         logger.warn({
           event: 'user.update.forbidden',
           actorUserId: auth.user.id,
@@ -75,6 +76,20 @@ export default class UpdateUserController {
         return response.badRequest({
           message: 'Validation failed',
           errors: error.messages,
+        })
+      }
+
+      if (error?.message === 'User not found') {
+        logger.warn({ event: 'user.update.not_found' })
+        return response.notFound({
+          message: 'User not found',
+        })
+      }
+
+      if (error?.status === 400 || error?.code === 'E_BAD_REQUEST') {
+        logger.warn({ event: 'user.update.bad_request', err: error?.message })
+        return response.badRequest({
+          message: error.message,
         })
       }
 

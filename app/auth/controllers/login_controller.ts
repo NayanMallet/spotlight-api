@@ -53,7 +53,7 @@ export default class LoginController {
     } catch (error: any) {
       if (error?.messages) {
         logger.warn({ event: 'user.login.validation_failed', issues: error.messages })
-        return response.unprocessableEntity({
+        return response.badRequest({
           message: 'Validation failed',
           errors: error.messages,
         })

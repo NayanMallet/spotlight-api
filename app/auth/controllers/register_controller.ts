@@ -54,7 +54,7 @@ export default class RegisterController {
       // Handle validation errors
       if (error?.messages) {
         logger.warn({ event: 'user.register.validation_failed', issues: error.messages })
-        return response.unprocessableEntity({
+        return response.badRequest({
           message: 'Validation failed',
           errors: error.messages,
         })

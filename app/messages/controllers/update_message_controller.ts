@@ -2,6 +2,7 @@ import { HttpContext } from '@adonisjs/core/http'
 import { updateMessageValidator, messageIdValidator } from '#messages/validators/messages'
 import { MessagesService } from '#messages/services/messages_service'
 import { inject } from '@adonisjs/core'
+import { UserRoles } from '#auth/enums/users'
 
 @inject()
 export default class UpdateMessageController {
@@ -31,7 +32,12 @@ export default class UpdateMessageController {
 
       const payload = await request.validateUsing(updateMessageValidator)
 
-      const message = await this.messagesService.update(id, payload, user.id.toString())
+      const message = await this.messagesService.update(
+        id,
+        payload,
+        user.id.toString(),
+        user.role === UserRoles.ADMIN
+      )
 
       if (!message) {
         return response.notFound({

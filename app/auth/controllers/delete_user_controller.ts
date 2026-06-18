@@ -2,6 +2,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 import { UsersService } from '#auth/services/users_service'
 import User from '#auth/models/user'
 import { inject } from '@adonisjs/core'
+import { UserRoles } from '#auth/enums/users'
 
 @inject()
 export default class DeleteUserController {
@@ -36,8 +37,8 @@ export default class DeleteUserController {
         targetUserId: userId,
       })
 
-      // Users can only delete their own profile unless they're admin
-      if (userId !== auth.user.id) {
+      // Users can only delete their own profile unless they are admin.
+      if (userId !== auth.user.id && auth.user.role !== UserRoles.ADMIN) {
         logger.warn({
           event: 'user.delete.forbidden',
           actorUserId: auth.user.id,
