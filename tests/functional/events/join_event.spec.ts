@@ -69,7 +69,6 @@ test.group('Events / join and quit', (group) => {
       hasJoined: true,
       eventId: event.id,
       userId: user.id,
-      hasJoined: true,
     })
 
     const response = await client.post(`/events/join/${event.id}`).loginAs(user)

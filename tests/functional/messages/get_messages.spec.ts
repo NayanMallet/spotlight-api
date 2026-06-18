@@ -31,8 +31,8 @@ test.group('Messages / get messages', (group) => {
     })
 
     await Message.createMany([
-      { eventId: event.id.toString(), userId: user.id, content: 'Message 1' },
-      { eventId: event.id.toString(), userId: user.id, content: 'Message 2' },
+      { eventId: event.id.toString(), userId: user.id.toString(), content: 'Message 1' },
+      { eventId: event.id.toString(), userId: user.id.toString(), content: 'Message 2' },
     ])
 
     const response = await client.get(`/events/${event.id}/messages`).loginAs(user)

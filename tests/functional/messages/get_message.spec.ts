@@ -32,7 +32,7 @@ test.group('Messages / get message', (group) => {
 
     const message = await Message.create({
       eventId: event.id.toString(),
-      userId: user.id,
+      userId: user.id.toString(),
       content: 'Unique content',
     })
 

@@ -1,7 +1,6 @@
 import { inject } from '@adonisjs/core'
 import env from '#start/env'
 import { EventsService } from '#events/services/events_service'
-import { AiService } from '#services/ai_service'
 import { EventType, EventSubtype } from '#events/enums/events'
 import { DateTime } from 'luxon'
 
@@ -61,10 +60,7 @@ export class SportsScraperService {
     'Petit Palais des Sports': { lat: 43.6125, lng: 1.4334 },
   }
 
-  constructor(
-    private eventsService: EventsService,
-    private aiService: AiService
-  ) {
+  constructor(private eventsService: EventsService) {
     this.rapidApiKey = env.get('RAPID_API_KEY') || process.env['X-RapidAPI-Key'] || ''
     if (!this.rapidApiKey) {
       console.warn(
@@ -263,7 +259,7 @@ export class SportsScraperService {
         city: 'Toulouse',
         type: EventType.EXHIBITION,
         subtype: subtype,
-        bannerUrl: bannerUrl || null,
+        bannerUrl: bannerUrl,
         latitude: lat,
         longitude: lng,
       })

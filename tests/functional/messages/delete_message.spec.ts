@@ -40,7 +40,7 @@ test.group('Messages / delete message', (group) => {
 
     const message = await Message.create({
       eventId: event.id.toString(),
-      userId: user.id,
+      userId: user.id.toString(),
       content: 'Message to delete',
     })
 
@@ -64,7 +64,7 @@ test.group('Messages / delete message', (group) => {
 
     const message = await Message.create({
       eventId: '1',
-      userId: user.id,
+      userId: user.id.toString(),
       content: 'Protected message',
     })
 
