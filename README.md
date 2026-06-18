@@ -5,6 +5,7 @@ This repository contains a RESTful API built with AdonisJS and Docker. The appli
 ## ✨ Key Features
 
 ### 🔒 Security
+
 - **Custom Exception Handling**: Specialized exception classes for consistent error responses
 - **Input Sanitization**: Protection against XSS and injection attacks
 - **Rate Limiting**: API abuse prevention with configurable limits
@@ -12,18 +13,21 @@ This repository contains a RESTful API built with AdonisJS and Docker. The appli
 - **OAuth Security**: Cryptographically secure password generation using cuid()
 
 ### ⚡ Performance
+
 - **Database Indexes**: Composite indexes for optimized queries (type, city, date combinations)
 - **Pagination Limits**: Maximum 100 items per request to prevent overload
 - **N+1 Query Prevention**: Eager loading for related data
 - **Optimized City Search**: Exact match + partial match for better index utilization
 
 ### 🏗️ Architecture
+
 - **Clean Architecture**: DTOs, Base Controllers, and layered structure
 - **TypeScript**: Full type safety with explicit return types
 - **API Versioning**: Ready for v1, v2, v3 evolution
 - **Environment Validation**: Startup validation of all required variables
 
 ### 📊 Monitoring & Logging
+
 - **Health Check Endpoint**: `/health` for Docker and load balancer monitoring
 - **Request Logging**: Automatic logging of all API requests with performance metrics
 - **Error Tracking**: Comprehensive error logging with stack traces and context
@@ -265,6 +269,7 @@ The project uses [Japa](https://japa.dev/) as the testing framework with AdonisJ
 We use **Functional Testing** to verify the API's behavior from the perspective of an end-user. Unlike unit tests with heavy mocking, these tests hit actual endpoints and interact with a real database.
 
 **Core Principles & Implementation:**
+
 - **Standard API Client**: We use Japa's `client` to perform HTTP requests (`client.get()`, `client.post()`).
 - **Database Transactions**: We use `testUtils.db().withGlobalTransaction()` to ensure every test runs inside a transaction that is rolled back automatically.
 - **Service Fakes & Fixtures**: We use `Drive.fake()` to intercept file uploads. To bypass VineJS file extension validation errors during tests, we use our custom `createJpegFixture` helper to generate and clean up real temporary physical files instead of using raw Buffers.
@@ -300,6 +305,7 @@ curl http://localhost:3333/health
 ```
 
 Response:
+
 ```json
 {
   "status": "ok",
@@ -315,6 +321,7 @@ Response:
 ```
 
 Use this endpoint for:
+
 - Docker health checks
 - Kubernetes liveness/readiness probes
 - Load balancer health monitoring
@@ -323,6 +330,7 @@ Use this endpoint for:
 ### Request Logging
 
 All API requests are automatically logged with:
+
 - HTTP method, URL, status code
 - Response time (duration)
 - IP address and user agent

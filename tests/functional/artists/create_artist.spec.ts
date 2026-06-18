@@ -25,7 +25,9 @@ test.group('Artists / create artist', (group) => {
     const imagePath = createJpegFixture('artist-image')
 
     try {
-      const response = await client.post('/artists').loginAs(admin)
+      const response = await client
+        .post('/artists')
+        .loginAs(admin)
         .field('name', 'Newly Created Artist')
         .file('image', imagePath, {
           filename: 'new.jpg',
@@ -56,7 +58,9 @@ test.group('Artists / create artist', (group) => {
     const imagePath = createJpegFixture('illegal-artist-image')
 
     try {
-      const response = await client.post('/artists').loginAs(user)
+      const response = await client
+        .post('/artists')
+        .loginAs(user)
         .field('name', 'Illegal Artist')
         .file('image', imagePath, {
           filename: 'illegal.jpg',

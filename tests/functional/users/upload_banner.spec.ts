@@ -122,7 +122,9 @@ test.group('Users / upload banner', (group) => {
     }
   })
 
-  test('returns not found when an admin uploads a banner for a missing user', async ({ client }) => {
+  test('returns not found when an admin uploads a banner for a missing user', async ({
+    client,
+  }) => {
     const admin = await User.create({
       full_name: 'Admin Missing Banner',
       email: 'admin-missing-banner@example.com',

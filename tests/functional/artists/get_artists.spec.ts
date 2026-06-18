@@ -25,10 +25,7 @@ test.group('Artists / get artists', (group) => {
       message: 'Artists retrieved successfully',
       data: {
         meta: { total: 2 },
-        data: [
-          { name: 'Artist 1' },
-          { name: 'Artist 2' },
-        ],
+        data: [{ name: 'Artist 1' }, { name: 'Artist 2' }],
       },
     })
   })

@@ -41,10 +41,7 @@ test.group('Messages / get messages', (group) => {
     response.assertBodyContains({
       message: 'Messages retrieved successfully',
       meta: { total: 2 },
-      data: [
-        { content: 'Message 2' },
-        { content: 'Message 1' },
-      ],
+      data: [{ content: 'Message 2' }, { content: 'Message 1' }],
     })
   })
 

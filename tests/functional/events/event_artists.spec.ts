@@ -150,9 +150,11 @@ test.group('Events / event artists', (group) => {
       password: 'password123',
     })
 
-    const response = await client.post('/events/1/artists').loginAs(user).json({ artistIds: [1] })
+    const response = await client
+      .post('/events/1/artists')
+      .loginAs(user)
+      .json({ artistIds: [1] })
 
     response.assertStatus(403)
   })
 })
-

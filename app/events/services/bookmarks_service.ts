@@ -95,8 +95,7 @@ export class BookmarksService {
       .where('event_users.is_favorite', true)
       .orderBy('event_users.created_at', 'desc')
       .paginate(page, limit)
-}
-
+  }
 
   /**
    * Checks if a user has bookmarked a specific event

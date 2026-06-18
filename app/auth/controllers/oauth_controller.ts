@@ -7,7 +7,7 @@ import env from '#start/env'
 
 @inject()
 export default class OauthController {
-  constructor(protected usersService: UsersService) { }
+  constructor(protected usersService: UsersService) {}
 
   /**
    * Maps provider string to OAuthProviders enum
@@ -104,8 +104,8 @@ export default class OauthController {
       const oauthUser = await oauthProvider.user()
       const emailMasked = oauthUser.email
         ? String(oauthUser.email)
-          .toLowerCase()
-          .replace(/(.{2}).+(@.+)/, '$1***$2')
+            .toLowerCase()
+            .replace(/(.{2}).+(@.+)/, '$1***$2')
         : undefined
 
       const user = await this.usersService.handleOAuthLoginOrRegister({

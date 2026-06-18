@@ -14,7 +14,7 @@ export class EventsScraperService {
     private eventsService: EventsService,
     private artistsService: ArtistsService,
     private aiService: AiService
-  ) { }
+  ) {}
 
   private async createOrFindArtists(lineup: { name: string; image: string }[]): Promise<number[]> {
     const artistIds: number[] = []
@@ -139,7 +139,7 @@ export class EventsScraperService {
           b.textContent?.toLowerCase().trim().includes('voir plus')
         )
         if (btn) {
-          ; (btn as HTMLElement).click()
+          ;(btn as HTMLElement).click()
           return true
         }
         return false
@@ -191,7 +191,9 @@ export class EventsScraperService {
       return eventUtc >= nowUtc && eventUtc <= inFourWeeksUtc
     })
 
-    console.log(`[Scraper] Found ${rawEvents.length} raw events. Processing ${eventsToProcess.length} events in next 4 weeks.`)
+    console.log(
+      `[Scraper] Found ${rawEvents.length} raw events. Processing ${eventsToProcess.length} events in next 4 weeks.`
+    )
 
     const createdEvents: Event[] = []
     const CONCURRENCY = 3
@@ -206,13 +208,15 @@ export class EventsScraperService {
           if (!event) break
 
           processedCount++
-          console.log(`[Scraper][Worker ${id}] Processing (${processedCount}/${eventsToProcess.length}): ${event.title}`)
+          console.log(
+            `[Scraper][Worker ${id}] Processing (${processedCount}/${eventsToProcess.length}): ${event.title}`
+          )
 
           try {
             await workerPage.goto(event.url, { waitUntil: 'domcontentloaded', timeout: 30000 })
 
-            const { description, lineup, location, placeName, startDateTime, latitude, longitude } = await workerPage.evaluate(
-              () => {
+            const { description, lineup, location, placeName, startDateTime, latitude, longitude } =
+              await workerPage.evaluate(() => {
                 const result = {
                   description: '',
                   lineup: [] as { name: string; image: string }[],
@@ -250,21 +254,23 @@ export class EventsScraperService {
                   }
                 }
 
-                const locationAnchor = Array.from(document.querySelectorAll('a.text-foreground')).find(
+                const locationAnchor = Array.from(
+                  document.querySelectorAll('a.text-foreground')
+                ).find(
                   (a): a is HTMLAnchorElement =>
                     a instanceof HTMLAnchorElement && a.href.includes('google.com/maps/search')
                 )
 
                 if (locationAnchor) {
                   result.location = locationAnchor.textContent?.trim() || ''
-                  
+
                   // Extraire lat/lng depuis le lien Google Maps
                   // Format: https://www.google.com/maps/search/.../@43.5480492,1.4854047,17z
                   const href = locationAnchor.href
                   const coordsMatch = href.match(/@([-\d.]+),([-\d.]+),\d+z/)
                   if (coordsMatch) {
-                    result.latitude = parseFloat(coordsMatch[1])
-                    result.longitude = parseFloat(coordsMatch[2])
+                    result.latitude = Number.parseFloat(coordsMatch[1])
+                    result.longitude = Number.parseFloat(coordsMatch[2])
                   }
                 }
 
@@ -292,8 +298,7 @@ export class EventsScraperService {
                 }
 
                 return result
-              }
-            )
+              })
 
             // Correction parsing des dates avec la fonction buildISODate
             let startDate = ''

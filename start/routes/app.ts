@@ -74,7 +74,8 @@ const GetEventMembersController = () => import('#events/controllers/get_event_me
 
 // Scraper route for testing - Admin only
 router.get('/scrap/events/toulouse', [ScrapeEventsController]).as('events.scrape')
-const ScrapeSportsEventsController = () => import('#events/controllers/scrape_sports_events_controller')
+const ScrapeSportsEventsController = () =>
+  import('#events/controllers/scrape_sports_events_controller')
 router.get('/scrap/sports/toulouse', [ScrapeSportsEventsController]).as('events.scrape-sports')
 // .middleware([middleware.auth(), middleware.admin()])
 

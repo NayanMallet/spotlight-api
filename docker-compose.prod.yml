@@ -1,5 +1,5 @@
 # Production Docker Compose Configuration
-# Use this for deploying to production environments 
+# Use this for deploying to production environments
 # Usage: docker-compose -f docker-compose.prod.yml up -d
 
 version: '3.8'
@@ -22,7 +22,7 @@ services:
     networks:
       - spotlight_net
     healthcheck:
-      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost']
       interval: 10s
       timeout: 5s
       retries: 5
@@ -63,7 +63,7 @@ services:
 
     # Health check using our /health endpoint
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:${PORT}/health" ]
+      test: ['CMD', 'curl', '-f', 'http://localhost:${PORT}/health']
       interval: 30s
       timeout: 10s
       retries: 3

@@ -48,7 +48,10 @@ test.group('Users / update profile', (group) => {
     assert.equal(verifiedUser.id, user.id)
   })
 
-  test('updates the authenticated user banner through profile update', async ({ client, assert }) => {
+  test('updates the authenticated user banner through profile update', async ({
+    client,
+    assert,
+  }) => {
     const user = await User.create({
       full_name: 'Banner Profile',
       email: 'banner-profile@example.com',
@@ -191,9 +194,12 @@ test.group('Users / update profile', (group) => {
       message: 'Validation failed',
     })
 
-    const longPassword = await client.put('/users/me').loginAs(user).json({
-      password: 'x'.repeat(256),
-    })
+    const longPassword = await client
+      .put('/users/me')
+      .loginAs(user)
+      .json({
+        password: 'x'.repeat(256),
+      })
 
     longPassword.assertStatus(400)
     longPassword.assertBodyContains({
