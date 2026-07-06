@@ -126,6 +126,7 @@ export class EventsScraperService {
         '--disable-features=AudioServiceSandbox',
         '--disable-software-rasterizer',
       ],
+      dumpio: true,
     })
 
     const page = await browser.newPage()
