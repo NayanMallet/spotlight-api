@@ -117,6 +117,10 @@ export class EventsScraperService {
       browser: 'firefox',
       executablePath: '/usr/bin/firefox-esr',
       headless: true,
+      extraPrefsFirefox: {
+        'general.useragent.override':
+          'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+      },
       args: ['--no-sandbox'],
       dumpio: true,
     })
@@ -124,9 +128,6 @@ export class EventsScraperService {
     const page = await browser.newPage()
 
     // Configuration anti-détection pour éviter les challenges Vercel/Cloudflare
-    await page.setUserAgent(
-      'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'
-    )
     await page.evaluateOnNewDocument(() => {
       Object.defineProperty(navigator, 'webdriver', { get: () => false })
     })
@@ -214,9 +215,6 @@ export class EventsScraperService {
 
     const worker = async (id: number) => {
       const workerPage = await browser.newPage()
-      await workerPage.setUserAgent(
-        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'
-      )
       await workerPage.evaluateOnNewDocument(() => {
         Object.defineProperty(navigator, 'webdriver', { get: () => false })
       })
