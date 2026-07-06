@@ -39,7 +39,7 @@ services:
       FRONTEND_URL: http://${MANAGER_IP:-localhost}
       GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-dummy_id}
       GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-dummy_secret}
-      GOOGLE_CALLBACK_URL: ${GOOGLE_CALLBACK_URL:-http://${MANAGER_IP:-localhost}:3333/oauth/google/callback}
+      GOOGLE_CALLBACK_URL: http://${MANAGER_IP:-localhost}:3333/oauth/google/callback
       SMTP_HOST: ${SMTP_HOST:-mailhog}
       SMTP_PORT: ${SMTP_PORT:-1025}
       MAIL_FROM: ${MAIL_FROM:-Spotlight <no-reply@local.test>}

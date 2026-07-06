@@ -105,4 +105,6 @@ jobs:
           export DB_PASSWORD="${{ secrets.DB_PASSWORD }}"
           export APP_KEY="${{ secrets.APP_KEY }}"
           export MANAGER_IP="${{ secrets.MANAGER_IP }}"
+          export GOOGLE_CLIENT_ID="${{ secrets.GOOGLE_CLIENT_ID }}"
+          export GOOGLE_CLIENT_SECRET="${{ secrets.GOOGLE_CLIENT_SECRET }}"
           docker stack deploy -c docker-compose.swarm.yml spotlight --with-registry-auth
