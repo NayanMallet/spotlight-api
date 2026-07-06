@@ -32,7 +32,6 @@ tmp
 *.log
 
 # Test files
-tests
 coverage
 .nyc_output
 

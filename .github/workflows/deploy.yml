@@ -1,15 +1,64 @@
-name: CD Spotlight API
+name: CI/CD Spotlight API
 
 on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run ESLint
+        run: pnpm lint
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build native modules
+        run: pnpm rebuild better-sqlite3
+
+      - name: Run tests
+        run: pnpm test:ci
+
   build-and-push:
     name: Build & Push API Image
     runs-on: ubuntu-latest
+    needs: [lint, test]
+    if: github.event_name != 'pull_request'
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -41,6 +90,7 @@ jobs:
     name: Deploy to Swarm Manager
     runs-on: self-hosted
     needs: build-and-push
+    if: github.event_name != 'pull_request'
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
