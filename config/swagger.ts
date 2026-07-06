@@ -9,7 +9,6 @@ export default {
   version: '1.0.0', // use info instead
   description: 'API documentation for Spotlight application', // use info instead
   tagIndex: 1,
-  productionEnv: 'production', // optional
   info: {
     title: 'Spotlight API',
     version: '1.0.0',
