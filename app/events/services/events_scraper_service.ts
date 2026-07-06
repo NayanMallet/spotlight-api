@@ -131,7 +131,6 @@ export class EventsScraperService {
     await page.evaluateOnNewDocument(() => {
       Object.defineProperty(navigator, 'webdriver', { get: () => false })
     })
-    await page.setViewport({ width: 1280, height: 800 })
 
     await page.goto('https://shotgun.live/fr/cities/toulouse', {
       waitUntil: 'domcontentloaded',
@@ -218,7 +217,6 @@ export class EventsScraperService {
       await workerPage.evaluateOnNewDocument(() => {
         Object.defineProperty(navigator, 'webdriver', { get: () => false })
       })
-      await workerPage.setViewport({ width: 1280, height: 800 })
 
       try {
         while (queue.length > 0) {
