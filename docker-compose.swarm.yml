@@ -35,8 +35,15 @@ services:
       DB_PASSWORD: ${DB_PASSWORD}
       DB_DATABASE: spotlight_db
       DRIVE_DISK: fs
-      APP_URL: http://${MANAGER_IP}:3333
-      FRONTEND_URL: http://${MANAGER_IP}
+      APP_URL: http://${MANAGER_IP:-localhost}:3333
+      FRONTEND_URL: http://${MANAGER_IP:-localhost}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-dummy_id}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-dummy_secret}
+      GOOGLE_CALLBACK_URL: ${GOOGLE_CALLBACK_URL:-http://${MANAGER_IP:-localhost}:3333/oauth/google/callback}
+      SMTP_HOST: ${SMTP_HOST:-mailhog}
+      SMTP_PORT: ${SMTP_PORT:-1025}
+      MAIL_FROM: ${MAIL_FROM:-Spotlight <no-reply@local.test>}
+      LIMITER_STORE: ${LIMITER_STORE:-database}
     ports:
       - "3333:3333"
     command: ["sh", "-c", "node build/ace.js migration:run --force && dumb-init node build/bin/server.js"]
@@ -80,6 +87,22 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     ports:
       - "8888:8080"
+    networks:
+      - spotlight_net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+      restart_policy:
+        condition: on-failure
+
+  # 5) MailHog (SMTP local et interface de test)
+  mailhog:
+    image: mailhog/mailhog:latest
+    ports:
+      - "1025:1025"
+      - "8025:8025"
     networks:
       - spotlight_net
     deploy:
