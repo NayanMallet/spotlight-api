@@ -114,17 +114,11 @@ export class EventsScraperService {
     await db.from('artists').delete()
 
     const browser = await puppeteer.launch({
-      executablePath: '/usr/bin/chromium',
+      browser: 'firefox',
+      executablePath: '/usr/bin/firefox-esr',
       headless: true,
       args: [
         '--no-sandbox',
-        '--disable-setuid-sandbox',
-        '--disable-dev-shm-usage',
-        '--disable-gpu',
-        '--no-zygote',
-        '--disable-features=dbus',
-        '--disable-features=AudioServiceSandbox',
-        '--disable-software-rasterizer',
       ],
       dumpio: true,
     })
