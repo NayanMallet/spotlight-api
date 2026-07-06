@@ -117,9 +117,7 @@ export class EventsScraperService {
       browser: 'firefox',
       executablePath: '/usr/bin/firefox-esr',
       headless: true,
-      args: [
-        '--no-sandbox',
-      ],
+      args: ['--no-sandbox'],
       dumpio: true,
     })
 
