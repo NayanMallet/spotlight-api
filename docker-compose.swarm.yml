@@ -1,0 +1,99 @@
+version: '3.8'
+
+services:
+  # 1) Base de données MySQL
+  mysql_db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: spotlight_db
+    volumes:
+      - mysql_data_prod:/var/lib/mysql
+    networks:
+      - spotlight_net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+      restart_policy:
+        condition: on-failure
+
+  # 2) AdonisJS Backend (API)
+  spotlight_api:
+    image: ${DOCKER_HUB_USERNAME}/spotlight-api:latest
+    environment:
+      TZ: UTC
+      PORT: 3333
+      HOST: 0.0.0.0
+      LOG_LEVEL: info
+      NODE_ENV: production
+      APP_KEY: ${APP_KEY}
+      DB_HOST: mysql_db
+      DB_PORT: 3306
+      DB_USER: root
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_DATABASE: spotlight_db
+      DRIVE_DISK: fs
+      APP_URL: http://${MANAGER_IP}:3333
+      FRONTEND_URL: http://${MANAGER_IP}
+    ports:
+      - "3333:3333"
+    networks:
+      - spotlight_net
+    depends_on:
+      - mysql_db
+    deploy:
+      mode: replicated
+      replicas: 2
+      update_config:
+        parallelism: 1
+        delay: 10s
+        order: start-first
+        failure_action: rollback
+      restart_policy:
+        condition: on-failure
+
+  # 3) React Frontend
+  spotlight_front:
+    image: ${DOCKER_HUB_USERNAME}/spotlight-front:latest
+    ports:
+      - "80:80"
+    networks:
+      - spotlight_net
+    deploy:
+      mode: replicated
+      replicas: 2
+      update_config:
+        parallelism: 1
+        delay: 10s
+        order: start-first
+        failure_action: rollback
+      restart_policy:
+        condition: on-failure
+
+  # 4) Dozzle (Monitoring des logs en temps réel)
+  dozzle:
+    image: amir20/dozzle:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    ports:
+      - "8888:8080"
+    networks:
+      - spotlight_net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+      restart_policy:
+        condition: on-failure
+
+volumes:
+  mysql_data_prod:
+    driver: local
+
+networks:
+  spotlight_net:
+    driver: overlay
+    attachable: true
