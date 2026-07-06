@@ -122,9 +122,19 @@ export class EventsScraperService {
     })
 
     const page = await browser.newPage()
+
+    // Configuration anti-détection pour éviter les challenges Vercel/Cloudflare
+    await page.setUserAgent(
+      'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'
+    )
+    await page.evaluateOnNewDocument(() => {
+      Object.defineProperty(navigator, 'webdriver', { get: () => false })
+    })
+    await page.setViewport({ width: 1280, height: 800 })
+
     await page.goto('https://shotgun.live/fr/cities/toulouse', {
       waitUntil: 'domcontentloaded',
-      timeout: 60000,
+      timeout: 90000,
     })
 
     const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
@@ -204,6 +214,14 @@ export class EventsScraperService {
 
     const worker = async (id: number) => {
       const workerPage = await browser.newPage()
+      await workerPage.setUserAgent(
+        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'
+      )
+      await workerPage.evaluateOnNewDocument(() => {
+        Object.defineProperty(navigator, 'webdriver', { get: () => false })
+      })
+      await workerPage.setViewport({ width: 1280, height: 800 })
+
       try {
         while (queue.length > 0) {
           const event = queue.shift()
@@ -215,7 +233,7 @@ export class EventsScraperService {
           )
 
           try {
-            await workerPage.goto(event.url, { waitUntil: 'domcontentloaded', timeout: 30000 })
+            await workerPage.goto(event.url, { waitUntil: 'domcontentloaded', timeout: 60000 })
 
             const { description, lineup, location, placeName, startDateTime, latitude, longitude } =
               await workerPage.evaluate(() => {
