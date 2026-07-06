@@ -39,7 +39,7 @@ services:
       FRONTEND_URL: http://${MANAGER_IP}
     ports:
       - "3333:3333"
-    command: ["sh", "-c", "node ace migration:run --force && dumb-init node build/server.js"]
+    command: ["sh", "-c", "node build/ace.js migration:run --force && dumb-init node build/bin/server.js"]
     networks:
       - spotlight_net
     depends_on:
