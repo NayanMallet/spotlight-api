@@ -525,4 +525,4 @@ The application uses a multi-stage Docker build process:
 The docker-compose.yml file defines two services:
 
 - `mysql_db`: MySQL database
-- `spotlight_api`: AdonisJS application
+- `spotlight_api`: AdonisJS application 
