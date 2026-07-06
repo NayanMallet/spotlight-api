@@ -11,8 +11,11 @@ RUN apt-get update && apt-get install -y \
   libx11-xcb1 libxcomposite1 libxdamage1 libxrandr2 \
   libxss1 libxtst6 xdg-utils libu2f-udev libvulkan1 \
   libgbm1 libgtk-3-0 libpangocairo-1.0-0 libpango-1.0-0 libharfbuzz0b \
-  chromium && \
+  libdrm2 chromium && \
   rm -rf /var/lib/apt/lists/*
+
+# Désactive D-Bus pour éviter les erreurs de bus de session dans Chromium
+ENV DBUS_SESSION_BUS_ADDRESS=/dev/null
 
 # Installe pnpm
 RUN npm install -g pnpm

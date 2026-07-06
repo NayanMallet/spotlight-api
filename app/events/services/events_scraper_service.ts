@@ -121,6 +121,10 @@ export class EventsScraperService {
         '--disable-setuid-sandbox',
         '--disable-dev-shm-usage',
         '--disable-gpu',
+        '--no-zygote',
+        '--disable-features=dbus',
+        '--disable-features=AudioServiceSandbox',
+        '--disable-software-rasterizer',
       ],
     })
 
