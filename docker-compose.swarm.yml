@@ -99,7 +99,7 @@ services:
 
   # 5) MailHog (SMTP local et interface de test)
   mailhog:
-    image: mailhog/mailhog:latest
+    image: axllent/mailpit:latest
     ports:
       - "1025:1025"
       - "8025:8025"

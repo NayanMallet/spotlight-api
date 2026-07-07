@@ -23,7 +23,7 @@ services:
   ########################
   mailhog:
     container_name: mailhog
-    image: mailhog/mailhog:latest
+    image: axllent/mailpit:latest
     restart: unless-stopped
     ports:
       - '1025:1025' # SMTP port
